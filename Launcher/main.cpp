@@ -1,39 +1,35 @@
+#include "nwol_array.h"
+
 #include "ftplib.h"
+
 #include <stdio.h>
 #include <string>
-#include "nwol_array.h"
 #include <Windows.h>
 
-static ::nwol::array_obj<std::string> logLines;
+static ::nwol::array_obj<std::string>	logLines;
 
-template <size_t _Size, typename... _Args>
-void log_printf(const char (&format)[_Size], _Args... args)
-{
-	char tmpStr[512] = {};
-	sprintf_s(tmpStr, format, args...);
-	printf("%s", tmpStr);
-	logLines.push_back(tmpStr);
+#define log_printf(...)																	\
+{																						\
+	info_printf(__VA_ARGS__);															\
+	char_t										tmpStr[512]				= {};			\
+	sprintf_s(tmpStr, __VA_ARGS__);														\
+	printf("%s", tmpStr);																\
+	logLines.push_back(tmpStr);															\
 }
 
-
-
-int32_t getLines(const char* source, int32_t maxLen, ::nwol::array_obj<std::string>& lines_)
-{
-	::nwol::array_obj<std::string> lines;
-	int32_t bufferIndex = 0;
-	while(bufferIndex < maxLen)
-	{
-		char nameBuffer[256] = {};
-		int32_t nameLen = 0;
-		while(nameLen < 256 && bufferIndex < maxLen)
-		{
-			nameBuffer[nameLen++] = source[bufferIndex++];
-			if(nameBuffer[nameLen-1] == '\n')
-			{
+int32_t									getLines				(const char* source, int32_t maxLen, ::nwol::array_obj<std::string>& lines_)	{
+	::nwol::array_obj<std::string>				lines;
+	int32_t										bufferIndex				= 0;
+	while(bufferIndex < maxLen) {
+		char										nameBuffer[256]			= {};
+		int32_t										nameLen					= 0;
+		while(nameLen < 256 && bufferIndex < maxLen) {
+			nameBuffer[nameLen++]					= source[bufferIndex++];
+			if(nameBuffer[nameLen-1] == '\n') {
 				if(nameBuffer[nameLen-2] == '\r')
-					nameBuffer[nameLen-2] = 0;
+					nameBuffer[nameLen-2]					= 0;
 				else
-					nameBuffer[nameLen-1] = 0;
+					nameBuffer[nameLen-1]					= 0;
 				break;
 			}
 		}
@@ -41,86 +37,75 @@ int32_t getLines(const char* source, int32_t maxLen, ::nwol::array_obj<std::stri
 		lines.push_back(nameBuffer);
 	}
 
-	lines_ = lines;
+	lines_									= lines;
 
 	return 0;
 }
 
-static const char tempFileName[] = "launcher.tmp";
+static const char						tempFileName[]			= "launcher.tmp";
 
-int32_t listRemote(netbuf* netConnection, ::nwol::array_obj<std::string>& fileNames_)
-{
-	int success = 0;
+int32_t									listRemote				(netbuf* netConnection, ::nwol::array_obj<std::string>& fileNames_)		{
+	int											success					= 0;
 
-	const char remotePath[] = "/";// ".gitignore";
-	success = FtpNlst(tempFileName, remotePath, netConnection);
+	const char									remotePath[]			= "/";// ".gitignore";
+	success									= ::FtpNlst(tempFileName, remotePath, netConnection);
 
-	FILE* fp = 0;
-	int32_t error = fopen_s(&fp, tempFileName, "rb");
+	FILE										* fp					= 0;
+	int32_t										error					= fopen_s(&fp, tempFileName, "rb");
 	if(0 == fp)
 		return -1;
 	fseek(fp, 0, SEEK_END);
-	int32_t fileSize = ftell(fp);
+	int32_t										fileSize				= ftell(fp);
 	fseek(fp, 0, SEEK_SET);
-	char* buffer = (char*)malloc(fileSize+1);
+	char										* buffer				= (char*)malloc(fileSize+1);
 	fread(buffer, 1, fileSize, fp);
 	fclose(fp);
-	buffer[fileSize] = 0;
+	buffer[fileSize]						= 0;
 
-	::nwol::array_obj<std::string> fileNames;
-	getLines(buffer, fileSize, fileNames_);
-	
+	::nwol::array_obj<::std::string>			fileNames;
+	::getLines(buffer, fileSize, fileNames_);
+
 	free(buffer);
 	return 0;
 }
 
 #pragma pack(push, 1)
-struct SPatchDate
-{
-	int32_t PackedDate;
-	int16_t Year;
-	char	Month;
-	char	Day;
+struct SPatchDate {
+	int32_t								PackedDate;
+	int16_t								Year;
+	char								Month;
+	char								Day;
 };
 
-struct SPatchFile : public SPatchDate
-{
-	std::string Path;
+struct SPatchFile : public SPatchDate {
+	::std::string						Path;
 };
 
-struct SLauncherSettings
-{
-	int32_t						PrevDate = 0;
-	int32_t						LastDate = 0;
-	::nwol::array_obj<SPatchFile>		Files	 = {};
+struct SLauncherSettings {
+	int32_t								PrevDate				= 0;
+	int32_t								LastDate				= 0;
+	::nwol::array_obj<SPatchFile>		Files					= {};
 };
 #pragma pack(pop)
 
 
-int32_t loadSettings(SLauncherSettings& launcherSettings, const char* settingsFileName)
-{
-	FILE* fp = 0;
+int32_t									loadSettings			(SLauncherSettings& launcherSettings, const char* settingsFileName)			{
+	FILE										* fp					= 0;
 	fopen_s(&fp, settingsFileName, "rb");
-	if(fp)
-	{
+	if(fp) {
 		fseek(fp, 0, SEEK_END);
-		int32_t fileSize = ftell(fp);
+		int32_t										fileSize				= ftell(fp);
 		fseek(fp, 0, SEEK_SET);
-		
 		fread(&launcherSettings, 1, sizeof(int64_t) > fileSize ? fileSize : sizeof(int64_t), fp);
-
-		uint32_t fileCount = 0;
+		
+		uint32_t									fileCount				= 0;
 		fread(&fileCount, 1, sizeof(uint32_t), fp);
 		launcherSettings.Files.resize(fileCount);
-		for(uint32_t i=0; i<fileCount; ++i)
-		{
-			SPatchDate* fileDate = &launcherSettings.Files[i];
-			fread(fileDate, 1, sizeof(SPatchDate), fp);
-			int32_t nameLen = 0; 
-			fread(&nameLen, 1, sizeof(int32_t), fp);
-			char path[256] = {};
-			fread(&path[0], 1, nameLen > 256 ? 256 : nameLen, fp);
-			launcherSettings.Files[i].Path = path;
+		for(uint32_t i = 0; i < fileCount; ++i) {
+			SPatchDate									* fileDate				= &launcherSettings.Files[i];	fread(fileDate, 1, sizeof(SPatchDate), fp);
+			int32_t										nameLen					= 0;							fread(&nameLen, 1, sizeof(int32_t), fp);
+			char										path[256]				= {};							fread(&path[0], 1, nameLen > 256 ? 256 : nameLen, fp);
+			launcherSettings.Files[i].Path			= path;
 		}
 
 		fclose(fp);
@@ -131,21 +116,17 @@ int32_t loadSettings(SLauncherSettings& launcherSettings, const char* settingsFi
 	return 0;
 }
 
-int32_t saveSettings(const SLauncherSettings& launcherSettings, const char* settingsFileName)
-{
-	FILE* fp = 0;
+int32_t									saveSettings			(const SLauncherSettings& launcherSettings, const char* settingsFileName)	{
+	FILE										* fp					= 0;
 	fopen_s(&fp, settingsFileName, "wb");
-	if(fp)
-	{
+	if(fp) {
 		fwrite(&launcherSettings, 1, sizeof(int64_t), fp);
-		uint32_t fileCount = (uint32_t)launcherSettings.Files.size();
+		uint32_t									fileCount				= (uint32_t)launcherSettings.Files.size();
 		fwrite(&fileCount, 1, sizeof(uint32_t), fp);
-		for(uint32_t i=0; i<fileCount; ++i)
-		{
-			const SPatchDate* fileDate = &launcherSettings.Files[i];
-
+		for(uint32_t i=0; i<fileCount; ++i) {
+			const SPatchDate							* fileDate				= &launcherSettings.Files[i];
 			fwrite(fileDate, 1, sizeof(SPatchDate), fp);
-			int32_t nameLen = (int32_t)launcherSettings.Files[i].Path.size();
+			int32_t										nameLen					= (int32_t)launcherSettings.Files[i].Path.size();
 			fwrite(&nameLen, 1, sizeof(int32_t), fp);
 			fwrite(launcherSettings.Files[i].Path.c_str(), 1, nameLen, fp);
 		}
@@ -158,55 +139,49 @@ int32_t saveSettings(const SLauncherSettings& launcherSettings, const char* sett
 }
 
 template <size_t _Size>
-int32_t loadHost(char (&patchhost)[_Size])
-{
-	const char hostFileName[]		= "launcher.ini";
-	FILE* fp = 0;
+int32_t									loadHost				(char (&patchhost)[_Size])	{
+	const char									hostFileName[]			= "launcher.ini";
+	FILE										* fp					= 0;
 	fopen_s(&fp, hostFileName, "rb");
-	if(fp)
-	{
+	if(fp) {
 		fseek(fp, 0, SEEK_END);
-		int32_t fileSize = ftell(fp);
+		int32_t										fileSize				= ftell(fp);
 		fseek(fp, 0, SEEK_SET);
-		int32_t maxRead = (fileSize > _Size) ? _Size : fileSize;
+		int32_t										maxRead					= (fileSize > _Size) ? _Size : fileSize;
 		fread(patchhost, 1, maxRead, fp);
 		fclose(fp);
 		for(int32_t i=0; i<maxRead; ++i)
-			if(patchhost[i] == '\r' || patchhost[i] == '\n')
-			{
+			if(patchhost[i] == '\r' || patchhost[i] == '\n') {
 				patchhost[i] = 0;
 				break;
 			}
 			else if(patchhost[i] == 0)
 				break;
 	}
-	else
-	{
+	else {
 		log_printf("Host file not found\n");
 		return -1;
 	}
 
-	patchhost[_Size-1] = 0;
+	patchhost[_Size-1]						= 0;
 	return 0;
 }
 
-static HWND g_hWnd = 0;
+static HWND								g_hWnd					= 0;
 
 
-int32_t downloadPatchInfoFiles(netbuf* netConnection, const ::nwol::array_obj<std::string>& fileNames, const ::nwol::array_pod<SPatchDate>& fileDates, ::nwol::array_obj<SPatchFile>& fileNamesToPatch, int32_t& lastDate)
+int32_t									downloadPatchInfoFiles	(netbuf* netConnection, const ::nwol::array_obj<::std::string>& fileNames, const ::nwol::array_pod<::SPatchDate>& fileDates, ::nwol::array_obj<::SPatchFile>& fileNamesToPatch, int32_t& lastDate)
 {
 	FILE* fp = 0;
 	MSG msg;
-	for (uint32_t iFile = 0, fileCount = (uint32_t)fileNames.size(); iFile < fileCount; ++iFile)
-	{
-		const std::string&	currentFileName = fileNames[iFile];
-		const SPatchDate&	patchDate = fileDates[iFile];
+	for (uint32_t iFile = 0, fileCount = (uint32_t)fileNames.size(); iFile < fileCount; ++iFile) {
+		const ::std::string		& currentFileName		= fileNames[iFile];
+		const ::SPatchDate		& patchDate				= fileDates[iFile];
 
 		// process file
 		FtpGet(tempFileName, currentFileName.c_str(), FTPLIB_ASCII, netConnection);
 		fopen_s(&fp, tempFileName, "rb");
-		if (0 == fp)
-		{
+		if (0 == fp) {
 			log_printf("Error loading patch info file: %s.\n", currentFileName.c_str());
 			continue;
 		}
@@ -302,10 +277,10 @@ int32_t downloadPatchContents(netbuf* netConnection, SLauncherSettings& launcher
 				{
 					FtpGet(currentFileName.c_str(), remotePathFixed, FTPLIB_BINARY, netConnection);
 					fopen_s(&fp, currentFileName.c_str(), "rb");
-					if(0 == fp)
+					if(0 == fp) {
 						log_printf("Error downloading patch for file: %s.\n", currentFileName.c_str());
-					else
-					{
+					}
+					else {
 						fclose(fp);
 						log_printf("File downloaded successfully: %s.\n", currentFileName.c_str());
 						launcherSettings.Files[iForThisPatch] = fileNamesToPatch[iFileNames];
@@ -322,18 +297,17 @@ int32_t downloadPatchContents(netbuf* netConnection, SLauncherSettings& launcher
 		{
 			int32_t success = FtpGet(currentFileName.c_str(), remotePathFixed, FTPLIB_BINARY, netConnection);
 			fopen_s(&fp, currentFileName.c_str(), "rb");
-			if(0 == fp)
+			if(0 == fp) {
 				log_printf("Error downloading patch for file: %s.\n", currentFileName.c_str());
-			else
-			{
+			}
+			else {
 				fclose(fp);
 				log_printf("File downloaded successfully: %s.\n", currentFileName.c_str());
 				launcherSettings.Files.push_back(fileNamesToPatch[iFileNames]);
 			}
 		}
 
-		while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
-		{
+		while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}

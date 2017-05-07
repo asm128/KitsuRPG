@@ -16,8 +16,7 @@ int runCommunications(::SApplication& instanceApp)
 	errMy							= ::nwol::connect				(instanceClient); reterr_error_if_errored(errMy, "%s", "Failed to connect.");
 
 	::nwol::error_t				result				= 0;
-	while gbit_true(appNetwork.State, ::nwol::NETWORK_STATE_ENABLED)
-	{
+	while gbit_true(appNetwork.State, ::nwol::NETWORK_STATE_ENABLED) {
 		// Ping before anything else to make sure everything is more or less in order.
 		if(false == ::nwol::ping(instanceClient.pClient, instanceClient.pServer))	{
 			error_printf("%s", "Ping timeout.");
@@ -39,8 +38,7 @@ int runCommunications(::SApplication& instanceApp)
 			info_printf("%s", "Client instance updated successfully.");
 		}
 
-		// Disconnect if the network was disabled.
-		if gbit_false(appNetwork.State, ::nwol::NETWORK_STATE_ENABLED)
+		if gbit_false(appNetwork.State, ::nwol::NETWORK_STATE_ENABLED)	// Disconnect if the network was disabled.
 			break;
 
 		::std::this_thread::sleep_for(::std::chrono::milliseconds(1000));

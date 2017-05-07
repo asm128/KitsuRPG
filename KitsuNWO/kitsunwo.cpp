@@ -19,8 +19,7 @@ DEFINE_RUNTIME_INTERFACE_FUNCTIONS(SApplication, "Vulgar Display of Power", 0, 1
 		if errored(_err_errMy = functionCall) {	error_printf(" Error code: 0x%x. " format, _err_errMy, __VA_ARGS__); }	\
 	}
 
-int32_t cleanup	(::SApplication& instanceApp)
-{ 
+int32_t cleanup	(::SApplication& instanceApp) { 
 	::nwol::shutdownASCIIScreen();
 
 	::networkDisable(instanceApp);
@@ -30,25 +29,25 @@ int32_t cleanup	(::SApplication& instanceApp)
 
 int32_t setup (::SApplication& instanceApp)
 { 
-	::nwol::SGUI					& guiSystem = instanceApp.GUI;
+	::nwol::SGUI							& guiSystem					= instanceApp.GUI;
 
 	::nwol::initASCIIScreen(guiSystem.TargetSizeASCII.x, guiSystem.TargetSizeASCII.y);
-	::nwol::setASCIIScreenTitle(appTitle());
+	::nwol::setASCIIScreenTitle(::nwol_moduleTitle());
 
 	::klib::initGame(instanceApp.Game);
 
 	errmsg(::networkEnable(instanceApp), "Failed to enable network.");
 
-	guiSystem.TargetSizeASCII.x	= nwol::getASCIIBackBufferWidth		();
-	guiSystem.TargetSizeASCII.y	= nwol::getASCIIBackBufferHeight	();
+	guiSystem.TargetSizeASCII.x			= nwol::getASCIIBackBufferWidth		();
+	guiSystem.TargetSizeASCII.y			= nwol::getASCIIBackBufferHeight	();
 
-	static const ::nwol::glabel				newControlLabel	= "Exit";
+	static const ::nwol::glabel				newControlLabel				= "Exit";
 	::nwol::SGUIControl						newControl;
 
-	newControl.AreaASCII					= {1, 1, (int32_t)newControlLabel.size(), 1}	;
-	newControl.Text							= newControlLabel								;
+	newControl.AreaASCII				= {1, 1, (int32_t)newControlLabel.size(), 1}	;
+	newControl.Text						= newControlLabel								;
 
-	::nwol::error_t							errMy			= ::nwol::createControl(guiSystem, newControl);
+	::nwol::error_t							errMy						= ::nwol::createControl(guiSystem, newControl);
 	reterr_error_if_errored(errMy, "Failed to create control.");
 
 	return 0; 
@@ -64,18 +63,17 @@ int32_t update(::SApplication& instanceApp, bool exitRequested)
 	if(exitRequested)
 		return ::nwol::APPLICATION_STATE_EXIT;
 
-	::nwol::SInput							& inputSystem	= instanceApp.Input;
+	::nwol::SInput								& inputSystem			= instanceApp.Input;
 	::nwol::pollInput(inputSystem);
 	//if(inputSystem.Keys[VK_ESCAPE])
 	//	return ::nwol::APPLICATION_STATE_EXIT;
 
-	::nwol::SGUI							& guiSystem		= instanceApp.GUI;
+	::nwol::SGUI								& guiSystem				= instanceApp.GUI;
 	::nwol::updateGUI(guiSystem, inputSystem);
 
-	::nwol::array_pod<::nwol::CONTROL_FLAG>	& controlFlags	= guiSystem.Controls.ControlFlags;
+	::nwol::array_pod<::nwol::CONTROL_FLAG>		& controlFlags			= guiSystem.Controls.ControlFlags;
 	for(uint32_t iControl = 0, controlCount = controlFlags.size(); iControl < controlCount; ++iControl)
-		if(::nwol::bit_true(controlFlags[iControl], ::nwol::CONTROL_FLAG_EXECUTE))
-		{
+		if(::nwol::bit_true(controlFlags[iControl], ::nwol::CONTROL_FLAG_EXECUTE)) {
 			info_printf("Execute control %u.", iControl);
 			switch(iControl)
 			{
@@ -89,18 +87,17 @@ int32_t update(::SApplication& instanceApp, bool exitRequested)
 	return 0; 
 }
 
-int32_t render(::SApplication& instanceApp)
-{ 
+int32_t render(::SApplication& instanceApp) { 
 	::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
 
-	::klib::SGame&							instanceGame		= instanceApp.Game;
+	::klib::SGame							& instanceGame		= instanceApp.Game;
 	::nwol::SApplicationNetworkClient		& appNetwork		= instanceApp.NetworkClient;
 	
 	{	// here we update the game instance with the data received from the server.
 		::nwol::CLock							thelock				(appNetwork.ServerTimeMutex);
 		instanceGame.ServerTime				= appNetwork.ServerTime;
 	}
-	instanceGame.FrameInput	= instanceApp.Input;
+	instanceGame.FrameInput				= instanceApp.Input;
 	::klib::drawAndPresentGame(instanceGame);
 
 	::nwol::SASCIITarget					target;
