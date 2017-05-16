@@ -16,9 +16,8 @@ GDEFINE_ENUM_VALUE	(NETWORK_STATE, NONE	, 0);
 GDEFINE_ENUM_VALUE	(NETWORK_STATE, ENABLED	, 1);
 GDEFINE_ENUM_VALUE	(NETWORK_STATE, RUNNING	, 2);
 
-struct SApplication	: public ::nwol::SApplicationBase
-{
-	NWOM(::klib, SGame	,		Game			, ::nwol::GDATA_TYPE_OBJ		, "Game instance"				, "Game information is stored in this object."					);
+struct SApplication	: public ::nwol::SApplicationBase {
+	NWOM(, SApplication, ::klib, SGame,	Game, ::nwol::GDATA_TYPE_OBJ, "Game instance", "Game information is stored in this object.");
 	NWOM_REGISTRY
 		(	NWOM_NAME(Game)
 		);
