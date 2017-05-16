@@ -91,7 +91,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>NWOL_MTSUPPORT; NOMINMAX; NWOL_DEBUG_ENABLED; _WINDOWS; _DEBUG; WIN32; %(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;  _WINDOWS; _DEBUG; WIN32; %(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\kitsulib; ..\netlib; </AdditionalIncludeDirectories>
     </ClCompile>
@@ -109,7 +109,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>NWOL_MTSUPPORT; NOMINMAX; NWOL_DEBUG_ENABLED; _WINDOWS; _DEBUG; %(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;  _WINDOWS; _DEBUG; %(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\kitsulib; ..\netlib; </AdditionalIncludeDirectories>
     </ClCompile>
@@ -129,7 +129,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NWOL_MTSUPPORT; NOMINMAX; _WINDOWS; NDEBUG; WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX; _WINDOWS; NDEBUG; WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\kitsulib; ..\netlib; </AdditionalIncludeDirectories>
     </ClCompile>
@@ -151,7 +151,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NWOL_MTSUPPORT; NOMINMAX; _WINDOWS; NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX; _WINDOWS; NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\kitsulib; ..\netlib; </AdditionalIncludeDirectories>
     </ClCompile>
