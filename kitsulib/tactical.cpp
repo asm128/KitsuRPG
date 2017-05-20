@@ -13,89 +13,71 @@
 
 using namespace klib;
 
-bool handleUserInput(SGame& instanceGame, const SGameState& returnState)
-{
-	static nwol::SAccumulator<double>	keyAccum = {0.0, 0.6};
+bool handleUserInput(SGame& instanceGame, const SGameState& returnState) {
+	static nwol::SAccumulator<double>											keyAccum										= {0.0, 0.6};
 
-	STacticalInfo&	tacticalInfo	= instanceGame.TacticalInfo;
-	//SPlayer&		playerUser		= instanceGame.Players[PLAYER_INDEX_USER];
-	SPlayer&		currentPlayer	= instanceGame.Players[tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer]];
-	
-	const bool bDoneWaiting = keyAccum.Accumulate(instanceGame.FrameTimer.LastTimeSeconds) > 0.0;
-	if(instanceGame.FrameInput.Keys[VK_TAB] && bDoneWaiting)
-	{
-		if(currentPlayer.Selection.PlayerUnit != -1 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1)
-		{
-			CCharacter&			currentAgent = *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
-			::nwol::SCoord3<int32_t>&	currentAgentPosition = currentAgent.Position;
+	STacticalInfo																& tacticalInfo									= instanceGame.TacticalInfo;
+	//SPlayer																	& playerUser									= instanceGame.Players[PLAYER_INDEX_USER];
+	SPlayer																		& currentPlayer									= instanceGame.Players[tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer]];
+	const bool																	bDoneWaiting									= keyAccum.Accumulate(instanceGame.FrameTimer.LastTimeSeconds) > 0.0;
+	if(instanceGame.FrameInput.Keys[VK_TAB] && bDoneWaiting) {
+		if(currentPlayer.Selection.PlayerUnit != -1 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1) {
+			CCharacter																	& currentAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
+			::nwol::SCoord3<int32_t>													& currentAgentPosition							= currentAgent.Position;
 		}
-		if(instanceGame.FrameInput.Keys[VK_SHIFT])
-		{
-			if(!currentPlayer.SelectPreviousAgent())
-			{
-				keyAccum.Value = 0.0;
+		if(instanceGame.FrameInput.Keys[VK_SHIFT]) {
+			if(!currentPlayer.SelectPreviousAgent()) {
+				keyAccum.Value															= 0.0;
 				return true;
 			}
 		}
-		else if(!currentPlayer.SelectNextAgent())
-		{
-			keyAccum.Value = 0.0;
+		else if(!currentPlayer.SelectNextAgent()) {
+			keyAccum.Value																= 0.0;
 			return true;
 		}
-
-		if(currentPlayer.Selection.TargetPlayer != -1 && currentPlayer.Selection.TargetUnit != -1)
-		{
+		if(currentPlayer.Selection.TargetPlayer != -1 && currentPlayer.Selection.TargetUnit != -1) {
 			SPlayer&  playerTarget = instanceGame.Players[tacticalInfo.Setup.Players[currentPlayer.Selection.TargetPlayer]];
 			if(playerTarget.Squad.Agents[currentPlayer.Selection.TargetUnit] != -1)
-				currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit] = playerTarget.Army[playerTarget.Squad.Agents[currentPlayer.Selection.TargetUnit]]->Position;
+				currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit]		= playerTarget.Army[playerTarget.Squad.Agents[currentPlayer.Selection.TargetUnit]]->Position;
 			else
 				currentPlayer.Selection.ClearTarget();
 		}
-
-		keyAccum.Value = 0.0;
+		keyAccum.Value																= 0.0;
 	}
-	else 
-	{
-		int32_t mouseX = instanceGame.FrameInput.MouseX;
-		int32_t mouseY = instanceGame.FrameInput.MouseY;
+	else {
+		int32_t																			mouseX										= instanceGame.FrameInput.MouseX;
+		int32_t																			mouseY										= instanceGame.FrameInput.MouseY;
 
-		klib::SGlobalDisplay& globalDisplay = instanceGame.GlobalDisplay;
-		STacticalDisplay& tacticalDisplay = instanceGame.TacticalDisplay;
-		int32_t tacticalDisplayX	= (globalDisplay.Width>>1)	- (tacticalDisplay.Width>>1);
-		int32_t tacticalDisplayStop	= TACTICAL_DISPLAY_POSY		+ (tacticalDisplay.Depth);
-		int32_t tacticalMouseX		= mouseX-tacticalDisplayX;
-		int32_t tacticalMouseY		= mouseY-TACTICAL_DISPLAY_POSY;
+		::klib::SGlobalDisplay															& globalDisplay								= instanceGame.GlobalDisplay;
+		::klib::STacticalDisplay														& tacticalDisplay							= instanceGame.TacticalDisplay;
+		int32_t																			tacticalDisplayX							= (globalDisplay.Width>>1)	- (tacticalDisplay.Width>>1);
+		int32_t																			tacticalDisplayStop							= TACTICAL_DISPLAY_POSY		+ (tacticalDisplay.Depth);
+		int32_t																			tacticalMouseX								= mouseX-tacticalDisplayX;
+		int32_t																			tacticalMouseY								= mouseY-TACTICAL_DISPLAY_POSY;
 
-		bool bInArea = tacticalMouseX >= 0 && tacticalMouseX < STacticalBoard::Width
-					&& tacticalMouseY >= 0 && tacticalMouseY < STacticalBoard::Depth;
-		
+		bool																			 bInArea									=  tacticalMouseX >= 0 && tacticalMouseX < STacticalBoard::Width
+																																	&& tacticalMouseY >= 0 && tacticalMouseY < STacticalBoard::Depth
+			;
 		if(false == bInArea)
 			return false;
 
 		if(tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer] != PLAYER_INDEX_USER)
 			return false;
 
-		STacticalBoard& tacticalBoard = tacticalInfo.Board;
+		STacticalBoard																	& tacticalBoard								= tacticalInfo.Board;
 
-		if(currentPlayer.Selection.PlayerUnit != -1 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1)
-		{
-			CCharacter&			currentAgent = *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
-			const ::nwol::SCoord3<int32_t>&	currentAgentPosition = currentAgent.Position;
-
-
-			int32_t targetPlayerIndex	= tacticalBoard.Tiles.Entities.Agents[tacticalMouseY][tacticalMouseX].PlayerIndex;
-			int32_t agentIndex			= tacticalBoard.Tiles.Entities.Agents[tacticalMouseY][tacticalMouseX].AgentIndex;
-			if(0 != instanceGame.FrameInput.MouseButtons[0])// || 0 != instanceGame.FrameInput.MouseButtons[4]) 
-			{
-				currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit] = {tacticalMouseX, currentAgentPosition.y, tacticalMouseY};
-				if(	targetPlayerIndex != -1 && agentIndex != -1 )
-				{
-					if(targetPlayerIndex == tacticalInfo.CurrentPlayer && currentPlayer.Army[currentPlayer.Squad.Agents[agentIndex]]->IsAlive() && false == currentPlayer.Army[currentPlayer.Squad.Agents[agentIndex]]->DidLoseTurn() && (0 == instanceGame.FrameInput.Keys[VK_CONTROL] && 0 == instanceGame.FrameInput.Keys[VK_LCONTROL]))
-					{
+		if(currentPlayer.Selection.PlayerUnit != -1 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1) {
+			CCharacter																		& currentAgent								= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
+			const ::nwol::SCoord3<int32_t>													& currentAgentPosition						= currentAgent.Position;
+			int32_t																			targetPlayerIndex							= tacticalBoard.Tiles.Entities.Agents[tacticalMouseY][tacticalMouseX].PlayerIndex;
+			int32_t																			agentIndex									= tacticalBoard.Tiles.Entities.Agents[tacticalMouseY][tacticalMouseX].AgentIndex;
+			if(0 != instanceGame.FrameInput.MouseButtons[0]) {// || 0 != instanceGame.FrameInput.MouseButtons[4]) 
+				currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit]		= {tacticalMouseX, currentAgentPosition.y, tacticalMouseY};
+				if(	targetPlayerIndex != -1 && agentIndex != -1 ) {
+					if(targetPlayerIndex == tacticalInfo.CurrentPlayer && currentPlayer.Army[currentPlayer.Squad.Agents[agentIndex]]->IsAlive() && false == currentPlayer.Army[currentPlayer.Squad.Agents[agentIndex]]->DidLoseTurn() && (0 == instanceGame.FrameInput.Keys[VK_CONTROL] && 0 == instanceGame.FrameInput.Keys[VK_LCONTROL])) {
 						currentPlayer.Selection.PlayerUnit		= agentIndex;
 						currentPlayer.Selection.PlayerSquad	= 0;
-						if(currentPlayer.Selection.TargetPlayer != -1 && currentPlayer.Selection.TargetUnit != -1)
-						{
+						if(currentPlayer.Selection.TargetPlayer != -1 && currentPlayer.Selection.TargetUnit != -1) {
 							SPlayer&  playerTarget = instanceGame.Players[tacticalInfo.Setup.Players[currentPlayer.Selection.TargetPlayer]];
 							if(playerTarget.Squad.Agents[currentPlayer.Selection.TargetUnit] != -1)
 								currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit] = playerTarget.Army[playerTarget.Squad.Agents[currentPlayer.Selection.TargetUnit]]->Position;
@@ -103,16 +85,14 @@ bool handleUserInput(SGame& instanceGame, const SGameState& returnState)
 								currentPlayer.Selection.ClearTarget();
 						}
 					}
-					else 
-					{
+					else {
 						currentPlayer.Selection.TargetPlayer	= targetPlayerIndex;
-						currentPlayer.Selection.TargetSquad	= 0;
+						currentPlayer.Selection.TargetSquad		= 0;
 						currentPlayer.Selection.TargetUnit		= agentIndex;
 						currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit] = {tacticalMouseX, currentAgentPosition.y, tacticalMouseY};
 					}
 				}
-				else
-				{
+				else {
 					currentPlayer.Selection.ClearTarget();
 					currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit] = {tacticalMouseX, currentAgentPosition.y, tacticalMouseY};
 				}
@@ -149,14 +129,12 @@ void drawTileInfo
 		 && mouseY >= TACTICAL_DISPLAY_POSY && mouseY < tacticalDisplayStop
 		)
 	{
-		bInTacticalMap = true;
-		int32_t		playerIndex		= tacticalInfo.Board.Tiles.Entities.Agents[boardZ][boardX].PlayerIndex;
-		int32_t		agentIndex		= tacticalInfo.Board.Tiles.Entities.Agents[boardZ][boardX].AgentIndex;
+		bInTacticalMap		= true;
+		int32_t					playerIndex		= tacticalInfo.Board.Tiles.Entities.Agents[boardZ][boardX].PlayerIndex;
+		int32_t					agentIndex		= tacticalInfo.Board.Tiles.Entities.Agents[boardZ][boardX].AgentIndex;
+		int32_t					terrainHeight	= tacticalInfo.Board.Tiles.Terrain.Topology[boardZ][boardX].Sharp+tacticalInfo.Board.Tiles.Terrain.Topology[boardZ][boardX].Smooth;
 
-		int32_t		terrainHeight	= tacticalInfo.Board.Tiles.Terrain.Topology[boardZ][boardX].Sharp+tacticalInfo.Board.Tiles.Terrain.Topology[boardZ][boardX].Smooth;
-
-		if(playerIndex	!= -1 && agentIndex != -1 && tacticalInfo.Setup.Players[playerIndex] != -1)
-		{
+		if(playerIndex	!= -1 && agentIndex != -1 && tacticalInfo.Setup.Players[playerIndex] != -1) {
 			const SPlayer&	boardPlayer	= instanceGame.Players[tacticalInfo.Setup.Players[playerIndex]];
 			bool			bDarken		= !	( boardPlayer.Control.Type == PLAYER_CONTROL_AI
 											 && ( (boardPlayer.Control.AIMode == PLAYER_AI_ASSISTS)
@@ -169,28 +147,25 @@ void drawTileInfo
 			selectedTile	= boardPlayer.Army[boardPlayer.Squad.Agents[agentIndex]]->Name;
 			bDrawText		= true;
 		}
-		else if(tacticalInfo.Board.Tiles.Entities.Coins[boardZ][boardX])
-		{
+		else if(tacticalInfo.Board.Tiles.Entities.Coins[boardZ][boardX]) {
 			selectedTile	= "Coins: " + std::to_string(tacticalInfo.Board.Tiles.Entities.Coins[boardZ][boardX]);
 			messageColor	= COLOR_ORANGE;
 			bDrawText		= true;
 		}
-		else if(tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Definition != -1)
-		{
+		else if(tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Definition != -1) {
 			std::string stagePropName = getStagePropName(
-			{	tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Definition			
-			,	tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Modifier
-			,	tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Level
-			,	-1
-			}
-			);
+				{	tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Definition			
+				,	tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Modifier
+				,	tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Level
+				,	-1
+				});
 			selectedTile	= stagePropName;
 			if(tacticalInfo.Board.Tiles.Entities.Props[boardZ][boardX].Level == -1)
 				selectedTile	+= " (Destroyed)";
 			messageColor	= COLOR_DARKGREY;
 			bDrawText		= true;
 		}
-		else if(terrainHeight 
+		else if ( terrainHeight 
 			||	0 != tacticalInfo.Board.Tiles.Terrain.Geometry.Cells[boardZ][boardX].fHeight[0] 
 			||	0 != tacticalInfo.Board.Tiles.Terrain.Geometry.Cells[boardZ][boardX].fHeight[1]
 			||	0 != tacticalInfo.Board.Tiles.Terrain.Geometry.Cells[boardZ][boardX].fHeight[2]
@@ -248,19 +223,16 @@ void drawTileInfo
 
 }
 
-void drawPlayerInfo(SGame& instanceGame)
-{
+void drawPlayerInfo(SGame& instanceGame) {
 	static bool							bSwap			= false;
-	static ::nwol::STimer					animationTimer;
+	static ::nwol::STimer				animationTimer;
 	static ::nwol::SAccumulator<double>	animationAccum	= {0.0, 0.1};
 
 	animationTimer.Frame();
-	if( animationAccum.Accumulate(animationTimer.LastTimeSeconds) )
-	{
+	if( animationAccum.Accumulate(animationTimer.LastTimeSeconds) ) {
 		bSwap = !bSwap;
 		animationAccum.Value = 0;
-	};
-
+	}
 	SGlobalDisplay&			globalDisplay		= instanceGame.GlobalDisplay;
 	STacticalDisplay&		tacticalDisplay		= instanceGame.TacticalDisplay;
 	const int32_t			tacticalDisplayStop	= TACTICAL_DISPLAY_POSY		+ (tacticalDisplay.Depth);
@@ -279,7 +251,7 @@ void drawPlayerInfo(SGame& instanceGame)
 	if( currentPlayer.Selection.PlayerUnit != -1 
 	 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1 
 	 && currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]]->IsAlive()
-	) 
+	 ) 
 	{
 		bool	bDarken = !	( currentPlayer.Control.Type == PLAYER_CONTROL_AI
 							 && ( (currentPlayer.Control.AIMode == PLAYER_AI_ASSISTS)
@@ -287,11 +259,8 @@ void drawPlayerInfo(SGame& instanceGame)
 							   || (currentPlayer.Control.AIMode == PLAYER_AI_VIOLENT)
 								)
 							);
-
-
 		messageColor = getPlayerColor(tacticalInfo, currentPlayer, tacticalInfo.CurrentPlayer, PLAYER_INDEX_USER, bDarken);
-		if(currentPlayer.Selection.PlayerUnit != -1 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1)
-		{
+		if(currentPlayer.Selection.PlayerUnit != -1 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1) {
 			CCharacter& playerAgent = *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 			displayDetailedAgentSlot(globalDisplay, PLAYER_INFO_POSY, 4, playerAgent, messageColor);
 			displayStatusEffectsAndTechs(globalDisplay, PLAYER_INFO_POSY+9, 4+32, currentPlayer.Selection.PlayerUnit+1, playerAgent);
@@ -369,8 +338,7 @@ void drawPlayerInfo(SGame& instanceGame)
 	lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 3, tacticalDisplayX+1, nwol::SCREEN_RIGHT, selectionText.c_str());
 }
 
-bool shoot(SGame& instanceGame, int32_t tacticalPlayer, int32_t squadAgent)
-{
+bool shoot(SGame& instanceGame, int32_t tacticalPlayer, int32_t squadAgent) {
 	STacticalDisplay&	tacticalDisplay	= instanceGame.TacticalDisplay;
 	STacticalInfo&		tacticalInfo	= instanceGame.TacticalInfo;
 	SPlayer& playerShooter		= instanceGame.Players[tacticalInfo.Setup.Players[tacticalPlayer]];
@@ -391,26 +359,19 @@ bool shoot(SGame& instanceGame, int32_t tacticalPlayer, int32_t squadAgent)
 
 	//if ((rand() % 100) < finalChance ) {
 
-	if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_SPLASH))
-		PlaySound("sounds\\Shotgun_Blast-Jim_Rogers-1914772763.wav", 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass, PROJECTILE_CLASS_ROCKET))
-		PlaySound("sounds\\Missle_Launch-Kibblesbob-2118796725.wav", 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass, PROJECTILE_CLASS_GRENADE))
-		PlaySound("sounds\\grenade-launcher-daniel_simon.wav", 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass, PROJECTILE_CLASS_BULLET))
-		PlaySound("sounds\\Anti Aircraft Gun-Mike_Koenig-1303768514.wav", 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass, PROJECTILE_CLASS_RAY))
-		PlaySound("sounds\\Gun_Shot-Marvin-1140816320.wav", 0, SND_ASYNC | SND_FILENAME);
+		 if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType		, ATTACK_TYPE_SPLASH		)) PlaySound("sounds\\Shotgun_Blast-Jim_Rogers-1914772763.wav"		, 0, SND_ASYNC | SND_FILENAME);
+	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_ROCKET	)) PlaySound("sounds\\Missle_Launch-Kibblesbob-2118796725.wav"		, 0, SND_ASYNC | SND_FILENAME);
+	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_GRENADE	)) PlaySound("sounds\\grenade-launcher-daniel_simon.wav"			, 0, SND_ASYNC | SND_FILENAME);
+	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_BULLET	)) PlaySound("sounds\\Anti Aircraft Gun-Mike_Koenig-1303768514.wav"	, 0, SND_ASYNC | SND_FILENAME);
+	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_RAY		)) PlaySound("sounds\\Gun_Shot-Marvin-1140816320.wav"				, 0, SND_ASYNC | SND_FILENAME);
 	
-	for(int32_t iBullet=0; iBullet<totalBullets; ++iBullet)
-	{
+	for(int32_t iBullet=0; iBullet<totalBullets; ++iBullet) {
 		::nwol::bit_clear(playerShooter.Squad.AgentStates[squadAgent], AGENT_STATE_MOVE);
 		SBullet newBullet;
 		newBullet.Position.Cell		= {agentShooter.Position.x, agentShooter.Position.y, agentShooter.Position.z};
 		newBullet.Position.Offset	= {.5f, .75f, .5f};
 		newBullet.Direction = {(float)(targetTile.x-newBullet.Position.Cell.x), (float)(targetTile.y-newBullet.Position.Cell.y), (float)(targetTile.z-newBullet.Position.Cell.z)};
-		if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_SPLASH))
-		{
+		if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_SPLASH)) {
 			double angleOffset	= 1.0/20.0*(totalBullets/2);
 			double angle		= iBullet/20.0;
 			newBullet.Direction.RotateY(angle-angleOffset);
@@ -439,57 +400,44 @@ bool shoot(SGame& instanceGame, int32_t tacticalPlayer, int32_t squadAgent)
 }
 
 TURN_ACTION selectAIAction		(SGame& instanceGame);
-TURN_ACTION selectRemoteAction	(SGame& instanceGame)
-{
+TURN_ACTION selectRemoteAction	(SGame& instanceGame) {
 	return selectAIAction(instanceGame);
 	return TURN_ACTION_CONTINUE;
-};
+}
 
-bool characterTurn(SGame& instanceGame, TURN_ACTION combatOption)
-{
-	STacticalInfo&	tacticalInfo	= instanceGame.TacticalInfo;
-	SGlobalDisplay&	globalDisplay	= instanceGame.GlobalDisplay;
+bool characterTurn(SGame& instanceGame, TURN_ACTION combatOption) {
+	STacticalInfo	& tacticalInfo					= instanceGame.TacticalInfo;
+	SGlobalDisplay	& globalDisplay					= instanceGame.GlobalDisplay;
+	SPlayer			& currentPlayer					= instanceGame.Players[tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer]];
+	bool			bNotCanceled					= true;
 
-	SPlayer&		currentPlayer	= instanceGame.Players[tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer]];
-
-	bool			bNotCanceled	= true;
-
-	if(combatOption == TURN_ACTION_ATTACK && currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Actions > 0) 
-	{
+	if(combatOption == TURN_ACTION_ATTACK && currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Actions > 0) {
 		CCharacter&		currentAgent	= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
-
-		instanceGame.ClearMessages();
 		CCharacter&		playerAgent		= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
-		if(nwol::bit_true(currentAgent.FinalFlags.Tech.AttackType, ATTACK_TYPE_RANGED))
-		{
-			if(true_if(playerAgent.ActiveBonus.Status.Status & COMBAT_STATUS_BLACKOUT) && (getWeaponFlags(playerAgent.CurrentEquip.Weapon).Tech.Tech & ENTITY_TECHNOLOGY_DIGITAL)) 
-			{
+		instanceGame.ClearMessages();
+		if(nwol::bit_true(currentAgent.FinalFlags.Tech.AttackType, ATTACK_TYPE_RANGED)) {
+			if(true_if(playerAgent.ActiveBonus.Status.Status & COMBAT_STATUS_BLACKOUT) && (getWeaponFlags(playerAgent.CurrentEquip.Weapon).Tech.Tech & ENTITY_TECHNOLOGY_DIGITAL)) {
 				instanceGame.UserMessage = "This weapon was disabled by an electromagnetic pulse.";
 				instanceGame.LogMessage();
 			}
-			else if(shoot(instanceGame, tacticalInfo.CurrentPlayer, currentPlayer.Selection.PlayerUnit))
-			{
+			else if(shoot(instanceGame, tacticalInfo.CurrentPlayer, currentPlayer.Selection.PlayerUnit)) {
 				instanceGame.UserSuccess = playerAgent.Name + " shoots!"; 
 				instanceGame.LogSuccess();
 				--currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Actions;
 			}
-			else
-			{
+			else {
 				instanceGame.UserMiss = "You need to select a valid target in order to attack!"; 
 				instanceGame.LogMiss();
 			}
 		}
-		else if(nwol::bit_true(currentAgent.FinalFlags.Tech.AttackType, ATTACK_TYPE_MELEE))
-		{
-			if(currentPlayer.Selection.TargetPlayer == -1 || tacticalInfo.Setup.Players[currentPlayer.Selection.TargetPlayer] == PLAYER_INDEX_INVALID || currentPlayer.Selection.TargetUnit == -1)
-			{
+		else if(nwol::bit_true(currentAgent.FinalFlags.Tech.AttackType, ATTACK_TYPE_MELEE)) {
+			if(currentPlayer.Selection.TargetPlayer == -1 || tacticalInfo.Setup.Players[currentPlayer.Selection.TargetPlayer] == PLAYER_INDEX_INVALID || currentPlayer.Selection.TargetUnit == -1) {
 				instanceGame.UserMiss = "You need to select a valid target in order to attack!"; 
 				instanceGame.LogMiss();
 			}
-			else
-			{
+			else {
 				SPlayer&					targetPlayer		= instanceGame.Players[tacticalInfo.Setup.Players[currentPlayer.Selection.TargetPlayer]];
-				CCharacter&					targetAgent			= *targetPlayer.Army[targetPlayer.Squad.Agents[currentPlayer.Selection.TargetUnit]];
+				CCharacter&					targetAgent			= *targetPlayer	.Army[targetPlayer.Squad.Agents[currentPlayer.Selection.TargetUnit]];
 				CCharacter&					playerAgent			= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 
 				::nwol::SCoord3<int32_t>	coordPlayer			= playerAgent.Position; 
@@ -501,15 +449,14 @@ bool characterTurn(SGame& instanceGame, TURN_ACTION combatOption)
 
 				double						finalSight			= getFinalRange(playerAgent, playerAgentPoints);
 				double						finalRange			= getFinalSight(playerAgent, playerAgentPoints);
-				if((distance.Length() > finalSight || distance.Length() > finalRange) 
-					&& nwol::bit_false(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_RANGED))
-			
+				if( (distance.Length() > finalSight || distance.Length() > finalRange) 
+				 && nwol::bit_false(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_RANGED)
+				 )
 				{
 					instanceGame.UserMiss = "You can't attack " + targetAgent.Name + " from that distance."; 
 					instanceGame.LogMiss();
 				}
-				else
-				{
+				else {
 					char						formatCoords[256]	= {};
 					sprintf_s(formatCoords, "{x=%i, y=%i, z=%i}", coordTarget.x, coordTarget.y, coordTarget.z);
 					::std::string				targetType			= "Target Coords: " + std::string(formatCoords) + ". Target player index: "	+ std::to_string(currentPlayer.Selection.TargetPlayer)	+ ". Target player unit: "	+ std::to_string(currentPlayer.Selection.TargetUnit) + ". Target player name: "		+ std::string(targetPlayer.Name);
@@ -525,8 +472,7 @@ bool characterTurn(SGame& instanceGame, TURN_ACTION combatOption)
 
 					if(!targetAgent.IsAlive())	
 						handleAgentDeath(instanceGame, targetAgent, playerAgent, tacticalInfo.Setup.TeamPerPlayer[currentPlayer.Selection.TargetPlayer]);
-					if(!playerAgent.IsAlive())	
-					{ 
+					if(!playerAgent.IsAlive()) { 
 						handleAgentDeath(instanceGame, playerAgent, targetAgent, tacticalInfo.Setup.TeamPerPlayer[tacticalInfo.CurrentPlayer]);
 						bNotCanceled = false;
 						endTurn(instanceGame);
@@ -539,25 +485,20 @@ bool characterTurn(SGame& instanceGame, TURN_ACTION combatOption)
 		}// if(melee)
 
 	} // if(TURN_ACTION_ATTACK)
-	else if(combatOption == TURN_ACTION_INVENTORY) 
-	{
+	else if(combatOption == TURN_ACTION_INVENTORY) {
 		instanceGame.State.Substate = GAME_SUBSTATE_CHARACTER;
 	}
-	else if(combatOption == TURN_ACTION_CANCEL) 
-	{
+	else if(combatOption == TURN_ACTION_CANCEL) {
 		instanceGame.UserMessage	= std::string(currentPlayer.Name) + " canceled the turn.";
 		instanceGame.LogMessage();
 		bNotCanceled = false;
 		endTurn(instanceGame);
 	}
-	else if(combatOption == TURN_ACTION_MOVE) 
-	{
-
+	else if(combatOption == TURN_ACTION_MOVE) {
 		char			buffer[128]	= {};
 		CCharacter&		playerAgent	= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 		bool			bSuccess	= false;
-		if(tacticalInfo.Board.Tiles.IsTileAvailable(currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].x, currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].z))
-		{
+		if(tacticalInfo.Board.Tiles.IsTileAvailable(currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].x, currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].z)) {
 			currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit] = AGENT_STATE_MOVE;
 			sprintf_s(buffer, "Player %s moves %s to {%i, %i, %i}."
 				, currentPlayer.Name.c_str()
@@ -569,8 +510,7 @@ bool characterTurn(SGame& instanceGame, TURN_ACTION combatOption)
 			instanceGame.UserSuccess	= buffer;
 			instanceGame.LogSuccess();
 		}
-		else
-		{
+		else {
 			sprintf_s(buffer, "Cannot move to {%i, %i, %i}. Terrain occupied or unreachable."
 				, currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].x
 				, currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].y
@@ -580,8 +520,7 @@ bool characterTurn(SGame& instanceGame, TURN_ACTION combatOption)
 			instanceGame.LogError();
 		}
 	}
-	else if(combatOption != TURN_ACTION_CONTINUE)
-	{
+	else if(combatOption != TURN_ACTION_CONTINUE) {
 		instanceGame.UserError = "This function isn't available!";
 		instanceGame.LogError();
 	}
@@ -590,17 +529,14 @@ bool characterTurn(SGame& instanceGame, TURN_ACTION combatOption)
 }
 
 template <size_t _Size1>
-int32_t initInventoryMenu(klib::CCharacter& adventurer, klib::SMenuItem<int32_t> (&itemOptions)[_Size1], bool bPrintPrice=false, bool bSellPrice=true)
-{
+int32_t initInventoryMenu(klib::CCharacter& adventurer, klib::SMenuItem<int32_t> (&itemOptions)[_Size1], bool bPrintPrice=false, bool bSellPrice=true) {
 	char	itemOption[128] = {};
 	
-	for(uint32_t i=0; i<adventurer.Goods.Inventory.Items.Count; ++i)
-	{
+	for(uint32_t i=0; i<adventurer.Goods.Inventory.Items.Count; ++i) {
 		const klib::SItem&	itemEntity	= adventurer.Goods.Inventory.Items[i].Entity;
 		std::string			itemName	= getItemName(itemEntity);
 
-		if(bPrintPrice)
-		{
+		if(bPrintPrice) {
 			int32_t				finalPrice	= getItemPrice(itemEntity, bSellPrice);
 			sprintf_s(itemOption, "%i coins each - x%.2u %s", finalPrice, adventurer.Goods.Inventory.Items[i].Count, itemName.c_str());
 		}
@@ -614,8 +550,7 @@ int32_t initInventoryMenu(klib::CCharacter& adventurer, klib::SMenuItem<int32_t>
 	return 0;
 }
 
-int32_t drawInventoryMenu(SGame& instanceGame, SPlayer& player, klib::CCharacter& adventurer, const std::string& menuTitle)
-{
+int32_t drawInventoryMenu(SGame& instanceGame, SPlayer& player, klib::CCharacter& adventurer, const std::string& menuTitle) {
 	::klib::SMenuItem<int32_t>	itemOptions[MAX_INVENTORY_SLOTS+1]	= {};
 	SGlobalDisplay&				globalDisplay						= instanceGame.GlobalDisplay;
 	SCharacterInventory&		characterInventory					= adventurer.Goods.Inventory;
@@ -624,19 +559,16 @@ int32_t drawInventoryMenu(SGame& instanceGame, SPlayer& player, klib::CCharacter
 		
 };
 
-TURN_ACTION useItems(SGame& instanceGame, SPlayer& player, klib::CCharacter& user, const std::string& menuTitle, bool bIsAIControlled)
-{
+TURN_ACTION useItems(SGame& instanceGame, SPlayer& player, klib::CCharacter& user, const std::string& menuTitle, bool bIsAIControlled) {
 	int32_t						indexInventory						= ~0U;
 	SCharacterInventory&		characterInventory					= user.Goods.Inventory;
 	bool						bUsedItem							= false;
-	if(!bIsAIControlled) 
-	{
+	if(!bIsAIControlled)  {
 		indexInventory = drawInventoryMenu(instanceGame, player, user, menuTitle);
 		if(indexInventory < (int32_t)user.Goods.Inventory.Items.Count)
 			bUsedItem = true;
 	}
-	else // not a player so execute choice by AI
-	{
+	else { // not a player so execute choice by AI
 		//indexInventory = selectItemsAI(user, target);
 		indexInventory = user.Goods.Inventory.Items.Count;
 		if(indexInventory < (int32_t)user.Goods.Inventory.Items.Count)
@@ -648,8 +580,7 @@ TURN_ACTION useItems(SGame& instanceGame, SPlayer& player, klib::CCharacter& use
 	else if(indexInventory == -1)
 		return TURN_ACTION_CONTINUE;
 
-	if(bUsedItem)
-	{
+	if(bUsedItem) {
 		const klib::SItem&			entityItem = user.Goods.Inventory.Items[indexInventory].Entity;
 		const klib::CItem&			itemDescription = klib::itemDescriptions[entityItem.Definition];
 		const klib::SEntityPoints&	userFinalPoints = user.FinalPoints;
@@ -670,37 +601,31 @@ TURN_ACTION useItems(SGame& instanceGame, SPlayer& player, klib::CCharacter& use
 			bUsedItem = true;
 	}
 
-	if(bUsedItem)
-	{
+	if(bUsedItem) {
 		const klib::SItem& entityItem = user.Goods.Inventory.Items[indexInventory].Entity;
 		const klib::CItem& itemDescription = klib::itemDescriptions[entityItem.Definition];
 		if( klib::ITEM_TYPE_POTION == itemDescription.Type )
 			bUsedItem = klib::executeItem(indexInventory, user, user);
-		else 
+		else {
 		//if( klib::ITEM_TYPE_GRENADE == itemDescription.Type )
 		//{
 		//
 		//}
 		//else if( klib::ITEM_TYPE_POTION == itemDescription.Type )
-		{
-			if(player.Selection.TargetPlayer != -1 && player.Selection.TargetUnit != -1)
-			{
+			if(player.Selection.TargetPlayer != -1 && player.Selection.TargetUnit != -1) {
 				SPlayer& targetPlayer = instanceGame.Players[instanceGame.TacticalInfo.Setup.Players[player.Selection.TargetPlayer]];
-				if(targetPlayer.Squad.Agents[player.Selection.TargetUnit] != -1)
-				{
+				if(targetPlayer.Squad.Agents[player.Selection.TargetUnit] != -1) {
 					CCharacter& targetAgent = *targetPlayer.Army[targetPlayer.Squad.Agents[player.Selection.TargetUnit]];
 					bUsedItem = klib::executeItem(indexInventory, user, targetAgent);
 				}
-				else
-				{
+				else {
 					bUsedItem = false;
 					std::string itemName = getItemName(entityItem);
 					instanceGame.UserMessage = "You need to select a valid target in order to use " + itemName + "!";
 					instanceGame.LogMessage();
 				}
 			}
-			else
-			{
+			else {
 				bUsedItem = false;
 				std::string itemName = getItemName(entityItem);
 				instanceGame.UserMessage = "You need to select a valid target in order to use " + itemName + "!";
@@ -715,25 +640,18 @@ TURN_ACTION useItems(SGame& instanceGame, SPlayer& player, klib::CCharacter& use
 	return TURN_ACTION_CONTINUE;
 }
 
-SGameState endMission(SGame& instanceGame)
-{
-	// Determine outcome before exiting tactical mode.
-	klib::determineOutcome(instanceGame);
-
-	// Clear tactical state bit.
-	nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);
+SGameState endMission(SGame& instanceGame) {
+	klib::determineOutcome(instanceGame);						// Determine outcome before exiting tactical mode.
+	nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);	// Tell the system that the tactical mode is over.
 	return {GAME_STATE_WELCOME_COMMANDER};
 }
 
 
-void updateBullets(SGame& instanceGame)
-{
+void updateBullets(SGame& instanceGame) {
 	STacticalInfo&		tacticalInfo	= instanceGame.TacticalInfo;
 
-	for(uint32_t iBullet=0;iBullet<tacticalInfo.Board.Shots.Bullet.Count; ++iBullet)
-	{
-		for(uint32_t iShot=0; iBullet < tacticalInfo.Board.Shots.Bullet.Count && iShot < tacticalInfo.Board.Shots.Bullet[iBullet].Count; ++iShot)
-		{
+	for(uint32_t iBullet=0;iBullet<tacticalInfo.Board.Shots.Bullet.Count; ++iBullet) {
+		for(uint32_t iShot=0; iBullet < tacticalInfo.Board.Shots.Bullet.Count && iShot < tacticalInfo.Board.Shots.Bullet[iBullet].Count; ++iShot) {
 			double						fSpeed			= 10.0;
 			double						fActualSpeed	= instanceGame.FrameTimer.LastTimeSeconds*fSpeed;
 			//double fActualSpeed = 1.0*fSpeed;
@@ -917,8 +835,7 @@ void updateBullets(SGame& instanceGame)
 						SPlayer&			playerShooter	= instanceGame.Players[tacticalInfo.Setup.Players[newAOE.Caster.PlayerIndex]];
 						CCharacter&			shooter			= *playerShooter.Army[playerShooter.Squad.Agents[newAOE.Caster.AgentIndex]];
 						TEAM_TYPE			teamShooter		= tacticalInfo.Setup.TeamPerPlayer[newAOE.Caster.PlayerIndex];
-						for(int32_t iAgentInRange=0; iAgentInRange < agentsInRange.Count; ++iAgentInRange)
-						{
+						for(int32_t iAgentInRange=0; iAgentInRange < agentsInRange.Count; ++iAgentInRange) {
 							SPlayer&						playerVictim	= instanceGame.Players[tacticalInfo.Setup.Players[agentsInRange.Agents[iAgentInRange].Agent.PlayerIndex]];
 							TEAM_TYPE						teamVictim		= tacticalInfo.Setup.TeamPerPlayer[agentsInRange.Agents[iAgentInRange].Agent.PlayerIndex];
 							CCharacter&						agentVictim		= *playerVictim.Army[playerVictim.Squad.Agents[agentsInRange.Agents[iAgentInRange].Agent.AgentIndex]];
@@ -952,27 +869,22 @@ void updateBullets(SGame& instanceGame)
 }
 
 bool initTacticalGame(SGame& instanceGame);
-SGameState drawTacticalScreen(SGame& instanceGame, const SGameState& returnState)
-{
+SGameState drawTacticalScreen(SGame& instanceGame, const SGameState& returnState) {
 	SGameState exitState = returnState;
-	if(false == nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL))
-	{
-		if(!initTacticalGame(instanceGame))
-		{
+	if(false == nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL)) {
+		if(!initTacticalGame(instanceGame)) {
 			nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);
 			return {GAME_STATE_WELCOME_COMMANDER};
-		};		   
+		}
 		//int32_t finalCost = missionCost(instanceGame.Players[PLAYER_INDEX_USER], instanceGame.Players[PLAYER_INDEX_USER].Squad, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
 		PlaySound("sounds\\Intro_Wind-Mark_DiAngelo-844491759.wav", 0, SND_ASYNC | SND_FILENAME);
 		//instanceGame.Players[PLAYER_INDEX_USER].Money -= finalCost;
 	}
 	
 	STacticalInfo&		tacticalInfo	= instanceGame.TacticalInfo;
-	if(tacticalInfo.Board.Shots.Bullet.Count <= 0)
-	{
+	if(tacticalInfo.Board.Shots.Bullet.Count <= 0) {
 		handleUserInput(instanceGame, returnState);
-		if(!updateCurrentPlayer(instanceGame))
-		{
+		if(!updateCurrentPlayer(instanceGame)) {
 			endTurn(instanceGame);
 
 			 // If players have agents still alive we just continue in the tactical screen. Otherwise go back to main screen. 
@@ -980,7 +892,7 @@ SGameState drawTacticalScreen(SGame& instanceGame, const SGameState& returnState
 				return exitState;
 
 			return endMission(instanceGame);
-		};
+		}
 	}
 
 	STacticalDisplay&	tacticalDisplay	= instanceGame.TacticalDisplay;
@@ -994,8 +906,7 @@ SGameState drawTacticalScreen(SGame& instanceGame, const SGameState& returnState
 
 	TURN_ACTION			selectedAction	= TURN_ACTION_CONTINUE;
 
-	if(tacticalInfo.Board.Shots.Bullet.Count <= 0)
-	{
+	if(tacticalInfo.Board.Shots.Bullet.Count <= 0) {
 		// Need to construct menu title
 		std::string menuTitle = "Mission Over";
 		if( currentPlayer.Selection.PlayerUnit != -1 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1 && GAME_SUBSTATE_CHARACTER != instanceGame.State.Substate)
@@ -1003,22 +914,18 @@ SGameState drawTacticalScreen(SGame& instanceGame, const SGameState& returnState
 		else if(currentPlayer.Selection.PlayerUnit != -1)
 			menuTitle = "Agent #" + std::to_string(currentPlayer.Selection.PlayerUnit+1);
 
-		if(currentPlayer.Control.Type == PLAYER_CONTROL_LOCAL) 
-		{
- 			if(instanceGame.State.Substate == GAME_SUBSTATE_INVENTORY)
-			{
+		if(currentPlayer.Control.Type == PLAYER_CONTROL_LOCAL)  {
+ 			if(instanceGame.State.Substate == GAME_SUBSTATE_INVENTORY) {
 				menuTitle += " - Inventory";
 				CCharacter& currentAgent = *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 				selectedAction = useItems(instanceGame, currentPlayer, currentAgent, menuTitle, false);
 			}
- 			else if(instanceGame.State.Substate == GAME_SUBSTATE_EQUIPMENT)
-			{
+ 			else if(instanceGame.State.Substate == GAME_SUBSTATE_EQUIPMENT) {
 				menuTitle += " - Equipment";
 				exitState = drawMenu(globalDisplay.Screen, &globalDisplay.TextAttributes.Cells[0][0], menuTitle, optionsCombatTurnEquip, instanceGame.FrameInput, {GAME_STATE_TACTICAL_CONTROL, GAME_SUBSTATE_MAIN}, exitState, 10);
 				selectedAction = TURN_ACTION_CONTINUE;
 			}
-			else
-			{
+			else {
 				if(instanceGame.State.Substate != GAME_SUBSTATE_MAIN) {
 					instanceGame.ClearMessages();
 					instanceGame.UserError = "Unrecognized game substate!";
@@ -1027,8 +934,7 @@ SGameState drawTacticalScreen(SGame& instanceGame, const SGameState& returnState
 				selectedAction = drawMenu(globalDisplay.Screen, &globalDisplay.TextAttributes.Cells[0][0], menuTitle, optionsCombatTurn, instanceGame.FrameInput, TURN_ACTION_MENUS, TURN_ACTION_CONTINUE, 10);
 			}
 		}
-		else if(currentPlayer.Control.Type == PLAYER_CONTROL_AI) 
-		{
+		else if(currentPlayer.Control.Type == PLAYER_CONTROL_AI)  {
 			selectedAction = selectAIAction(instanceGame);
 #if !(defined(NWOL_DEBUG_ENABLED))
 			Sleep(70);	
@@ -1050,21 +956,15 @@ SGameState drawTacticalScreen(SGame& instanceGame, const SGameState& returnState
 	}
 
 	bool	bNotCanceled	= true;
-	if(selectedAction == TURN_ACTION_MENUS) 
-		return {GAME_STATE_WELCOME_COMMANDER};
-	else if(selectedAction == TURN_ACTION_INVENTORY) 
-		return {exitState.State, GAME_SUBSTATE_INVENTORY};
-	else if(selectedAction == TURN_ACTION_EQUIPMENT) 
-		return {exitState.State, GAME_SUBSTATE_EQUIPMENT};
-	else if(selectedAction == TURN_ACTION_MAIN) 
-		return {exitState.State, GAME_SUBSTATE_MAIN};
-	else if(selectedAction == TURN_ACTION_ABORT_MISSION) 
-	{
+		 if(selectedAction == TURN_ACTION_MENUS)			return {GAME_STATE_WELCOME_COMMANDER};
+	else if(selectedAction == TURN_ACTION_INVENTORY)		return {exitState.State, GAME_SUBSTATE_INVENTORY};
+	else if(selectedAction == TURN_ACTION_EQUIPMENT)		return {exitState.State, GAME_SUBSTATE_EQUIPMENT};
+	else if(selectedAction == TURN_ACTION_MAIN)				return {exitState.State, GAME_SUBSTATE_MAIN};
+	else if(selectedAction == TURN_ACTION_ABORT_MISSION) {
 		currentPlayer.Squad.Clear(-1);
 		return endMission(instanceGame);
 	}
-	else if(selectedAction == TURN_ACTION_AUTOPLAY) 
-	{
+	else if(selectedAction == TURN_ACTION_AUTOPLAY) {
 		currentPlayer.Control.Type = PLAYER_CONTROL_AI;
 		tacticalInfo.Setup.Controls[tacticalInfo.CurrentPlayer].Type = PLAYER_CONTROL_AI;
 		return exitState;
@@ -1076,8 +976,7 @@ SGameState drawTacticalScreen(SGame& instanceGame, const SGameState& returnState
 		endTurn(instanceGame);
 
 	 // If players have agents still alive we just continue in the tactical screen. Otherwise go back to main screen. 
-	if(isTacticalValid(instanceGame))
-	{
+	if(isTacticalValid(instanceGame)) {
 		updateBullets(instanceGame);
 		return exitState;
 	}
