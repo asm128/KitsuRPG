@@ -1,5 +1,3 @@
-//#define NOMINMAX
-
 #include "Game.h"
 
 #include "Enemy.h"
@@ -22,9 +20,7 @@ GDEFINE_OBJ(klib, CCharacter);
 
 using namespace klib;
 
-
-void prompt(std::string& userInput, const std::string& displayText)
-{
+void prompt(std::string& userInput, const std::string& displayText) {
 	nwol::clearASCIIBackBuffer(' ', COLOR_GREEN);
 
 	// Set up a nice prompt 
@@ -45,8 +41,7 @@ void prompt(std::string& userInput, const std::string& displayText)
 	getline(::std::cin, userInput);
 }
 
-void klib::resetGame(SGame& instanceGame)
-{
+void klib::resetGame(SGame& instanceGame) {
 	instanceGame.UserLog.clear();
 	initGame(instanceGame);
 
@@ -64,23 +59,19 @@ void klib::resetGame(SGame& instanceGame)
 	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE);
 }
 
-struct SWearables
-{
+struct SWearables {
 	SProfession	Profession	= {0, 0, 1, -1};
 	SWeapon		Weapon		= {0, 0, 1, -1};
 	SArmor		Armor		= {0, 0, 1, -1};
 	SAccessory	Accessory	= {0, 0, 1, -1};
 };
 
-
-
 // Sets up initial equipment and items for the player to carry or wear.
-void klib::initGame(SGame& instanceGame)
-{
-	info_printf("sizeof(SEntityPoints): %u"						, (uint32_t) sizeof(klib::SEntityPoints)								);
+void klib::initGame(SGame& instanceGame) {
+	info_printf("sizeof(SEntityPoints): %u"							, (uint32_t) sizeof(klib::SEntityPoints)								);
 	info_printf("sizeof(SEntityFlags): %u"							, (uint32_t) sizeof(klib::SEntityFlags)									);
 	info_printf("sizeof(SCombatBonus): %u"							, (uint32_t) sizeof(klib::SCombatBonus)									);
-	info_printf("sizeof(SCombatStatus): %u"						, (uint32_t) sizeof(klib::SCombatStatus)								);
+	info_printf("sizeof(SCombatStatus): %u"							, (uint32_t) sizeof(klib::SCombatStatus)								);
 	info_printf("sizeof(SCharacterEquip): %u"						, (uint32_t) sizeof(klib::SCharacterEquip)								);
 	info_printf("sizeof(SCharacterTurnBonus): %u"					, (uint32_t) sizeof(klib::SCharacterTurnBonus)							);
 	info_printf("sizeof(SCharacterScore): %u"						, (uint32_t) sizeof(klib::SCharacterScore)								);
@@ -89,12 +80,12 @@ void klib::initGame(SGame& instanceGame)
 	info_printf("sizeof(SCharacter)-sizeof(SCharacterGoods): %u"	, (uint32_t)(sizeof(klib::SCharacter)	-sizeof(klib::SCharacterGoods))	);
 	info_printf("sizeof(SPlayer): %u"								, (uint32_t) sizeof(klib::SPlayer)										);
 	info_printf("sizeof(SPlayer)-sizeof(SCharacterGoods): %u"		, (uint32_t)(sizeof(klib::SPlayer)		-sizeof(klib::SCharacterGoods))	);
-	info_printf("sizeof(STacticalInfo): %u"						, (uint32_t) sizeof(klib::STacticalInfo)								);
+	info_printf("sizeof(STacticalInfo): %u"							, (uint32_t) sizeof(klib::STacticalInfo)								);
 	info_printf("sizeof(STacticalBoard): %u"						, (uint32_t) sizeof(klib::STacticalBoard)								);
-	info_printf("sizeof(SMapInventory): %u"						, (uint32_t) sizeof(klib::SMapInventory)								);
+	info_printf("sizeof(SMapInventory): %u"							, (uint32_t) sizeof(klib::SMapInventory)								);
 	info_printf("sizeof(STacticalInfo)-sizeof(SMapInventory): %u"	, (uint32_t)(sizeof(klib::STacticalInfo)-sizeof(klib::SMapInventory))	);
 	info_printf("sizeof(STacticalInfo)-sizeof(STacticalBoard): %u"	, (uint32_t)(sizeof(klib::STacticalInfo)-sizeof(klib::STacticalBoard))	);
-	info_printf("sizeof(SGame): %u"								, (uint32_t) sizeof(klib::SGame)										);
+	info_printf("sizeof(SGame): %u"									, (uint32_t) sizeof(klib::SGame)										);
 
 	nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_STARTED			);
 	nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL			);
@@ -205,35 +196,31 @@ void klib::initGame(SGame& instanceGame)
 	wearablesSniper		.Profession	= {24,	 1+(rand()&3),  5+(int16_t)(rand()%5), -1};
 
 
-	for(uint32_t iPlayer=0, count=1/*MAX_PLAYER_TYPES*/; iPlayer < count; ++iPlayer)
-	{
+	for(uint32_t iPlayer=0, count=1/*MAX_PLAYER_TYPES*/; iPlayer < count; ++iPlayer) {
 		SPlayer& player	= instanceGame.Players[iPlayer]	= SPlayer();
 		GPtrObj(CCharacter) newAgent = klib::enemyDefinitions[1+rand()%(nwol::size(klib::enemyDefinitions)-1)];
 
-		for(uint32_t iAgent=0, agentCount=CAMPAIGN_AGENT_COUNT*2; iAgent<agentCount; iAgent++) 
-		{
+		for(uint32_t iAgent=0, agentCount=CAMPAIGN_AGENT_COUNT*2; iAgent<agentCount; iAgent++) {
 			int32_t iAgentType = (int32_t)(iif(iAgent < CAMPAIGN_AGENT_COUNT) nwol::size(klib::enemyDefinitions)-iAgent-2 : 1);
 			GPtrObj(CCharacter) newAgentNext = klib::enemyDefinitions[iAgentType];
 			klib::CCharacter& adventurer = *newAgentNext.get_address();
 			klib::setupAgent(adventurer, adventurer);
-			if(iPlayer == 0)
-			{
+			if(iPlayer == 0) {
 				SWearables wearablesSelected = {};
 				GENDER genderSelected = GENDER_FEMALE;
-				switch(iAgent)
-				{
-				case  0:	wearablesSelected	= wearablesDeath		;	adventurer.Flags.Tech.Gender	= GENDER_FEMALE	;	break;
-				case  1:	wearablesSelected	= wearablesTiamat		;	adventurer.Flags.Tech.Gender	= GENDER_FEMALE	;	break;
-				case  2:	wearablesSelected	= wearablesAnhur		;	adventurer.Flags.Tech.Gender	= GENDER_MALE	;	break;
-				case  3:	wearablesSelected	= wearablesThor			;	adventurer.Flags.Tech.Gender	= GENDER_MALE	;	break;
-				case  4:	wearablesSelected	= wearablesZeus			;	adventurer.Flags.Tech.Gender	= GENDER_MALE	;	break;
+				switch(iAgent) {
+				case  0:	wearablesSelected	= wearablesDeath		;	adventurer.Flags.Tech.Gender	= GENDER_FEMALE	;							break;
+				case  1:	wearablesSelected	= wearablesTiamat		;	adventurer.Flags.Tech.Gender	= GENDER_FEMALE	;							break;
+				case  2:	wearablesSelected	= wearablesAnhur		;	adventurer.Flags.Tech.Gender	= GENDER_MALE	;							break;
+				case  3:	wearablesSelected	= wearablesThor			;	adventurer.Flags.Tech.Gender	= GENDER_MALE	;							break;
+				case  4:	wearablesSelected	= wearablesZeus			;	adventurer.Flags.Tech.Gender	= GENDER_MALE	;							break;
 				case  5:	wearablesSelected	= wearablesCthulhu		;	adventurer.Flags.Tech.Gender	= GENDER(GENDER_MALE	| GENDER_FEMALE);	break;
-				case  6:	wearablesSelected	= wearablesPerseus		;	adventurer.Flags.Tech.Gender	= GENDER_MALE;	break;	// "Perseus"	
-				case  7:	wearablesSelected	= wearablesFenrir		;	adventurer.Flags.Tech.Gender	= GENDER_MALE;	break;	// "Fenrir"	
-				case  8:	wearablesSelected	= wearablesGilgamesh	;	adventurer.Flags.Tech.Gender	= GENDER_MALE;	break;	// "Gilgamesh"	
-				case  9:	wearablesSelected	= wearablesDragon		;	adventurer.Flags.Tech.Gender	= (GENDER)(1+(rand()&1));	break;
-				case 10:	wearablesSelected	= wearablesJesus		;	adventurer.Flags.Tech.Gender	= GENDER_MALE;	break;	// "Jesus"		
-				case 11:	wearablesSelected	= wearablesBehemoth		;	adventurer.Flags.Tech.Gender	= GENDER_MALE;	break;	// "Behemoth"	
+				case  6:	wearablesSelected	= wearablesPerseus		;	adventurer.Flags.Tech.Gender	= GENDER_MALE;								break;	// "Perseus"	
+				case  7:	wearablesSelected	= wearablesFenrir		;	adventurer.Flags.Tech.Gender	= GENDER_MALE;								break;	// "Fenrir"	
+				case  8:	wearablesSelected	= wearablesGilgamesh	;	adventurer.Flags.Tech.Gender	= GENDER_MALE;								break;	// "Gilgamesh"	
+				case  9:	wearablesSelected	= wearablesDragon		;	adventurer.Flags.Tech.Gender	= (GENDER)(1+(rand()&1));					break;
+				case 10:	wearablesSelected	= wearablesJesus		;	adventurer.Flags.Tech.Gender	= GENDER_MALE;								break;	// "Jesus"		
+				case 11:	wearablesSelected	= wearablesBehemoth		;	adventurer.Flags.Tech.Gender	= GENDER_MALE;								break;	// "Behemoth"	
 				case 12:	// Assault
 				case 15:		
 				case 18:	
@@ -258,8 +245,7 @@ void klib::initGame(SGame& instanceGame)
 					break;
 				}
 
-				if(iAgent > CAMPAIGN_AGENT_COUNT)
-				{
+				if(iAgent > CAMPAIGN_AGENT_COUNT) {
 					wearablesSelected.Profession	.Modifier	= 1+(rand()&3);	// Sergeant Assault
 					wearablesSelected.Weapon		.Level		= 3+(int16_t)(rand()%5);	// Shotgun of Resistance
 					wearablesSelected.Accessory		.Level		= 3+(int16_t)(rand()%5);	// Gold Watch
@@ -273,8 +259,7 @@ void klib::initGame(SGame& instanceGame)
 				//wearablesSelected.Armor			.Level	= 5;
 				//wearablesSelected.Profession	.Level	= 5;
 
-				switch(iAgent)
-				{
+				switch(iAgent) {
 				default:
 					break;
 				case 12:
@@ -297,8 +282,7 @@ void klib::initGame(SGame& instanceGame)
 			player.Army.push_back(newAgentNext);
 		}
 
-		for(uint32_t i=0; i<2; ++i)
-		{
+		for(uint32_t i=0; i<2; ++i) {
 			player.Goods.Inventory.Weapon		.AddElement({2+rand()%2,1+rand()%2,1,-1});
 			player.Goods.Inventory.Accessory	.AddElement({2+rand()%2,1+rand()%2,1,-1});
 			player.Goods.Inventory.Armor		.AddElement({2+rand()%2,1+rand()%2,1,-1});
@@ -307,9 +291,7 @@ void klib::initGame(SGame& instanceGame)
 
 		player.Squad.Clear(-1);
 		player.Squad.Agents[0] = 3;
-		for(uint32_t i=0; i<2; i++) {
-			player.Squad.Agents[1+i] = CAMPAIGN_AGENT_COUNT+i;
-		}
+		for(uint32_t i=0; i<2; i++) { player.Squad.Agents[1+i] = CAMPAIGN_AGENT_COUNT+i; }
 
 		player.Selection = {0, 0, -1, -1, -1};
 

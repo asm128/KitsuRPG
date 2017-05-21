@@ -14,8 +14,7 @@
 
 
 template<typename _TEntity, typename _TEntityRecord, size_t _SizeDefinitions, size_t _SizeModifiers>
-void setupAgentEquip(_TEntity& currentEnemyCurrentEquip, klib::SResearchGroup<_TEntity>& agentCompletedResearch, const _TEntity& templateAgentCurrentEquip, const _TEntityRecord (&definitionsTable)[_SizeDefinitions], const _TEntityRecord (&modifiersTable)[_SizeModifiers] )
-{
+void setupAgentEquip(_TEntity& currentEnemyCurrentEquip, klib::SResearchGroup<_TEntity>& agentCompletedResearch, const _TEntity& templateAgentCurrentEquip, const _TEntityRecord (&definitionsTable)[_SizeDefinitions], const _TEntityRecord (&modifiersTable)[_SizeModifiers] ) {
 	int32_t defin = templateAgentCurrentEquip.Definition	;
 	int32_t modif = templateAgentCurrentEquip.Modifier		;
 	if( defin <= 2 ) {	defin = (rand()%3)+1; } else { defin = (templateAgentCurrentEquip.Definition	+((rand()%3)-1)); }
@@ -26,16 +25,14 @@ void setupAgentEquip(_TEntity& currentEnemyCurrentEquip, klib::SResearchGroup<_T
 	currentEnemyCurrentEquip.Level		= std::max(templateAgentCurrentEquip.Level	+ ((rand()%3)-2), 1);
 }
 
-void klib::completeAgentResearch(klib::CCharacter& agent)
-{
+void klib::completeAgentResearch(klib::CCharacter& agent) {
 	klib::completeAgentResearch(agent.Goods.CompletedResearch.Profession	, agent.CurrentEquip.Profession	);
 	klib::completeAgentResearch(agent.Goods.CompletedResearch.Weapon		, agent.CurrentEquip.Weapon		);
 	klib::completeAgentResearch(agent.Goods.CompletedResearch.Armor			, agent.CurrentEquip.Armor		);
 	klib::completeAgentResearch(agent.Goods.CompletedResearch.Accessory		, agent.CurrentEquip.Accessory	);
 };
 
-void klib::setupAgent(const CCharacter& adventurer, CCharacter& currentEnemy)
-{
+void klib::setupAgent(const CCharacter& adventurer, CCharacter& currentEnemy) {
 	currentEnemy.Goods.Inventory.Items.AddElement({ 1+int16_t(rand()%(nwol::size(itemDescriptions)-1)), 1+int16_t(rand()%(nwol::size(itemModifiers)-1)), 1+int16_t(rand()%(nwol::size(itemGrades)-1)) });
 
 	for(int32_t iSlot=0, slotCount=adventurer.Goods.Inventory.Items.Count; iSlot<slotCount; ++iSlot)

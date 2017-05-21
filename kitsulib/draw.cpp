@@ -7,14 +7,12 @@ void drawIntro(SGame& instanceGame);
 
 // Currently what this function is lacking is the ability to receive negative offsets.
 template<typename _TCell, size_t _Width, size_t _Depth>
-void blitGrid(::nwol::SGrid<_TCell, _Width, _Depth>& source, int32_t offsetY, uint32_t offsetX, _TCell* target, size_t targetWidth, size_t targetHeight, int32_t rowPitch=-1)
-{
+void blitGrid(::nwol::SGrid<_TCell, _Width, _Depth>& source, int32_t offsetY, uint32_t offsetX, _TCell* target, size_t targetWidth, size_t targetHeight, int32_t rowPitch=-1) {
 	size_t								actualWidth					= std::min(_Width, std::max((size_t)0, targetWidth-offsetX));
 	if(rowPitch < 0)
 		rowPitch = (int32_t)targetWidth;
 
-	for(int32_t z = 0, maxZ = (int32_t)std::min(_Depth, targetHeight-offsetY); z < maxZ; ++z) 
-	{
+	for(int32_t z = 0, maxZ = (int32_t)std::min(_Depth, targetHeight-offsetY); z < maxZ; ++z)  {
 		if( (offsetY+z) < 0 )
 			continue;
 
@@ -27,8 +25,7 @@ void drawDisplay(::nwol::SGrid<_TCell, _Width, _Depth>& source, uint32_t offsetY
 	blitGrid(source, offsetY, offsetX, nwol::getASCIIBackBuffer(), nwol::getASCIIBackBufferWidth(), nwol::getASCIIBackBufferHeight());
 };
 
-void drawStateBackground( SGame& instanceGame )
-{
+void drawStateBackground( SGame& instanceGame ) {
 	switch(instanceGame.State.State) {
 	case	GAME_STATE_MENU_MAIN		:	drawIntro(instanceGame);																	; break;
 	case	GAME_STATE_CREDITS			:	//drawSnowBackground(instanceGame.GlobalDisplay, instanceGame.FrameTimer.LastTimeSeconds);	; break;
@@ -43,15 +40,9 @@ int32_t lineToScreen( int32_t offsetLine, int32_t offsetColumn, ::nwol::ALIGN_SC
 	return printfToRect(::nwol::getASCIIBackBuffer(), (size_t)::nwol::getASCIIBackBufferWidth(), (size_t)::nwol::getASCIIBackBufferHeight(), offsetLine, offsetColumn, align, format, args...);
 }
 
-SGameState drawMemorial(SGame& instanceGame, const SGameState& returnState)
-{
-	return returnState;
-}
-
-void klib::drawAndPresentGame( SGame& instanceGame )
-{
+SGameState	drawMemorial				(SGame& instanceGame, const SGameState& returnState)	{ return returnState;}
+void		klib::drawAndPresentGame	( SGame& instanceGame )									{
 	static ::nwol::STimer				frameMeasure;
-
 	static ::nwol::STimer				animTimer;
 	static ::nwol::SAccumulator<double>	animTimerAccum				= {0.0, 1.00};
 	// increase time
@@ -132,19 +123,18 @@ void klib::drawAndPresentGame( SGame& instanceGame )
 		actualOffsetX = nwol::lineToRectColored(target, instanceGame.UserLog[logSize-1-iLogLine].Color, bbHeight-9-iLogLine, 1, nwol::SCREEN_LEFT, instanceGame.UserLog[logSize-1-iLogLine].Message.c_str());	
 
 	// Print some debugging information 
-	if(nwol::bit_true(instanceGame.Flags,GAME_FLAGS_HELPON))
-	{
+	if(nwol::bit_true(instanceGame.Flags,GAME_FLAGS_HELPON)) {
 		int32_t								offsetYHelp					= TACTICAL_DISPLAY_POSY+instanceGame.TacticalDisplay.Depth;
-		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_YELLOW		, offsetYHelp+18-5, 2, ::nwol::SCREEN_RIGHT, "Help!!! Press F1 to hide.");
+		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_YELLOW	, offsetYHelp+18-5, 2, ::nwol::SCREEN_RIGHT, "Help!!! Press F1 to hide.");
 		//										::																																		 
-		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_ORANGE		, offsetYHelp+20-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Keys:");
+		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_ORANGE	, offsetYHelp+20-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Keys:");
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+21-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Up    : Menu cursor up.");
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+22-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Down  : Menu cursor down.");
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+23-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left  : Previous menu page.");
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+24-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Right : Next menu page.");
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+25-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Enter : Select menu option.");
 		//										::																																		 
-		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_ORANGE		, offsetYHelp+27-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Mouse:");
+		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_ORANGE	, offsetYHelp+27-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Mouse:");
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+28-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select menu option");
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+29-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select move destination");
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+30-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select attack target");
@@ -166,16 +156,15 @@ void klib::drawAndPresentGame( SGame& instanceGame )
 	actualOffsetX						= ::nwol::printfToRectColored(target, COLOR_DARKGREEN	, bbHeight-4, 1, nwol::SCREEN_LEFT, "Mouse: %i, %i."			, instanceGame.FrameInput.MouseX, instanceGame.FrameInput.MouseY);
 	actualOffsetX						= ::nwol::printfToRectColored(target, COLOR_GREEN		, bbHeight-3, 1, nwol::SCREEN_LEFT, "Frame time: %.5f seconds."	, instanceGame.FrameTimer.LastTimeSeconds	);
 	actualOffsetX						= ::nwol::printfToRectColored(target, COLOR_CYAN		, bbHeight-2, 1, nwol::SCREEN_LEFT, "Frames last second: %f."	, instanceGame.FrameTimer.FramesLastSecond	);
-	time_t								curTimeWithUnreliableSize	= 0;
-	{
-		::nwol::CLock						thelock(instanceGame.ServerTimeMutex);
+	time_t									curTimeWithUnreliableSize	= 0; 
+	{ 
+		::nwol::CLock							thelock						(instanceGame.ServerTimeMutex);
 		curTimeWithUnreliableSize			= instanceGame.ServerTime;
 	}
-	
-	char								send_buffer[64]				= {};
+	char									send_buffer[64]				= {};
 	ctime_s(send_buffer, sizeof(send_buffer), &curTimeWithUnreliableSize);
 
-	::std::string						serverTime					= ::std::string("Server time: ") + send_buffer;
+	::std::string							serverTime					= ::std::string("Server time: ") + send_buffer;
 	serverTime							= serverTime.substr(0, serverTime .size()-2);
 	actualOffsetX						= nwol::printfToRectColored(bbChar, bbWidth, bbHeight, bbColor, COLOR_CYAN		, bbHeight-2, 1, ::nwol::SCREEN_RIGHT, "%s."	, serverTime.c_str());	
 	actualOffsetX						= nwol::printfToRectColored(bbChar, bbWidth, bbHeight, bbColor, COLOR_DARKGREY	, bbHeight-1, 1, ::nwol::SCREEN_CENTER, "%s."	, instanceGame.StateMessage.c_str()); 
@@ -206,8 +195,7 @@ void klib::drawAndPresentGame( SGame& instanceGame )
 	static ::nwol::SAccumulator<double>	profitTimerAccum			= {0.0, 3.0};
 
 	profitTimer.Frame();
-	if( profitTimerAccum.Accumulate(profitTimer.LastTimeSeconds) )
-	{
+	if( profitTimerAccum.Accumulate(profitTimer.LastTimeSeconds) ) {
 		instanceGame.Players[PLAYER_INDEX_USER].Money++;
 		profitTimerAccum.Value				= 0;
 	}
@@ -217,8 +205,7 @@ void klib::drawAndPresentGame( SGame& instanceGame )
 	// increase time
 	keyTimer.Frame();
 	// Check for help display
-	if(keyTimerAccum.Accumulate(keyTimer.LastTimeSeconds) && instanceGame.FrameInput.Keys[VK_F1])
-	{
+	if(keyTimerAccum.Accumulate(keyTimer.LastTimeSeconds) && instanceGame.FrameInput.Keys[VK_F1]) {
 		if(::nwol::bit_true(instanceGame.Flags, GAME_FLAGS_HELPON))
 			::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_HELPON);
 		else
@@ -228,9 +215,7 @@ void klib::drawAndPresentGame( SGame& instanceGame )
 
 }; 	// 
 
-
-void drawIntro( SGame& instanceGame )
-{
+void drawIntro( SGame& instanceGame ) {
 	drawFireBackground(instanceGame.PostEffectDisplay, instanceGame.FrameTimer.LastTimeSeconds);
 
 	int32_t								displayWidth				= (int32_t)instanceGame.PostEffectDisplay.Width;
