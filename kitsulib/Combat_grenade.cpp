@@ -124,8 +124,7 @@ bool klib::useGrenade(const SItem& itemGrenade, CCharacter& thrower, CCharacter&
 		break;
 	default:
 		printf("Grenade type not implemented!");
-	};
-
+	}
 
 	thrower.Score.GrenadesUsed++;
 

@@ -291,7 +291,8 @@ void klib::initGame(SGame& instanceGame) {
 
 		player.Squad.Clear(-1);
 		player.Squad.Agents[0] = 3;
-		for(uint32_t i=0; i<2; i++) { player.Squad.Agents[1+i] = CAMPAIGN_AGENT_COUNT+i; }
+		for(uint32_t i=0; i<2; i++) 
+			player.Squad.Agents[1+i] = CAMPAIGN_AGENT_COUNT+i;
 
 		player.Selection = {0, 0, -1, -1, -1};
 
