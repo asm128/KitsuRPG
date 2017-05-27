@@ -11,36 +11,33 @@ int runCommunications(::SApplication& instanceApp)
 	::nwol::SClientConnection			& instanceClient	= appNetwork.Connection;
 	int32_t								bytesTransmitted	= -1;
 
-	::nwol::error_t
-	errMy							= ::nwol::initClientConnection	(instanceClient); reterr_error_if_errored(errMy, "%s", "Failed to initialize client connection.");
-	errMy							= ::nwol::connect				(instanceClient); reterr_error_if_errored(errMy, "%s", "Failed to connect.");
+	nwol_ecall(::nwol::initClientConnection	(instanceClient), "%s", "Failed to initialize client connection.");
+	nwol_ecall(::nwol::connect				(instanceClient), "%s", "Failed to connect.");
 
-	::nwol::error_t				result				= 0;
+	::nwol::error_t						result				= 0;
 	while gbit_true(appNetwork.State, ::nwol::NETWORK_STATE_ENABLED) {
 		// Ping before anything else to make sure everything is more or less in order.
 		if(false == ::nwol::ping(instanceClient.pClient, instanceClient.pServer))	{
 			error_printf("%s", "Ping timeout.");
-			result = -1;
+			result							= -1;
 			break;
 		}
 
 		// get server time
-		uint64_t					current_time;
+		uint64_t							current_time;
 		if errored(result = ::nwol::serverTime(instanceClient, current_time))		{
 			error_printf("Failed to get server time. Error code: 0x%X.", (uint32_t)result);
-			result	= -1;
+			result							= -1;
 			break;
 		};
 		
 		{	// here we update the game instance with the data received from the server.
-			::nwol::CLock			thelock(appNetwork.ServerTimeMutex);
-			appNetwork.ServerTime	= current_time;
+			::nwol::CLock							thelock(appNetwork.ServerTimeMutex);
+			appNetwork.ServerTime				= current_time;
 			info_printf("%s", "Client instance updated successfully.");
 		}
 
-		if gbit_false(appNetwork.State, ::nwol::NETWORK_STATE_ENABLED)	// Disconnect if the network was disabled.
-			break;
-
+		break_info_if(gbit_false(appNetwork.State, ::nwol::NETWORK_STATE_ENABLED), "Disconnect as the network was disabled.");
 		::std::this_thread::sleep_for(::std::chrono::milliseconds(1000));
 	}
 
