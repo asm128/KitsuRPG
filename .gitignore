@@ -264,3 +264,6 @@ ModelManifest.xml
 /KitsuGUI
 /netlib
 /tactical
+/kitsulib/LineCounter.py
+/chatserver_client
+/chatserver
