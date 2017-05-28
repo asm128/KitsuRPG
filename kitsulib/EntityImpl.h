@@ -44,8 +44,7 @@ namespace klib
 	static constexpr	const SEntityPointsMultiplier		g_MultipliersTile			= {{  .25,   .25,   .25}, {  .25,   .25,   .25}, {  .25,   .25, {  .25,   .25,   .25},   .25,   .25}, { .25,   .25,  .25,   .1}, 0.125, 0.85, 1.0};
 
 #define DECLARE_ENTITY(_multipliers, _type, _name)																																									\
-	struct S##_name : public ::klib::SEntity																																										\
-	{ 																																																				\
+	struct S##_name : public ::klib::SEntity { 																																										\
 		using					::klib::SEntity					::SEntity; 																																			\
 																																																					\
 		inline constexpr										S##_name					(void)													{}																\
@@ -66,8 +65,7 @@ namespace klib
 	DECLARE_ENTITY(g_MultipliersItem		, ENTITY_TYPE_ITEM			, Item			);
 	DECLARE_ENTITY(g_MultipliersTile		, ENTITY_TYPE_TILE			, Tile			);
 
-	struct SCombatStatus
-	{
+	struct SCombatStatus {
 		static					const uint32_t					MaxStatus					= MAX_COMBAT_STATUS_COUNT;
 								COMBAT_STATUS					Status						= COMBAT_STATUS_NONE;
 								int8_t							TurnsLeft					[MAX_COMBAT_STATUS_COUNT]								= {};
@@ -76,11 +74,9 @@ namespace klib
 			Status		= COMBAT_STATUS_NONE;
 			memset(TurnsLeft, 0, sizeof(uint8_t)*nwol::size(TurnsLeft));
 		}
-
 								int32_t							GetStatusTurns				(const COMBAT_STATUS status)			const			{
 			int32_t			turns		= 0;
-			for(uint32_t i=0, count = MaxStatus; i<count; ++i)
-			{
+			for(uint32_t i=0, count = MaxStatus; i<count; ++i) {
 				COMBAT_STATUS	statusBit	= (COMBAT_STATUS)(1 << i);
 				if(0 == (statusBit & Status & status))
 					continue;
