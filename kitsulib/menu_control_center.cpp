@@ -18,8 +18,8 @@ struct SListItem {
 int32_t mouseOverList(const nwol::SInput& frameInput, uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width) {
 	int32_t indexSelected = -1;
 	for(uint32_t iRow = 0; iRow < rowCount; ++iRow)
-		if(mouseOver(frameInput.MouseX, frameInput.MouseY, offsetX, offsetY+iRow, width)) {
-			indexSelected = iRow | (frameInput.MouseButtons[0] ? 0x80000000 : 0);
+		if(mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, offsetX, offsetY+iRow, width)) {
+			indexSelected = iRow | (frameInput.Mouse.Buttons[0] ? 0x80000000 : 0);
 			break;
 		}
 
@@ -59,8 +59,8 @@ int32_t drawList(SGlobalDisplay& display, const std::vector<SListItem<_TReturn>>
 }
 
 int32_t processEquipAgentInput(SGlobalDisplay& display, const nwol::SInput& frameInput, const SPlayer& player, uint32_t rowCount, int32_t offsetY, int32_t offsetX) {
-	const int32_t mouseX = frameInput.MouseX; 
-	const int32_t mouseY = frameInput.MouseY; 
+	const int32_t mouseX = frameInput.Mouse.Deltas.x; 
+	const int32_t mouseY = frameInput.Mouse.Deltas.y; 
 	int32_t indexEquip = -1;
 
 	offsetY += 1; 
@@ -69,7 +69,7 @@ int32_t processEquipAgentInput(SGlobalDisplay& display, const nwol::SInput& fram
 		if(0 == player.Army[iRow] || player.Squad.IsAgentAssigned((int32_t)iRow))
 			continue;
 
-		if(mouseOver(mouseX, mouseY, offsetX, offsetY+actualAgentsProcessed, AGENT_ROW_WIDTH)) { indexEquip = iRow | (frameInput.MouseButtons[0] ? 0x80000000 : 0); break; }
+		if(mouseOver(mouseX, mouseY, offsetX, offsetY+actualAgentsProcessed, AGENT_ROW_WIDTH)) { indexEquip = iRow | (frameInput.Mouse.Buttons[0] ? 0x80000000 : 0); break; }
 		
 		++actualAgentsProcessed;
 	}
@@ -108,10 +108,10 @@ int32_t drawAgentResume(SGlobalDisplay& display, const CCharacter& agent, int32_
 }
 
 int32_t processSliderInput(const nwol::SInput& frameInput, int32_t offsetY, int32_t offsetX, int32_t& value, int32_t minValue, int32_t maxValue, int32_t labelMaxLen) {
-	int32_t mouseX = frameInput.MouseX; 
-	int32_t mouseY = frameInput.MouseY; 
-		 if( mouseOver(mouseX, mouseY, offsetX+11, offsetY, 3) && frameInput.MouseButtons[0]) {if( value > minValue ) --value; }
-	else if( mouseOver(mouseX, mouseY, offsetX+20, offsetY, 3) && frameInput.MouseButtons[0]) {if( value < maxValue ) ++value; }
+	int32_t mouseX = frameInput.Mouse.Deltas.x; 
+	int32_t mouseY = frameInput.Mouse.Deltas.y; 
+		 if( mouseOver(mouseX, mouseY, offsetX+11, offsetY, 3) && frameInput.Mouse.Buttons[0]) {if( value > minValue ) --value; }
+	else if( mouseOver(mouseX, mouseY, offsetX+20, offsetY, 3) && frameInput.Mouse.Buttons[0]) {if( value < maxValue ) ++value; }
 
 	return 0;
 }
@@ -424,7 +424,7 @@ int32_t drawWelcomeGUI(SGame& instanceGame, const SGameState& returnValue) {
 
 	drawBalance(display, instanceGame.FrameInput, instanceGame.Players[PLAYER_INDEX_USER], display.Width-38, startY);
 
-	if((!bHandledKey) && instanceGame.FrameInput.MouseButtons[0])
+	if((!bHandledKey) && instanceGame.FrameInput.Mouse.Buttons[0])
 		selectedEquip = selectedAgent = -1;
 
 	// Score

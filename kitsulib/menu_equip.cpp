@@ -166,9 +166,9 @@ SGameState drawEquip(SGame& instanceGame, const SGameState& returnState)
 		//drawEntityDetail(display, offsetY					, offsetX+=48, playerAgent.CurrentEquip.Facility	, definitionsFacility	, modifiersFacility		, labelFacility		);
 		//drawEntityDetail(display, offsetY					, offsetX+=48, playerAgent.CurrentEquip.StageProp	, definitionsStageProp	, modifiersStageProp	, labelStageProp	);
 		//displayAgentSlot(display, offsetY					, offsetX+=48, player.Selection.PlayerUnit+1		, playerAgent, false);
-		displayAgentSlot(display, offsetY+=slotRowSpace		,	offsetX = 3, player.Selection.PlayerUnit+1		, playerAgent, false);
-		displayStatusEffectsAndTechs(display, offsetY		,		offsetX = 50, player.Selection.PlayerUnit+1		, playerAgent);
-		drawScore					(display, offsetY		,		offsetX = display.Width-40, playerAgent.Score);
+		displayAgentSlot(display, offsetY+=slotRowSpace		, offsetX = 3, player.Selection.PlayerUnit+1		, playerAgent, false);
+		displayStatusEffectsAndTechs(display, offsetY		, offsetX+=50, player.Selection.PlayerUnit+1		, playerAgent);
+		drawScore					(display, offsetY		, offsetX = display.Width-40, playerAgent.Score);
 	}
 	else if(player.Selection.PlayerUnit != -1)
 	{

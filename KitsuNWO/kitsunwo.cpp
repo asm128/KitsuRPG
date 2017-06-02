@@ -22,8 +22,7 @@ DEFINE_RUNTIME_INTERFACE_FUNCTIONS(SApplication, "Vulgar Display of Power", 0, 1
 int32_t cleanup	(::SApplication& instanceApp) { 
 	::nwol::shutdownASCIIScreen();
 
-	::networkDisable(instanceApp);
-
+	nwol_necall(::networkDisable(instanceApp), "Network not enabled?");
 	return 0; 
 }
 
@@ -32,7 +31,10 @@ int32_t setup (::SApplication& instanceApp)
 	::nwol::SGUI							& guiSystem					= instanceApp.GUI;
 
 	::nwol::initASCIIScreen(guiSystem.TargetSizeASCII.x, guiSystem.TargetSizeASCII.y);
-	::nwol::setASCIIScreenTitle(::nwol_moduleTitle());
+	char															moduleTitle[240]						= {};
+	uint8_t															moduleTitleLen							= (uint8_t)::nwol::size(moduleTitle);
+	nwol_necall(::nwol_moduleTitle(moduleTitle, &moduleTitleLen), "If this fails then something weird is going on.");
+	::nwol::setASCIIScreenTitle(moduleTitle);
 
 	::klib::initGame(instanceApp.Game);
 
@@ -46,10 +48,7 @@ int32_t setup (::SApplication& instanceApp)
 
 	newControl.AreaASCII				= {1, 1, (int32_t)newControlLabel.size(), 1}	;
 	newControl.Text						= newControlLabel								;
-
-	::nwol::error_t							errMy						= ::nwol::createControl(guiSystem, newControl);
-	reterr_error_if_errored(errMy, "Failed to create control.");
-
+	nwol_necall(::nwol::createControl(guiSystem, newControl), "Failed to create control: %s.", newControl.Text.c_str());
 	return 0; 
 }
 

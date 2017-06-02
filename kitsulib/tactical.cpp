@@ -45,8 +45,8 @@ bool handleUserInput(SGame& instanceGame, const SGameState& returnState) {
 		keyAccum.Value																= 0.0;
 	}
 	else {
-		int32_t																			mouseX										= instanceGame.FrameInput.MouseX;
-		int32_t																			mouseY										= instanceGame.FrameInput.MouseY;
+		int32_t																			mouseX										= instanceGame.FrameInput.Mouse.Deltas.x;
+		int32_t																			mouseY										= instanceGame.FrameInput.Mouse.Deltas.y;
 
 		::klib::SGlobalDisplay															& globalDisplay								= instanceGame.GlobalDisplay;
 		::klib::STacticalDisplay														& tacticalDisplay							= instanceGame.TacticalDisplay;
@@ -71,7 +71,7 @@ bool handleUserInput(SGame& instanceGame, const SGameState& returnState) {
 			const ::nwol::SCoord3<int32_t>													& currentAgentPosition						= currentAgent.Position;
 			int32_t																			targetPlayerIndex							= tacticalBoard.Tiles.Entities.Agents[tacticalMouseY][tacticalMouseX].PlayerIndex;
 			int32_t																			agentIndex									= tacticalBoard.Tiles.Entities.Agents[tacticalMouseY][tacticalMouseX].AgentIndex;
-			if(0 != instanceGame.FrameInput.MouseButtons[0]) {// || 0 != instanceGame.FrameInput.MouseButtons[4]) 
+			if(0 != instanceGame.FrameInput.Mouse.Buttons[0]) {// || 0 != instanceGame.FrameInput.MouseButtons[4]) 
 				currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit]		= {tacticalMouseX, currentAgentPosition.y, tacticalMouseY};
 				if(	targetPlayerIndex != -1 && agentIndex != -1 ) {
 					if(targetPlayerIndex == tacticalInfo.CurrentPlayer && currentPlayer.Army[currentPlayer.Squad.Agents[agentIndex]]->IsAlive() && false == currentPlayer.Army[currentPlayer.Squad.Agents[agentIndex]]->DidLoseTurn() && (0 == instanceGame.FrameInput.Keys[VK_CONTROL] && 0 == instanceGame.FrameInput.Keys[VK_LCONTROL])) {
@@ -118,8 +118,8 @@ void drawTileInfo
 	int32_t tacticalDisplayStop = TACTICAL_DISPLAY_POSY		+ (tacticalDisplay.Depth);
 
 	bool	bDrawText			= false;
-	int32_t mouseX				= frameInput.MouseX;
-	int32_t mouseY				= frameInput.MouseY;
+	int32_t mouseX				= frameInput.Mouse.Deltas.x;
+	int32_t mouseY				= frameInput.Mouse.Deltas.y;
 	int32_t tacticalDisplayX	= (globalDisplay.Width>>1)	- (tacticalDisplay.Width>>1);
 	int32_t boardX				= mouseX-tacticalDisplayX;
 	int32_t boardZ				= mouseY-TACTICAL_DISPLAY_POSY;

@@ -153,7 +153,7 @@ void		klib::drawAndPresentGame	( SGame& instanceGame )									{
 	else
 		actualOffsetX						= ::nwol::lineToRectColored(target, COLOR_YELLOW, TACTICAL_DISPLAY_POSY+instanceGame.TacticalDisplay.Depth+18-5, 2, ::nwol::SCREEN_RIGHT, "Press F1 to display help.");	
 	
-	actualOffsetX						= ::nwol::printfToRectColored(target, COLOR_DARKGREEN	, bbHeight-4, 1, nwol::SCREEN_LEFT, "Mouse: %i, %i."			, instanceGame.FrameInput.MouseX, instanceGame.FrameInput.MouseY);
+	actualOffsetX						= ::nwol::printfToRectColored(target, COLOR_DARKGREEN	, bbHeight-4, 1, nwol::SCREEN_LEFT, "Mouse: %i, %i."			, instanceGame.FrameInput.Mouse.Deltas.x, instanceGame.FrameInput.Mouse.Deltas.y);
 	actualOffsetX						= ::nwol::printfToRectColored(target, COLOR_GREEN		, bbHeight-3, 1, nwol::SCREEN_LEFT, "Frame time: %.5f seconds."	, instanceGame.FrameTimer.LastTimeSeconds	);
 	actualOffsetX						= ::nwol::printfToRectColored(target, COLOR_CYAN		, bbHeight-2, 1, nwol::SCREEN_LEFT, "Frames last second: %f."	, instanceGame.FrameTimer.FramesLastSecond	);
 	time_t									curTimeWithUnreliableSize	= 0; 

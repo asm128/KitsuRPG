@@ -36,8 +36,8 @@ namespace klib
 	template <size_t _Width, size_t _Depth>
 	static int32_t							displayEntityStatus				(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, int32_t agentIndex, const SEntityStatus& entityStatus)										{
 		int32_t										iLine							= 0;
-		if(entityStatus.Inflict		)	iLine += displayFlag(display, {offsetY+iLine, offsetX}, entityStatus.Inflict	, MAX_COMBAT_STATUS_COUNT, COLOR_YELLOW, COLOR_RED	, "- Inflicts: %-14.14s");
-		if(entityStatus.Immunity	)	iLine += displayFlag(display, {offsetY+iLine, offsetX}, entityStatus.Immunity	, MAX_COMBAT_STATUS_COUNT, COLOR_YELLOW, COLOR_CYAN	, "- Immunity: %-14.14s");
+		if(entityStatus.Inflict		)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityStatus.Inflict	, MAX_COMBAT_STATUS_COUNT, COLOR_YELLOW, COLOR_RED	, "- Inflicts: %-14.14s");
+		if(entityStatus.Immunity	)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityStatus.Immunity	, MAX_COMBAT_STATUS_COUNT, COLOR_YELLOW, COLOR_CYAN	, "- Immunity: %-14.14s");
 
 		return iLine;
 	}
@@ -45,9 +45,9 @@ namespace klib
 	template <size_t _Width, size_t _Depth>
 	static int32_t							displayEntityEffect				(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, int32_t agentIndex, const SEntityEffect& entityEffect)										{
 		int32_t										iLine							= 0;
-		if(entityEffect.Attack	)	iLine += displayFlag(display, {offsetY+iLine, offsetX}, entityEffect.Attack	, MAX_ATTACK_EFFECT_COUNT, COLOR_YELLOW, COLOR_RED	, "- Attack effect: %-14.14s"	);
-		if(entityEffect.Defend	)	iLine += displayFlag(display, {offsetY+iLine, offsetX}, entityEffect.Defend	, MAX_DEFEND_EFFECT_COUNT, COLOR_YELLOW, COLOR_CYAN	, "- Defend effect: %-14.14s"	);
-		if(entityEffect.Passive	)	iLine += displayFlag(display, {offsetY+iLine, offsetX}, entityEffect.Passive	, MAX_PASSIVE_EFFECT_COUNT, COLOR_YELLOW, COLOR_GREEN	, "- Passive effect: %-14.14s"	);
+		if(entityEffect.Attack	)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityEffect.Attack	, MAX_ATTACK_EFFECT_COUNT, COLOR_YELLOW, COLOR_RED	, "- Attack effect: %-14.14s"	);
+		if(entityEffect.Defend	)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityEffect.Defend	, MAX_DEFEND_EFFECT_COUNT, COLOR_YELLOW, COLOR_CYAN	, "- Defend effect: %-14.14s"	);
+		if(entityEffect.Passive	)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityEffect.Passive	, MAX_PASSIVE_EFFECT_COUNT, COLOR_YELLOW, COLOR_GREEN	, "- Passive effect: %-14.14s"	);
 
 		return iLine;
 	}
@@ -55,11 +55,11 @@ namespace klib
 	template <size_t _Width, size_t _Depth>
 	static int32_t							displayEntityTechnology			(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, int32_t agentIndex, const SEntityGrade& entityTech)											{
 		int32_t										iLine							= 0;
-		if(entityTech.Tech				) iLine	+= displayFlag(display, {offsetY+iLine, offsetX}, entityTech.Tech				, MAX_ENTITY_TECHNOLOGY_COUNT, COLOR_YELLOW, COLOR_GREEN	, "- Technology: %-14.14s"	);
-		if(entityTech.Grade				) iLine	+= displayFlag(display, {offsetY+iLine, offsetX}, entityTech.Grade				, 3, COLOR_YELLOW, COLOR_GREEN	, "- Grade: %-14.14s"		);
-		if(entityTech.AttackType		) iLine	+= displayFlag(display, {offsetY+iLine, offsetX}, entityTech.AttackType			, MAX_ATTACK_TYPE_COUNT, COLOR_YELLOW, COLOR_RED		, "- Attack type: %-14.14s"	);
-		if(entityTech.ProjectileClass	) iLine	+= displayFlag(display, {offsetY+iLine, offsetX}, entityTech.ProjectileClass	, MAX_PROJECTILE_CLASS_COUNT, COLOR_YELLOW, COLOR_RED	, "- Projectile Class: %-14.14s" );
-		if(entityTech.AmmoEffect		) iLine	+= displayFlag(display, {offsetY+iLine, offsetX}, entityTech.AmmoEffect			, MAX_AMMO_EFFECT_COUNT, COLOR_YELLOW, COLOR_RED		, "- Ammo Effect: %-14.14s"	);
+		if(entityTech.Tech				) iLine	+= displayFlag(display, {offsetX, offsetY+iLine}, entityTech.Tech				, MAX_ENTITY_TECHNOLOGY_COUNT, COLOR_YELLOW, COLOR_GREEN	, "- Technology: %-14.14s"	);
+		if(entityTech.Grade				) iLine	+= displayFlag(display, {offsetX, offsetY+iLine}, entityTech.Grade				, 3, COLOR_YELLOW, COLOR_GREEN	, "- Grade: %-14.14s"		);
+		if(entityTech.AttackType		) iLine	+= displayFlag(display, {offsetX, offsetY+iLine}, entityTech.AttackType			, MAX_ATTACK_TYPE_COUNT, COLOR_YELLOW, COLOR_RED		, "- Attack type: %-14.14s"	);
+		if(entityTech.ProjectileClass	) iLine	+= displayFlag(display, {offsetX, offsetY+iLine}, entityTech.ProjectileClass	, MAX_PROJECTILE_CLASS_COUNT, COLOR_YELLOW, COLOR_RED	, "- Projectile Class: %-14.14s" );
+		if(entityTech.AmmoEffect		) iLine	+= displayFlag(display, {offsetX, offsetY+iLine}, entityTech.AmmoEffect			, MAX_AMMO_EFFECT_COUNT, COLOR_YELLOW, COLOR_RED		, "- Ammo Effect: %-14.14s"	);
 
 		return iLine;
 	}
@@ -68,7 +68,7 @@ namespace klib
 	static void								displayStatusEffectsAndTechs	(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, int32_t agentIndex, CCharacter& character)													{
 		int32_t										iLine							= 0;
 		if(character.Flags.Tech.Gender)	
-			iLine									+= displayFlag(display, {offsetY+iLine, offsetX}, character.Flags.Tech.Gender, 2	, COLOR_YELLOW, COLOR_GREEN	, "- Gender: %-13.13s");
+			iLine									+= displayFlag(display, {offsetX, offsetY+iLine}, character.Flags.Tech.Gender, 2	, COLOR_YELLOW, COLOR_GREEN	, "- Gender: %-13.13s");
 		iLine									+= displayEntityTechnology	(display, offsetY+iLine, offsetX, agentIndex, character.FinalFlags.Tech		);
 		iLine									+= displayEntityStatus		(display, offsetY+iLine, offsetX, agentIndex, character.FinalFlags.Status	);
 		iLine									+= displayEntityEffect		(display, offsetY+iLine, offsetX, agentIndex, character.FinalFlags.Effect	);

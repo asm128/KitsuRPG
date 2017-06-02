@@ -63,7 +63,7 @@ namespace klib
 	template <size_t _ArraySize, typename _ReturnType>
 	_ReturnType processInput(const nwol::SInput& frameInput, uint32_t targetWidth, uint32_t targetHeight, SDrawMenuState& localPersistentState, bool& bResetMenuStuff, bool& bResetTitle, int32_t lineOffset, const klib::SMenuItem<_ReturnType>(&menuItems)[_ArraySize], uint32_t actualOptionCount, uint32_t pageCount, size_t itemOffset, int32_t exitOffset, int32_t numberCharsAvailable, const _ReturnType& noActionValue, const _ReturnType& exitValue, bool disableEscKeyClose, const ::nwol::glabel& exitText)
 	{
-		bool bMouseOverExit = mouseOver(frameInput.MouseX, frameInput.MouseY, exitOffset-4, (int32_t)targetHeight-MENU_ROFFSET-1, (int32_t)exitText.size()+4);
+		bool bMouseOverExit = mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, exitOffset-4, (int32_t)targetHeight-MENU_ROFFSET-1, (int32_t)exitText.size()+4);
 
 		_ReturnType resultVal = noActionValue;
 		if(localPersistentState.CurrentPage < (pageCount-1) && (frameInput.Keys[VK_NEXT] || frameInput.Keys[VK_RIGHT])) 
@@ -96,8 +96,8 @@ namespace klib
 			}
 		}
 		// Test exit request keys.
-		else if(frameInput.Keys['0'] || frameInput.Keys[VK_NUMPAD0] || ((frameInput.MouseButtons[4] || frameInput.Keys[VK_ESCAPE]) && !disableEscKeyClose) 
-			|| (frameInput.MouseButtons[0] && bMouseOverExit)
+		else if(frameInput.Keys['0'] || frameInput.Keys[VK_NUMPAD0] || ((frameInput.Mouse.Buttons[4] || frameInput.Keys[VK_ESCAPE]) && !disableEscKeyClose) 
+			|| (frameInput.Mouse.Buttons[0] && bMouseOverExit)
 			)
 		{
 			bResetMenuStuff = true;
@@ -118,8 +118,8 @@ namespace klib
 			for(uint32_t i=0, count = (uint32_t)actualOptionCount; i < count; i++) 
 			{
 				int32_t actualOffsetX = (int32_t)(targetWidth-targetWidth/2-numberCharsAvailable/2);
-				bool bMouseOver = mouseOver(frameInput.MouseX, frameInput.MouseY, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2);
-				if(frameInput.Keys['1'+i] || frameInput.Keys[VK_NUMPAD1+i] || (frameInput.MouseButtons[0] && bMouseOver)) 
+				bool bMouseOver = mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2);
+				if(frameInput.Keys['1'+i] || frameInput.Keys[VK_NUMPAD1+i] || (frameInput.Mouse.Buttons[0] && bMouseOver)) 
 				{
 					bResetMenuStuff = true;
 					resultVal = menuItems[i+itemOffset].ReturnValue;
@@ -184,7 +184,7 @@ namespace klib
 		for(uint32_t i=0, count = (uint32_t)actualOptionCount; i < count; i++) 
 		{
 			actualOffsetX = (int32_t)(targetWidth-targetWidth/2-numberCharsAvailable/2);
-			if(mouseOver(frameInput.MouseX, frameInput.MouseY, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2))
+			if(mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2))
 			{
 				localPersistentState.CurrentOption	= i;
 				break;
