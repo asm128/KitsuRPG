@@ -12,8 +12,7 @@
 
 #include <algorithm>
 
-void  researchWeaponDefinition(klib::CCharacter& adventurer) 
-{ 
+void				researchWeaponDefinition			(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Weapon, adventurer.Goods.CompletedResearch.Weapon.Definitions, klib::definitionsWeapon, adventurer.Goods.CompletedResearch.Weapon.MaxResearch, false	, true
 		, "%s Blueprint"		
@@ -25,8 +24,7 @@ void  researchWeaponDefinition(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchWeaponModifier(klib::CCharacter& adventurer) 
-{ 
+void				researchWeaponModifier				(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Weapon, adventurer.Goods.CompletedResearch.Weapon.Modifiers, klib::modifiersWeapon, adventurer.Goods.CompletedResearch.Weapon.MaxResearch, true	, true
 		, "Science"		
@@ -39,8 +37,7 @@ void  researchWeaponModifier(klib::CCharacter& adventurer)
 }
 
 
-void  researchArmorDefinition(klib::CCharacter& adventurer) 
-{ 
+void				researchArmorDefinition				(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Armor, adventurer.Goods.CompletedResearch.Armor.Definitions, klib::definitionsArmor, adventurer.Goods.CompletedResearch.Armor.MaxResearch, false	, true
 		, "%s Design"		
@@ -52,8 +49,7 @@ void  researchArmorDefinition(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchArmorModifier(klib::CCharacter& adventurer) 
-{ 
+void				researchArmorModifier				(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Armor, adventurer.Goods.CompletedResearch.Armor.Modifiers, klib::modifiersArmor, adventurer.Goods.CompletedResearch.Armor.MaxResearch, true	, true
 		, "Technology"		
@@ -65,8 +61,7 @@ void  researchArmorModifier(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchAccessoryDefinition(klib::CCharacter& adventurer) 
-{ 
+void				researchAccessoryDefinition			(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Accessory, adventurer.Goods.CompletedResearch.Accessory.Definitions, klib::definitionsAccessory, adventurer.Goods.CompletedResearch.Accessory.MaxResearch, false	, true
 		, "%s Accessory"		
@@ -78,8 +73,7 @@ void  researchAccessoryDefinition(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchAccessoryModifier(klib::CCharacter& adventurer) 
-{ 
+void				researchAccessoryModifier			(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Accessory, adventurer.Goods.CompletedResearch.Accessory.Modifiers, klib::modifiersAccessory, adventurer.Goods.CompletedResearch.Accessory.MaxResearch, true	, true
 		, "Crafting"		
@@ -91,9 +85,7 @@ void  researchAccessoryModifier(klib::CCharacter& adventurer)
 	); 
 }
 
-
-void  researchProfessionDefinition(klib::CCharacter& adventurer) 
-{ 
+void				researchProfessionDefinition		(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Profession, adventurer.Goods.CompletedResearch.Profession.Definitions, klib::definitionsProfession, adventurer.Goods.CompletedResearch.Profession.MaxResearch, false	, true
 		, "%s Mastery"		
@@ -105,8 +97,7 @@ void  researchProfessionDefinition(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchProfessionModifier(klib::CCharacter& adventurer) 
-{ 
+void				researchProfessionModifier			(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Profession, adventurer.Goods.CompletedResearch.Profession.Modifiers, klib::modifiersProfession, adventurer.Goods.CompletedResearch.Profession.MaxResearch, true	, true
 		, "Rank"		
@@ -118,8 +109,7 @@ void  researchProfessionModifier(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchVehicleDefinition(klib::CCharacter& adventurer) 
-{ 
+void				researchVehicleDefinition			(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Vehicle, adventurer.Goods.CompletedResearch.Vehicle.Definitions, klib::definitionsVehicle, adventurer.Goods.CompletedResearch.Vehicle.MaxResearch, false	, true
 		, "%s Prototype"		
@@ -131,8 +121,7 @@ void  researchVehicleDefinition(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchVehicleModifier(klib::CCharacter& adventurer) 
-{ 
+void				researchVehicleModifier				(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Vehicle, adventurer.Goods.CompletedResearch.Vehicle.Modifiers, klib::modifiersVehicle, adventurer.Goods.CompletedResearch.Vehicle.MaxResearch, true	, true
 		, "Mechanics"		
@@ -144,8 +133,7 @@ void  researchVehicleModifier(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchFacilityDefinition(klib::CCharacter& adventurer) 
-{ 
+void				researchFacilityDefinition			(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Facility, adventurer.Goods.CompletedResearch.Facility.Definitions, klib::definitionsFacility, adventurer.Goods.CompletedResearch.Facility.MaxResearch, false	, true
 		, "%s Architecture"		
@@ -157,8 +145,7 @@ void  researchFacilityDefinition(klib::CCharacter& adventurer)
 	); 
 }
 
-void  researchFacilityModifier(klib::CCharacter& adventurer) 
-{ 
+void				researchFacilityModifier			(klib::CCharacter& adventurer)										{ 
 	research
 	(adventurer.Goods.Inventory.Facility, adventurer.Goods.CompletedResearch.Facility.Modifiers, klib::modifiersFacility, adventurer.Goods.CompletedResearch.Facility.MaxResearch, true	, true
 		, "Construction"		

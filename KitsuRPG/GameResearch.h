@@ -10,19 +10,19 @@
 
 // This hell creates an user menu for the entity records available for research
 template <typename _TEquipClass, typename _TInventory, typename _TResearched, size_t _SizeInventory, size_t _SizeResearched, size_t _SizeDefinitions>
-void research
-	( klib::SEntityContainer<_TInventory, _SizeInventory>& equipInventory 
-	, klib::SEntityContainer<_TResearched, _SizeResearched>& researchedList
-	, const _TEquipClass (&definitionsTable)[_SizeDefinitions]
-	, _TInventory& adventurerMaxEquip
-	, bool bIsModifier
-	, bool bIsProgressive
-	, const std::string& itemFormat
-	, const std::string& allResearchComplete
-	, const std::string& noResearchAvailable
-	, const std::string& selectItemToResearch
-	, const std::string& startResearching
-	, const std::string& doneResearching
+void																		research
+	( klib::SEntityContainer<_TInventory, _SizeInventory>		& equipInventory 
+	, klib::SEntityContainer<_TResearched, _SizeResearched>		& researchedList
+	, const _TEquipClass										(&definitionsTable)[_SizeDefinitions]
+	, _TInventory												& adventurerMaxEquip
+	, bool														bIsModifier
+	, bool														bIsProgressive
+	, const std::string											& itemFormat
+	, const std::string											& allResearchComplete
+	, const std::string											& noResearchAvailable
+	, const std::string											& selectItemToResearch
+	, const std::string											& startResearching
+	, const std::string											& doneResearching
 	) 
 { 
 	if(researchedList.Count >= _SizeDefinitions-1) {	// No more research items in the game.
@@ -31,26 +31,27 @@ void research
 	}
 
 	// These variables are obviously to store the menuitems and compose the item menu text
-	static const int32_t			maxItemCount = 256;
-	static char						menuItemText[maxItemCount]	= {}; 
-	static klib::SMenuItem<int32_t>	menuItems	[maxItemCount]	= {}; 
+	static const int32_t															maxItemCount										= 256;
+	static char																		menuItemText	[maxItemCount]						= {}; 
+	static klib::SMenuItem<int32_t>													menuItems		[maxItemCount]						= {}; 
 
-	adventurerMaxEquip.Modifier		= (adventurerMaxEquip.Modifier	> 1) ? adventurerMaxEquip.Modifier	: 1;
-	adventurerMaxEquip.Definition	= (adventurerMaxEquip.Definition		> 1) ? adventurerMaxEquip.Definition		: 1;
-	adventurerMaxEquip.Level		= (adventurerMaxEquip.Level		> 1) ? adventurerMaxEquip.Level		: 1;
+	adventurerMaxEquip.Modifier													= (adventurerMaxEquip.Modifier		> 1) ? adventurerMaxEquip.Modifier		: 1;
+	adventurerMaxEquip.Definition												= (adventurerMaxEquip.Definition	> 1) ? adventurerMaxEquip.Definition	: 1;
+	adventurerMaxEquip.Level													= (adventurerMaxEquip.Level			> 1) ? adventurerMaxEquip.Level			: 1;
 
-	int32_t menuItemCount=0; 
-	int32_t duplicatedSamples=0;
+	int32_t																			menuItemCount										= 0; 
+	int32_t																			duplicatedSamples									= 0;
 	for( uint32_t i=0, count = equipInventory.Count; i<count; ++i ) {
-		int32_t value = 0;
-		const char* stringLeft=0, *stringRight=0;
-		if(bIsModifier)
-		{
-			int32_t selectedEntityModifier = equipInventory[i].Entity.Modifier;
+		int32_t																			value												= 0;
+		const char																		* stringLeft										= nullptr
+			,																			* stringRight										= nullptr
+			;
+		if(bIsModifier) {
+			int32_t																			selectedEntityModifier								= equipInventory[i].Entity.Modifier;
 			if( 0 != selectedEntityModifier && (-1) == researchedList.FindElement(selectedEntityModifier) ) { 
-				stringLeft	= definitionsTable[selectedEntityModifier].Name.c_str();
-				stringRight	= itemFormat.c_str();
-				value = selectedEntityModifier;
+				stringLeft																	= definitionsTable[selectedEntityModifier].Name.c_str();
+				stringRight																	= itemFormat.c_str();
+				value																		= selectedEntityModifier;
 				sprintf_s(menuItemText, stringLeft, stringRight);
 #ifndef DISABLE_RESEARCH_REQUIREMENTS
 				if(bIsProgressive) {
@@ -64,13 +65,12 @@ void research
 			else 
 				continue;
 		} 
-		else
-		{
-			int32_t selectedEntityDefinition = equipInventory[i].Entity.Definition;
+		else {
+			int32_t																			selectedEntityDefinition							= equipInventory[i].Entity.Definition;
 			if( 0 != selectedEntityDefinition && (-1) == researchedList.FindElement(selectedEntityDefinition) ) {
-				stringRight	= definitionsTable[selectedEntityDefinition].Name.c_str();
-				stringLeft	= itemFormat.c_str();
-				value = selectedEntityDefinition; 
+				stringRight																	= definitionsTable[selectedEntityDefinition].Name.c_str();
+				stringLeft																	= itemFormat.c_str();
+				value																		= selectedEntityDefinition; 
 				sprintf_s(menuItemText, stringLeft, stringRight);
 #ifndef DISABLE_RESEARCH_REQUIREMENTS
 				if(bIsProgressive) {
@@ -86,16 +86,16 @@ void research
 		}
 
 
-		bool bRequiresInserting = true;
+		bool																		bRequiresInserting										= true;
 		for(int32_t i=0; i<menuItemCount; ++i)
 			if(menuItems[i].ReturnValue == value) {
 				printf("You seem to have an additional research point for %s.\n", menuItemText);
-				bRequiresInserting = false;
+				bRequiresInserting														= false;
 				break;
 			}
 
 		if(bRequiresInserting)
-			menuItems[menuItemCount++] = { value, menuItemText };
+			menuItems[menuItemCount++]												= { value, menuItemText };
 	}
 
 	if( 0 == menuItemCount ) { 
@@ -103,10 +103,10 @@ void research
 		return; 
 	} 
 	
-	menuItems[menuItemCount++] = {maxItemCount, "Exit this menu"}; 
+	menuItems[menuItemCount++]												= {maxItemCount, "Exit this menu"}; 
 	
 	sprintf_s(menuItemText, "%s", selectItemToResearch.c_str());
-	int32_t selectedValue = displayMenu(menuItemText, menuItems, menuItemCount); 
+	int32_t																		selectedValue											= displayMenu(menuItemText, menuItems, menuItemCount); 
 	
 	if(maxItemCount == selectedValue) { 
 		printf("You exit the labs.\n"); 
@@ -122,14 +122,12 @@ void research
 
 	researchedList.AddElement((int32_t)selectedValue); 
 
-	if(bIsModifier)
-	{
-		adventurerMaxEquip.Modifier		= std::max(adventurerMaxEquip.Modifier, (int16_t)(selectedValue+1)); 
+	if(bIsModifier) {
+		adventurerMaxEquip.Modifier												= std::max(adventurerMaxEquip.Modifier, (int16_t)(selectedValue+1)); 
 		printf(doneResearching.c_str(), menuItemText); 
 	}
-	else
-	{
-		adventurerMaxEquip.Definition	= std::max(adventurerMaxEquip.Definition, (int16_t)(selectedValue+1)); 
+	else {
+		adventurerMaxEquip.Definition											= std::max(adventurerMaxEquip.Definition, (int16_t)(selectedValue+1)); 
 		printf(doneResearching.c_str(), definitionsTable[selectedValue].Name.c_str()); 
 	}
 	research
