@@ -11,18 +11,18 @@
 // This hell creates an user menu for the entity records available for research
 template <typename _TEquipClass, typename _TInventory, typename _TResearched, size_t _SizeInventory, size_t _SizeResearched, size_t _SizeDefinitions>
 void																		research
-	( klib::SEntityContainer<_TInventory, _SizeInventory>		& equipInventory 
-	, klib::SEntityContainer<_TResearched, _SizeResearched>		& researchedList
+	( ::klib::SEntityContainer<_TInventory, _SizeInventory>		& equipInventory 
+	, ::klib::SEntityContainer<_TResearched, _SizeResearched>	& researchedList
 	, const _TEquipClass										(&definitionsTable)[_SizeDefinitions]
 	, _TInventory												& adventurerMaxEquip
 	, bool														bIsModifier
 	, bool														bIsProgressive
-	, const std::string											& itemFormat
-	, const std::string											& allResearchComplete
-	, const std::string											& noResearchAvailable
-	, const std::string											& selectItemToResearch
-	, const std::string											& startResearching
-	, const std::string											& doneResearching
+	, const ::std::string										& itemFormat
+	, const ::std::string										& allResearchComplete
+	, const ::std::string										& noResearchAvailable
+	, const ::std::string										& selectItemToResearch
+	, const ::std::string										& startResearching
+	, const ::std::string										& doneResearching
 	) 
 { 
 	if(researchedList.Count >= _SizeDefinitions-1) {	// No more research items in the game.
@@ -84,7 +84,6 @@ void																		research
 			else 
 				continue;
 		}
-
 
 		bool																		bRequiresInserting										= true;
 		for(int32_t i=0; i<menuItemCount; ++i)

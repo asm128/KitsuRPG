@@ -80,11 +80,11 @@ void																	equipEntityMenu
 	}
 	
 	static char																	menuItemText[256]							= {};	
-	static klib::SMenuItem<int16_t>												menuItems	[256]							= {}; 
+	static ::klib::SMenuItem<int16_t>											menuItems	[256]							= {}; 
 	int32_t																		menuItemCount								= 0; 
 
 	for(int32_t i=0, count = characterInventory.Count; i<count; ++i) { 
-		sprintf_s(menuItemText, "x%.02i: %s level %u", characterInventory[i].Count, klib::getEntityName(characterInventory[i].Entity, tableDefinitions, tableModifiers).c_str(), characterInventory[i].Entity.Level);
+		sprintf_s(menuItemText, "x%.02i: %s level %u", characterInventory[i].Count, ::klib::getEntityName(characterInventory[i].Entity, tableDefinitions, tableModifiers).c_str(), characterInventory[i].Entity.Level);
 		menuItems[menuItemCount++]												= {(int16_t)i, menuItemText}; 
 	}	
 
@@ -97,13 +97,13 @@ void																	equipEntityMenu
 	equipEntityIfResearched(selectedValue, characterInventory, completedResearch, completedResearch, tableDefinitions, tableModifiers, currentEntity, cantAccessDefinitionError, cantAccessModifierError, storeOldWeaponMessage, equipNewWeaponMessage, researchTypeString);
 }
 
-void																	equipWeaponMenu								(klib::CCharacter& adventurer)				{ 
+void																	equipWeaponMenu								(klib::CCharacter& adventurer)						{ 
 	equipEntityMenu
-		( adventurer.Goods.Inventory.Weapon
-		, adventurer.Goods.CompletedResearch.Weapon
-		, klib::definitionsWeapon
-		, klib::modifiersWeapon
-		, adventurer.CurrentEquip.Weapon
+		( adventurer.Goods.Inventory			.Weapon
+		, adventurer.Goods.CompletedResearch	.Weapon
+		, ::klib::definitionsWeapon
+		, ::klib::modifiersWeapon
+		, adventurer.CurrentEquip				.Weapon
 		, "You don't have any other weapons yet!\n"
 		, "You're currently carrying a %s level %u.\n"
 		, "Select your weapon of choice"
@@ -115,13 +115,13 @@ void																	equipWeaponMenu								(klib::CCharacter& adventurer)				{
 		);
 }
 
-void																	equipAccessoryMenu							(klib::CCharacter& adventurer)				{ 
+void																	equipAccessoryMenu							(klib::CCharacter& adventurer)						{ 
 	equipEntityMenu
-		( adventurer.Goods.Inventory.Accessory
-		, adventurer.Goods.CompletedResearch.Accessory
+		( adventurer.Goods.Inventory			.Accessory
+		, adventurer.Goods.CompletedResearch	.Accessory
 		, klib::definitionsAccessory
 		, klib::modifiersAccessory
-		, adventurer.CurrentEquip.Accessory
+		, adventurer.CurrentEquip				.Accessory
 		, "You don't have any other accessories yet!\n"
 		, "You're currently wearing a %s level %u.\n"
 		, "Select an accessory to wear"
@@ -133,13 +133,13 @@ void																	equipAccessoryMenu							(klib::CCharacter& adventurer)				
 		);
 }
 
-void																	equipArmorMenu								(klib::CCharacter& adventurer)				{
+void																	equipArmorMenu								(klib::CCharacter& adventurer)						{
 	equipEntityMenu
-		( adventurer.Goods.Inventory.Armor
-		, adventurer.Goods.CompletedResearch.Armor
+		( adventurer.Goods.Inventory			.Armor
+		, adventurer.Goods.CompletedResearch	.Armor
 		, klib::definitionsArmor
 		, klib::modifiersArmor
-		, adventurer.CurrentEquip.Armor
+		, adventurer.CurrentEquip				.Armor
 		, "You don't have any other armors yet!\n"
 		, "You're currently wearing a %s level %u.\n"
 		, "Select your armor of choice"
@@ -151,13 +151,13 @@ void																	equipArmorMenu								(klib::CCharacter& adventurer)				{
 		);
 }
 
-void																	equipProfessionMenu							(klib::CCharacter& adventurer)				{ 
+void																	equipProfessionMenu							(klib::CCharacter& adventurer)						{ 
 	equipEntityMenu
-		( adventurer.Goods.Inventory.Profession
-		, adventurer.Goods.CompletedResearch.Profession
+		( adventurer.Goods.Inventory			.Profession
+		, adventurer.Goods.CompletedResearch	.Profession
 		, klib::definitionsProfession
 		, klib::modifiersProfession
-		, adventurer.CurrentEquip.Profession
+		, adventurer.CurrentEquip				.Profession
 		, "You don't have any other professions yet!\n"
 		, "You're currently assigned as a %s level %u.\n"
 		, "Select your favorite agent for the next mission"
@@ -169,13 +169,13 @@ void																	equipProfessionMenu							(klib::CCharacter& adventurer)			
 		);
 };
 
-void																	equipVehicleMenu							(klib::CCharacter& adventurer)				{ 
+void																	equipVehicleMenu							(klib::CCharacter& adventurer)						{ 
 	equipEntityMenu
-		( adventurer.Goods.Inventory.Vehicle
-		, adventurer.Goods.CompletedResearch.Vehicle
+		( adventurer.Goods.Inventory			.Vehicle
+		, adventurer.Goods.CompletedResearch	.Vehicle
 		, klib::definitionsVehicle
 		, klib::modifiersVehicle
-		, adventurer.CurrentEquip.Vehicle
+		, adventurer.CurrentEquip				.Vehicle
 		, "You don't have any other vehicles yet!\n"
 		, "You're currently piloting a %s level %u.\n"
 		, "Select your vehicle of choice"
@@ -187,13 +187,13 @@ void																	equipVehicleMenu							(klib::CCharacter& adventurer)				{
 		);
 };
 
-void																	equipFacilityMenu							(klib::CCharacter& adventurer)				{ 
+void																	equipFacilityMenu							(klib::CCharacter& adventurer)						{ 
 	equipEntityMenu
-		( adventurer.Goods.Inventory.Facility
-		, adventurer.Goods.CompletedResearch.Facility
+		( adventurer.Goods.Inventory			.Facility
+		, adventurer.Goods.CompletedResearch	.Facility
 		, klib::definitionsFacility
 		, klib::modifiersFacility 
-		, adventurer.CurrentEquip.Facility
+		, adventurer.CurrentEquip				.Facility
 		, "You don't have any other building yet!\n"
 		, "You're currently inside a %s level %u.\n"
 		, "Select your building of choice"
@@ -220,7 +220,7 @@ void																	researchFacilityModifier					(klib::CCharacter& adventurer)
 
 static const char														optionNotSupported[]						= "Option not supported yet. Please select a valid option.\n";
 
-void																	labs										(klib::CCharacter& adventurer)				{
+void																	labs										(klib::CCharacter& adventurer)						{
 	// This is the main loop of the game and queries for user input until the exit option is selected.
 	static const klib::SMenuItem<int>											tavernOptions[]								=
 	{ { 0, "Research new weapons"						}
