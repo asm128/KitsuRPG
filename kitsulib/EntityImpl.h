@@ -21,38 +21,37 @@ namespace klib
 	GDEFINE_ENUM_VALUE(ENTITY_TYPE, ITEM		, 8);
 	GDEFINE_ENUM_VALUE(ENTITY_TYPE, TILE		, 9);
 
-	struct SEntityResearch 
-	{
-							int32_t								ResearchIndex;
-							int32_t								PriceUnit;
-							int32_t								PricePaid;
-							bool_t								IsModifier;
-							::std::string						Name;
-							SEntity								Entity;
-							ENTITY_TYPE							Type;
+	struct SEntityResearch  {
+								int32_t								ResearchIndex;
+								int32_t								PriceUnit;
+								int32_t								PricePaid;
+								bool_t								IsModifier;
+								::std::string						Name;
+								SEntity								Entity;
+								ENTITY_TYPE							Type;
 	};
 
 
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersItem			= {{ .125,  .125,  .125}, { .125,  .125,  .125}, { .125,  .125, { .125,  .125,  .125},  .125,  .125}, {.125, .125, .125,  .125}, 0.125, 0.85, 1.0};
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersWeapon			= {{ .125,    .1, .0625}, { .125, .0625, .0625}, { .125,   .25, { .125,    .1,  .125}, .0625,   .25}, {.125,  .125, .125,   .1}, 0.125, 0.85, 1.0};
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersArmor			= {{ .125,    .1,   .25}, { .125,    .1,   .25}, {.0625, .0625, { .125, .0625,  .125},  .125, .0625}, {.125, .0625, .125,   .1}, 0.125, 0.85, 1.0};
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersProfession		= {{  .25,  .125, .0625}, {  .25,  .125, .0625}, { .125,  .125, {.0625,  .125, .0625},  .125,  .125}, {.125,    .1,   .1,   .1}, 0.125, 0.85, 1.0};
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersAccessory		= {{ .125,   .25, .0625}, { .125,   .25, .0625}, { .125,    .1, {.0625, .0625,  .125},    .1,    .1}, {.125,  .125, .125, .125}, 0.125, 0.85, 1.0};
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersVehicle		= {{.0625, .0625,   .25}, {.0625, .0625,   .25}, { .125,  .125, { .125,  .125,  .125},  .125,  .125}, {.125,    .1, .125,   .1},   0.1, 0.85, 1.0};
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersFacility		= {{  .25,   .25,   .25}, {  .25,   .25,   .25}, {  .25,   .25, {  .25,   .25,   .25},   .25,   .25}, { .25,   .25,  .25,   .1}, 0.125, 0.85, 1.0};
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersStageProp		= {{  .25,   .25,   .25}, {  .25,   .25,   .25}, {  .25,   .25, {  .25,   .25,   .25},   .25,   .25}, { .25,   .25,  .25,   .1}, 0.125, 0.85, 1.0};
-	static constexpr	const SEntityPointsMultiplier		g_MultipliersTile			= {{  .25,   .25,   .25}, {  .25,   .25,   .25}, {  .25,   .25, {  .25,   .25,   .25},   .25,   .25}, { .25,   .25,  .25,   .1}, 0.125, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersItem			= {{ .125,  .125,  .125}, { .125,  .125,  .125}, { .125,  .125, { .125,  .125,  .125},  .125,  .125}, {.125, .125, .125,  .125}, 0.125, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersWeapon			= {{ .125,    .1, .0625}, { .125, .0625, .0625}, { .125,   .25, { .125,    .1,  .125}, .0625,   .25}, {.125,  .125, .125,   .1}, 0.125, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersArmor			= {{ .125,    .1,   .25}, { .125,    .1,   .25}, {.0625, .0625, { .125, .0625,  .125},  .125, .0625}, {.125, .0625, .125,   .1}, 0.125, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersProfession		= {{  .25,  .125, .0625}, {  .25,  .125, .0625}, { .125,  .125, {.0625,  .125, .0625},  .125,  .125}, {.125,    .1,   .1,   .1}, 0.125, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersAccessory		= {{ .125,   .25, .0625}, { .125,   .25, .0625}, { .125,    .1, {.0625, .0625,  .125},    .1,    .1}, {.125,  .125, .125, .125}, 0.125, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersVehicle		= {{.0625, .0625,   .25}, {.0625, .0625,   .25}, { .125,  .125, { .125,  .125,  .125},  .125,  .125}, {.125,    .1, .125,   .1},   0.1, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersFacility		= {{  .25,   .25,   .25}, {  .25,   .25,   .25}, {  .25,   .25, {  .25,   .25,   .25},   .25,   .25}, { .25,   .25,  .25,   .1}, 0.125, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersStageProp		= {{  .25,   .25,   .25}, {  .25,   .25,   .25}, {  .25,   .25, {  .25,   .25,   .25},   .25,   .25}, { .25,   .25,  .25,   .1}, 0.125, 0.85, 1.0};
+	static constexpr		const SEntityPointsMultiplier		g_MultipliersTile			= {{  .25,   .25,   .25}, {  .25,   .25,   .25}, {  .25,   .25, {  .25,   .25,   .25},   .25,   .25}, { .25,   .25,  .25,   .1}, 0.125, 0.85, 1.0};
 
 #define DECLARE_ENTITY(_multipliers, _type, _name)																																									\
 	struct S##_name : public ::klib::SEntity { 																																										\
 		using					::klib::SEntity					::SEntity; 																																			\
 																																																					\
-		inline constexpr										S##_name					(void)													{}																\
-		inline constexpr										S##_name					(const SEntity& other)									: SEntity(other)											{}	\
-																																																					\
-		static inline constexpr	::klib::ENTITY_TYPE				getType						()														{ return _type;												}	\
-		static inline const		::nwol::glabel&					getName						()														{ static const ::nwol::glabel name = #_name; return name;	}	\
-		static inline constexpr	::klib::SEntityPointsMultiplier	getMultipliers				()														{ return _multipliers;										}	\
+		inline constexpr										S##_name						(void)													{}																\
+		inline constexpr										S##_name						(const SEntity& other)									: SEntity(other)											{}	\
+																																																						\
+		static inline constexpr	::klib::ENTITY_TYPE				getType							()														{ return _type;												}	\
+		static inline const		::nwol::glabel&					getName							()														{ static const ::nwol::glabel name = #_name; return name;	}	\
+		static inline constexpr	::klib::SEntityPointsMultiplier	getMultipliers					()														{ return _multipliers;										}	\
 	};
 
 	DECLARE_ENTITY(g_MultipliersProfession	, ENTITY_TYPE_PROFESSION	, Profession	);
@@ -66,15 +65,15 @@ namespace klib
 	DECLARE_ENTITY(g_MultipliersTile		, ENTITY_TYPE_TILE			, Tile			);
 
 	struct SCombatStatus {
-		static					const uint32_t					MaxStatus					= MAX_COMBAT_STATUS_COUNT;
-								COMBAT_STATUS					Status						= COMBAT_STATUS_NONE;
-								int8_t							TurnsLeft					[MAX_COMBAT_STATUS_COUNT]								= {};
+		static					const uint32_t					MaxStatus						= MAX_COMBAT_STATUS_COUNT;
+								COMBAT_STATUS					Status							= COMBAT_STATUS_NONE;
+								int8_t							TurnsLeft						[MAX_COMBAT_STATUS_COUNT]								= {};
 
-								void							Clear						()														{
+								void							Clear							()														{
 			Status		= COMBAT_STATUS_NONE;
 			memset(TurnsLeft, 0, sizeof(uint8_t)*nwol::size(TurnsLeft));
 		}
-								int32_t							GetStatusTurns				(const COMBAT_STATUS status)			const			{
+								int32_t							GetStatusTurns					(const COMBAT_STATUS status)			const			{
 			int32_t			turns		= 0;
 			for(uint32_t i=0, count = MaxStatus; i<count; ++i) {
 				COMBAT_STATUS	statusBit	= (COMBAT_STATUS)(1 << i);
@@ -86,7 +85,7 @@ namespace klib
 			return turns;
 		}
 
-								void							NextTurn					()														{
+								void							NextTurn						()														{
 			for(uint32_t i=0, count = MaxStatus; i<count; ++i)
 			{
 				COMBAT_STATUS	statusBit	= (COMBAT_STATUS)(1 << i);
@@ -119,7 +118,7 @@ namespace klib
 			}
 		}
 
-								void							NextEnemyTurn				()														{
+								void							NextEnemyTurn					()														{
 			for(uint32_t i=0, count = MaxStatus; i<count; ++i)
 			{
 				COMBAT_STATUS	statusBit	= (COMBAT_STATUS)(1 << i);
@@ -161,7 +160,7 @@ namespace klib
 			}
 		}
 
-								void							NextRound					()														{
+								void							NextRound						()														{
 			for(uint32_t i=0, count = MaxStatus; i<count; ++i)
 			{
 				COMBAT_STATUS	statusBit	= (COMBAT_STATUS)(1 << i);
@@ -186,18 +185,17 @@ namespace klib
 		}
 	};
 
-	void	addStatus		(SCombatStatus& characterStatus, COMBAT_STATUS statusType, int32_t turnCount);	
+							void							addStatus						(SCombatStatus& characterStatus, COMBAT_STATUS statusType, int32_t turnCount);	
 
 	typedef					SEntityPoints					SEntityPointsTurns;
-	struct SCombatBonus
-	{
-								SEntityPoints					Points						= {};	// these are points that are calculated during combat depending on equipment or item consumption.
-								SEntityPointsTurns				TurnsLeftPoints				= {};	// these are the amount of turns for which each bonus is valid. On each turn it should decrease by one and clear the bonus to zero when this counter reaches zero.
-								SEntityFlags					Flags						= {};	// these are points that are calculated during combat depending on equipment or item consumption.
-								SEntityFlagsTurns				TurnsLeftFlags				= {};	// these are the amount of turns for which each bonus is valid. On each turn it should decrease by one and clear the bonus to zero when this counter reaches zero.
+	struct SCombatBonus {
+								SEntityPoints					Points							= {};	// these are points that are calculated during combat depending on equipment or item consumption.
+								SEntityPointsTurns				TurnsLeftPoints					= {};	// these are the amount of turns for which each bonus is valid. On each turn it should decrease by one and clear the bonus to zero when this counter reaches zero.
+								SEntityFlags					Flags							= {};	// these are points that are calculated during combat depending on equipment or item consumption.
+								SEntityFlagsTurns				TurnsLeftFlags					= {};	// these are the amount of turns for which each bonus is valid. On each turn it should decrease by one and clear the bonus to zero when this counter reaches zero.
 
 								// Turn
-								void							NextTurn					()	{
+								void							NextTurn						()														{
 			if( 0 < TurnsLeftPoints.LifeMax.Health				)	{	if( 0 == --TurnsLeftPoints.LifeMax.Health				)	Points	.LifeMax		.Health		= 0										;} else if( 0 > TurnsLeftPoints.LifeMax.Health					)	{	if( 0 == ++TurnsLeftPoints.LifeMax.Health				)	Points.LifeMax.Health				= 0;	} 
 			if( 0 < TurnsLeftPoints.LifeMax.Mana				)	{	if( 0 == --TurnsLeftPoints.LifeMax.Mana					)	Points	.LifeMax		.Mana		= 0										;} else if( 0 > TurnsLeftPoints.LifeMax.Mana					)	{	if( 0 == ++TurnsLeftPoints.LifeMax.Mana					)	Points.LifeMax.Mana					= 0;	} 
 			if( 0 < TurnsLeftPoints.LifeMax.Shield				)	{	if( 0 == --TurnsLeftPoints.LifeMax.Shield				)	Points	.LifeMax		.Shield		= 0										;} else if( 0 > TurnsLeftPoints.LifeMax.Shield					)	{	if( 0 == ++TurnsLeftPoints.LifeMax.Shield				)	Points.LifeMax.Shield				= 0;	} 
@@ -209,7 +207,7 @@ namespace klib
 		}
 
 		// Player turn (round)
-								void							NextRound					()	{
+								void							NextRound						()														{
 			if( 0 < TurnsLeftPoints.Attack.Hit					)	{	if( 0 == --TurnsLeftPoints.Attack.Hit					)	Points	.Attack			.Hit					= 0							;} else if( 0 > TurnsLeftPoints.Attack.Hit						)	{	if( 0 == ++TurnsLeftPoints.Attack.Hit					)	Points.Attack.Hit					= 0;	} 
 			if( 0 < TurnsLeftPoints.Attack.Damage				)	{	if( 0 == --TurnsLeftPoints.Attack.Damage				)	Points	.Attack			.Damage					= 0							;} else if( 0 > TurnsLeftPoints.Attack.Damage					)	{	if( 0 == ++TurnsLeftPoints.Attack.Damage				)	Points.Attack.Damage				= 0;	} 
 			if( 0 < TurnsLeftPoints.Fitness.Attack				)	{	if( 0 == --TurnsLeftPoints.Fitness.Attack				)	Points	.Fitness		.Attack					= 0							;} else if( 0 > TurnsLeftPoints.Fitness.Attack					)	{	if( 0 == ++TurnsLeftPoints.Fitness.Attack				)	Points.Fitness.Attack				= 0;	} 
@@ -221,12 +219,12 @@ namespace klib
 			if( 0 < TurnsLeftPoints.Attack.DirectDamage.Shield	)	{	if( 0 == --TurnsLeftPoints.Attack.DirectDamage.Shield	)	Points	.Attack			.DirectDamage.Shield	= 0							;} else if( 0 > TurnsLeftPoints.Attack.DirectDamage.Shield		)	{	if( 0 == ++TurnsLeftPoints.Attack.DirectDamage.Shield	)	Points.Attack.DirectDamage.Shield	= 0;	} 
 			if( 0 < TurnsLeftFlags.Effect.Attack				)	{	if( 0 == --TurnsLeftFlags.Effect	.Attack				)	Flags	.Effect			.Attack					= ATTACK_EFFECT_NONE		;} else if( 0 > TurnsLeftFlags.Effect	.Attack					)	{	if( 0 == ++TurnsLeftFlags.Effect	.Attack		)	Flags.Effect	.Attack		= ATTACK_EFFECT_NONE		;	} 
 			if( 0 < TurnsLeftFlags.Status.Inflict				)	{	if( 0 == --TurnsLeftFlags.Status	.Inflict			)	Flags	.Status			.Inflict				= COMBAT_STATUS_NONE		;} else if( 0 > TurnsLeftFlags.Status	.Inflict				)	{	if( 0 == ++TurnsLeftFlags.Status	.Inflict	)	Flags.Status	.Inflict	= COMBAT_STATUS_NONE		;	} 
-			if( 0 < TurnsLeftFlags.Tech		.Tech				)	{	if( 0 == --TurnsLeftFlags.Tech		.Tech				)	Flags	.Tech			.Tech					= ENTITY_TECHNOLOGY_UNKNOWN	;} else if( 0 > TurnsLeftFlags.Tech		.Tech					)	{	if( 0 == ++TurnsLeftFlags.Tech		.Tech		)	Flags.Tech		.Tech		= ENTITY_TECHNOLOGY_UNKNOWN	;	} 
-			if( 0 < TurnsLeftFlags.Tech		.Grade				)	{	if( 0 == --TurnsLeftFlags.Tech		.Grade				)	Flags	.Tech			.Grade					= ENTITY_GRADE_ILLUSION		;} else if( 0 > TurnsLeftFlags.Tech		.Grade					)	{	if( 0 == ++TurnsLeftFlags.Tech		.Grade		)	Flags.Tech		.Grade		= ENTITY_GRADE_ILLUSION		;	} 
+			if( 0 < TurnsLeftFlags.Tech.Tech					)	{	if( 0 == --TurnsLeftFlags.Tech.Tech						)	Flags	.Tech			.Tech					= ENTITY_TECHNOLOGY_UNKNOWN	;} else if( 0 > TurnsLeftFlags.Tech		.Tech					)	{	if( 0 == ++TurnsLeftFlags.Tech		.Tech		)	Flags.Tech		.Tech		= ENTITY_TECHNOLOGY_UNKNOWN	;	} 
+			if( 0 < TurnsLeftFlags.Tech.Grade					)	{	if( 0 == --TurnsLeftFlags.Tech.Grade					)	Flags	.Tech			.Grade					= ENTITY_GRADE_ILLUSION		;} else if( 0 > TurnsLeftFlags.Tech		.Grade					)	{	if( 0 == ++TurnsLeftFlags.Tech		.Grade		)	Flags.Tech		.Grade		= ENTITY_GRADE_ILLUSION		;	} 
 		}
 
 		// Enemy turn
-								void							NextEnemyTurn				() {
+								void							NextEnemyTurn					()														{
 			if( 0 < TurnsLeftPoints.Attack	.Absorption			)	{	if( 0 == --TurnsLeftPoints.Attack	.Absorption			)	Points	.Attack			.Absorption				= 0							;} else if( 0 > TurnsLeftPoints.Attack.Absorption				)	{	if( 0 == ++TurnsLeftPoints.Attack.Absorption	)	Points.Attack.Absorption			= 0;	} 
 			if( 0 < TurnsLeftPoints.Fitness	.Reflexes			)	{	if( 0 == --TurnsLeftPoints.Fitness	.Reflexes			)	Points	.Fitness		.Reflexes				= 0							;} else if( 0 > TurnsLeftPoints.Fitness.Reflexes					)	{	if( 0 == ++TurnsLeftPoints.Fitness.Reflexes		)	Points.Fitness.Reflexes				= 0;	} 
 			if( 0 < TurnsLeftFlags.Effect	.Defend				)	{	if( 0 == --TurnsLeftFlags.Effect	.Defend				)	Flags	.Effect			.Defend					= DEFEND_EFFECT_NONE		;} else if( 0 > TurnsLeftFlags.Effect	.Defend					)	{	if( 0 == ++TurnsLeftFlags.Effect	.Defend		)	Flags.Effect	.Defend		= DEFEND_EFFECT_NONE		;	} 
@@ -234,64 +232,62 @@ namespace klib
 		}
 	};
 
-	struct SCharacterTurnBonus
-	{
-								SCombatBonus					Points						= SCombatBonus	();
-								SCombatStatus					Status						= SCombatStatus	();
+	struct SCharacterTurnBonus {
+								SCombatBonus					Points							= SCombatBonus	();
+								SCombatStatus					Status							= SCombatStatus	();
 	};
 
 	template<typename _TEntity>
-	struct SEquip
-	{
+	struct SEquip {
 		typedef					_TEntity						TEntity;
 
-								TEntity							Entity						= SEntity		();
-								SEntityPoints					Points						= SEntityPoints	();	
-								SEntityFlags					Flags						= SEntityFlags	();	
+								TEntity							Entity							= SEntity		();
+								SEntityPoints					Points							= SEntityPoints	();	
+								SEntityFlags					Flags							= SEntityFlags	();	
 
-								SEntityPoints					FinalPoints					= SEntityPoints	();	
-								SEntityFlags					FinalFlags					= SEntityFlags	();	
+								SEntityPoints					FinalPoints						= SEntityPoints	();	
+								SEntityFlags					FinalFlags						= SEntityFlags	();	
 
-								SCharacterTurnBonus				ActiveBonus					= SCharacterTurnBonus();
+								SCharacterTurnBonus				ActiveBonus						= SCharacterTurnBonus();
 
 		template<size_t _SizeDefinitions, size_t _SizeModifiers>
 								void							RecalculateFinalPoints	
-		(	const SEntityRecord<TEntity> (&entityDefinitions)[_SizeDefinitions]
-		,	const SEntityRecord<TEntity> (&entityModifiers	)[_SizeModifiers]
-		)
+			(	const SEntityRecord<TEntity> (&entityDefinitions)[_SizeDefinitions	]
+			,	const SEntityRecord<TEntity> (&entityModifiers	)[_SizeModifiers	]
+			)
 		{
-			const SEntityPoints		weaponPoints					= klib::getEntityPoints(Entity, entityDefinitions, entityModifiers);
-			const SEntityPoints		& bonusPoints					= ActiveBonus.Points.Points;
+			const SEntityPoints											weaponPoints					= klib::getEntityPoints(Entity, entityDefinitions, entityModifiers);
+			const SEntityPoints											& bonusPoints					= ActiveBonus.Points.Points;
 
 			// Currently, SEntityPoints::Coins and SEntityPoints::LifeCurrent values of the equipment are used in a different 
 			// way from the character's points so we avoid adding the character points to the result for these two.
-			SEntityPoints			result							= bonusPoints + weaponPoints; // + facilityPoints + vehiclePoints;
+			SEntityPoints												result							= bonusPoints + weaponPoints; // + facilityPoints + vehiclePoints;
 
-			result.LifeMax			= result.LifeMax				+ Points.LifeMax;	// 
-			result.Attack			= result.Attack					+ Points.Attack;	// 
-			result.Fitness			= result.Fitness				+ Points.Fitness;	// 
-			result.PriceBuy			= result.PriceBuy				+ Points.PriceBuy;	// 
-			result.CostMaintenance	= result.CostMaintenance		+ Points.CostMaintenance;	// 
+			result.LifeMax											= result.LifeMax			+ Points.LifeMax;	// 
+			result.Attack											= result.Attack				+ Points.Attack;	// 
+			result.Fitness											= result.Fitness			+ Points.Fitness;	// 
+			result.PriceBuy											= result.PriceBuy			+ Points.PriceBuy;	// 
+			result.CostMaintenance									= result.CostMaintenance	+ Points.CostMaintenance;	// 
 
-			FinalPoints = result;
+			FinalPoints												= result;
 		}
 
 		template<size_t _SizeDefinitions, size_t _SizeModifiers>
 								void							RecalculateFinalFlags	
-		(	const SEntityRecord<TEntity> (&entityDefinitions)[_SizeDefinitions]
-		,	const SEntityRecord<TEntity> (&entityModifiers	)[_SizeModifiers]
-		)
+			( const SEntityRecord<TEntity> (&entityDefinitions	)[_SizeDefinitions	]
+			, const SEntityRecord<TEntity> (&entityModifiers	)[_SizeModifiers	]
+			)
 		{
-			const SEntityFlags		weaponFlags				= klib::getEntityFlags(Entity, entityDefinitions, entityModifiers);
-			const SEntityFlags		& bonusFlags			= ActiveBonus.Points.Flags;
-			FinalFlags				= bonusFlags | weaponFlags | Flags;
+			const SEntityFlags											weaponFlags						= klib::getEntityFlags(Entity, entityDefinitions, entityModifiers);
+			const SEntityFlags											& bonusFlags					= ActiveBonus.Points.Flags;
+			FinalFlags												= bonusFlags | weaponFlags | Flags;
 		}
 		
 		template<size_t _SizeDefinitions, size_t _SizeModifiers>
 								void							Recalculate
-		(	const SEntityRecord<TEntity> (&entityDefinitions)[_SizeDefinitions]
-		,	const SEntityRecord<TEntity> (&entityModifiers	)[_SizeModifiers] 
-		)
+			(	const SEntityRecord<TEntity> (&entityDefinitions)[_SizeDefinitions	]
+			,	const SEntityRecord<TEntity> (&entityModifiers	)[_SizeModifiers	] 
+			)
 		{
 			RecalculateFinalPoints	(entityDefinitions, entityModifiers);
 			RecalculateFinalFlags	(entityDefinitions, entityModifiers);

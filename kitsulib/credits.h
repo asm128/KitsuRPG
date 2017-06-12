@@ -14,8 +14,6 @@ namespace klib
 	,	""							
 	,	"-- Graphics --"			
 	,	"654"						
-	,	"Melisa Zelertenis"		
-	,	"Florencia "		
 	,	""							
 	,	"-- Design --"			
 	,	"654"						

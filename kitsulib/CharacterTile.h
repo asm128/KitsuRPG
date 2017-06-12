@@ -21,12 +21,12 @@ namespace klib
 	GDEFINE_ENUM_VALUE(TEAM_TYPE, CUSTOM_6	, 10);
 	GDEFINE_ENUM_VALUE(TEAM_TYPE, CUSTOM_7	, 11);
 	
-	static				bool				isRelevantTeam				(TEAM_TYPE teamId) {
+	static				bool				isRelevantTeam				(TEAM_TYPE teamId)									{
 		static constexpr	const TEAM_TYPE			irrelevantTeams[]			= {TEAM_TYPE_CIVILIAN, TEAM_TYPE_SPECTATOR, TEAM_TYPE_INVALID};
 		bool										bRelevant					= true;
 		for(uint32_t i=0; i < ::nwol::size(irrelevantTeams); ++i)
 			if(irrelevantTeams[i] == teamId) {
-				bRelevant							= false;
+				bRelevant								= false;
 				break;
 			}
 
@@ -35,12 +35,12 @@ namespace klib
 
 	// Stores team, player slot, squad and agent in squad.
 	struct STileCharacter {
-							TEAM_TYPE	TeamId		;
-							int8_t		PlayerIndex	;
-							int8_t		SquadIndex	;
-							int8_t		AgentIndex	;
+							TEAM_TYPE			TeamId		;
+							int8_t				PlayerIndex	;
+							int8_t				SquadIndex	;
+							int8_t				AgentIndex	;
 
-		inline constexpr	bool		operator ==	(const STileCharacter& other)	const	noexcept	{ return TeamId == other.TeamId && PlayerIndex == other.PlayerIndex && SquadIndex == other.SquadIndex && AgentIndex == other.AgentIndex; }
+		inline constexpr	bool				operator ==				(const STileCharacter& other)	const	noexcept	{ return TeamId == other.TeamId && PlayerIndex == other.PlayerIndex && SquadIndex == other.SquadIndex && AgentIndex == other.AgentIndex; }
 	};
 #pragma pack(pop)
 } // namespace

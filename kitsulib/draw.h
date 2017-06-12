@@ -12,18 +12,18 @@ namespace klib
 {
 
 	template<size_t _Width, size_t _Height>
-	void drawSnowBackground( SWeightedDisplay<_Width, _Height>& display, double lastTimeSeconds, uint32_t disturbance = 1 )	{
-		int32_t displayWidth	= (int32_t)display.Width;
-		int32_t displayDepth	= (int32_t)display.Depth;
+	void													drawSnowBackground							( SWeightedDisplay<_Width, _Height>& display, double lastTimeSeconds, uint32_t disturbance = 1 )																							{
+		int32_t														displayWidth								= (int32_t)display.Width;
+		int32_t														displayDepth								= (int32_t)display.Depth;
 
 		for(int32_t x=0; x<displayWidth; ++x) 
 			if(display.DisplayWeights[0][x] == 0)  {
 				if( 0 == (rand()%200) && x % 2) {
-					display.Screen			.Cells[0][x] = (nwol::noise1D((uint32_t)(lastTimeSeconds*10000+x), disturbance) > 0.0) ? '.' : (nwol::noise1D((uint32_t)(lastTimeSeconds*10000-x*x), disturbance) > 0.0) ? 15 : ',';	
-					display.DisplayWeights	.Cells[0][x] = .00001f;
-					display.Speed			.Cells[0][x] = rand()*.001f;
-					display.SpeedTarget		.Cells[0][x] = rand()*.001f;
-					display.TextAttributes	.Cells[0][x] = (nwol::noise1D((uint32_t)(lastTimeSeconds*10000-x), disturbance) > 0.0) ? COLOR_CYAN:COLOR_WHITE;
+					display.Screen			.Cells[0][x]					= (nwol::noise1D((uint32_t)(lastTimeSeconds*10000+x), disturbance) > 0.0) ? '.' : (nwol::noise1D((uint32_t)(lastTimeSeconds*10000-x*x), disturbance) > 0.0) ? 15 : ',';	
+					display.DisplayWeights	.Cells[0][x]					= .00001f;
+					display.Speed			.Cells[0][x]					= rand()*.001f;
+					display.SpeedTarget		.Cells[0][x]					= rand()*.001f;
+					display.TextAttributes	.Cells[0][x]					= (nwol::noise1D((uint32_t)(lastTimeSeconds*10000-x), disturbance) > 0.0) ? COLOR_CYAN:COLOR_WHITE;
 				}
 			}
 	
@@ -32,12 +32,12 @@ namespace klib
 				if(display.DisplayWeights.Cells[z][x] == 0)
 					continue;
 
-				display.DisplayWeights.Cells[z][x] += (float)(lastTimeSeconds*display.Speed.Cells[z][x]);
+				display.DisplayWeights.Cells[z][x]						+= (float)(lastTimeSeconds*display.Speed.Cells[z][x]);
 
 				if(display.Speed.Cells[z][x] < display.SpeedTarget.Cells[z][x])
-					display.Speed.Cells	[z][x] += (float)((display.Speed.Cells[z][x]*lastTimeSeconds*lastTimeSeconds));//*.1f;
+					display.Speed.Cells	[z][x]								+= (float)((display.Speed.Cells[z][x]*lastTimeSeconds*lastTimeSeconds));//*.1f;
 				else
-					display.Speed.Cells	[z][x] -= (float)((display.Speed.Cells[z][x]*lastTimeSeconds*lastTimeSeconds));//*.1f;
+					display.Speed.Cells	[z][x]								-= (float)((display.Speed.Cells[z][x]*lastTimeSeconds*lastTimeSeconds));//*.1f;
 			}
 
 		for(uint32_t z=0; z<display.Depth-2; ++z) 
@@ -46,57 +46,57 @@ namespace klib
 					continue;
 
 				if(display.DisplayWeights.Cells[z][x] > 1.0) {
-					int randX = (rand()%2) ? rand()%(1+disturbance*2)-disturbance : 0;
-					int32_t xpos = std::max(std::min((int)x+randX, displayWidth-1), 0);
-					display.Screen			.Cells[z+1][xpos]	= display.Screen.Cells			[z][x];
-					display.Speed			.Cells[z+1][xpos]	= display.Speed.Cells			[z][x];
-					display.TextAttributes	.Cells[z+1][xpos]	= (nwol::noise1D((uint32_t)(lastTimeSeconds*10000+x), disturbance) > 0.0) ? COLOR_CYAN:COLOR_WHITE;
-					//display.TextAttributes	.Cells[z+1][xpos]	= display.TextAttributes.Cells	[z][x];
-					display.DisplayWeights	.Cells[z+1][xpos]	= 0.0001f;
-					display.SpeedTarget		.Cells[z+1][xpos]	= (float)((rand()%5000))*0.001f+0.001f;
+					int															randX										= (rand()%2) ? rand()%(1+disturbance*2)-disturbance : 0;
+					int32_t														xpos										= std::max(std::min((int)x+randX, displayWidth-1), 0);
+					display.Screen			.Cells[z+1][xpos]				= display.Screen.Cells			[z][x];
+					display.Speed			.Cells[z+1][xpos]				= display.Speed.Cells			[z][x];
+					display.TextAttributes	.Cells[z+1][xpos]				= (nwol::noise1D((uint32_t)(lastTimeSeconds*10000+x), disturbance) > 0.0) ? COLOR_CYAN:COLOR_WHITE;
+					//display.TextAttributes	.Cells[z+1][xpos]			= display.TextAttributes.Cells	[z][x];
+					display.DisplayWeights	.Cells[z+1][xpos]				= 0.0001f;
+					display.SpeedTarget		.Cells[z+1][xpos]				= (float)((rand()%5000))*0.001f+0.001f;
 
-					display.Screen			.Cells[z][x]	= ' ';
-					display.DisplayWeights	.Cells[z][x]	= 0;
-					display.Speed			.Cells[z][x]	= 0; 
-					display.SpeedTarget		.Cells[z][x]	= 0;
-					display.TextAttributes	.Cells[z][x]	= COLOR_WHITE;
+					display.Screen			.Cells[z][x]					= ' ';
+					display.DisplayWeights	.Cells[z][x]					= 0;
+					display.Speed			.Cells[z][x]					= 0; 
+					display.SpeedTarget		.Cells[z][x]					= 0;
+					display.TextAttributes	.Cells[z][x]					= COLOR_WHITE;
 				}
 			}
 
 	}
 
 	template<size_t _Width, size_t _Height>
-	void drawFireBackground( SWeightedDisplay<_Width, _Height>& display, double lastTimeSeconds, uint32_t disturbance = 2, uint32_t disappearChanceDivisor=10, bool bReverse=false, bool bDontSlowdown=true ) {
-		int32_t displayWidth	= (int32_t)display.Width;
-		int32_t displayDepth	= (int32_t)display.Depth;
+	void													drawFireBackground							( SWeightedDisplay<_Width, _Height>& display, double lastTimeSeconds, uint32_t disturbance = 2, uint32_t disappearChanceDivisor=10, bool bReverse=false, bool bDontSlowdown=true )			{
+		int32_t														displayWidth								= (int32_t)display.Width;
+		int32_t														displayDepth								= (int32_t)display.Depth;
 
-		uint32_t firstRow	= bReverse ? 0 : displayDepth - 1;
-		uint32_t lastRow	= bReverse ? displayDepth - 1 : 0;
-		uint64_t seed		= (uint64_t)(disturbance+lastTimeSeconds*100000*(1+(rand()%100)));
-		uint32_t randBase	= (uint32_t)(lastTimeSeconds*(disturbance+654)*100000			);
+		uint32_t													firstRow									= bReverse ? 0 : displayDepth - 1;
+		uint32_t													lastRow										= bReverse ? displayDepth - 1 : 0;
+		uint64_t													seed										= (uint64_t)(disturbance+lastTimeSeconds*100000*(1+(rand()%100)));
+		uint32_t													randBase									= (uint32_t)(lastTimeSeconds*(disturbance+654)*100000			);
 		for(int32_t x=0; x<displayWidth; ++x) 
 			if(display.DisplayWeights.Cells[firstRow][x] == 0) {
 				if( 0 == (rand()%4) ) {
-					display.Screen			.Cells[firstRow][x] =  (nwol::noise1D(randBase+x, seed+1203) > 0.0) ? '.' :  (nwol::noise1D(randBase+1+x*x, seed+1235) > 0.0) ? '|' : ',';
-					display.DisplayWeights	.Cells[firstRow][x] = .00001f;
-					display.Speed			.Cells[firstRow][x] = rand()*.001f+0.001f;
-					display.SpeedTarget		.Cells[firstRow][x] = rand()*.0009f+0.001f;
-					display.TextAttributes	.Cells[firstRow][x] = bReverse ? ((nwol::noise1D(randBase+321+x, seed+91423) > 0.0)?COLOR_CYAN:COLOR_BLUE) :  (nwol::noise1D(randBase+32+x, seed<<1) > 0.0) ? COLOR_RED : (nwol::noise1D(randBase+987429654+x, seed+98234) > 0.0) ? COLOR_ORANGE : COLOR_DARKYELLOW;
+					display.Screen			.Cells[firstRow][x]				=  (nwol::noise1D(randBase+x, seed+1203) > 0.0) ? '.' :  (nwol::noise1D(randBase+1+x*x, seed+1235) > 0.0) ? '|' : ',';
+					display.DisplayWeights	.Cells[firstRow][x]				= .00001f;
+					display.Speed			.Cells[firstRow][x]				= rand()*.001f+0.001f;
+					display.SpeedTarget		.Cells[firstRow][x]				= rand()*.0009f+0.001f;
+					display.TextAttributes	.Cells[firstRow][x]				= bReverse ? ((nwol::noise1D(randBase+321+x, seed+91423) > 0.0)?COLOR_CYAN:COLOR_BLUE) :  (nwol::noise1D(randBase+32+x, seed<<1) > 0.0) ? COLOR_RED : (nwol::noise1D(randBase+987429654+x, seed+98234) > 0.0) ? COLOR_ORANGE : COLOR_DARKYELLOW;
 				}
 			}
 
 		for(uint32_t z = 0, maxZ = display.Depth; z < maxZ; z ++) 
 			for(uint32_t x=0; x<display.Width; ++x) {
 				if(lastRow == z) {
-					display.Screen			.Cells[lastRow][x]	= ' ';
-					display.DisplayWeights	.Cells[lastRow][x]	= 0;
-					display.Speed			.Cells[lastRow][x]	= 0; 
-					display.SpeedTarget		.Cells[lastRow][x]	= 0;
+					display.Screen			.Cells[lastRow][x]				= ' ';
+					display.DisplayWeights	.Cells[lastRow][x]				= 0;
+					display.Speed			.Cells[lastRow][x]				= 0; 
+					display.SpeedTarget		.Cells[lastRow][x]				= 0;
 				}
 				if(display.Screen.Cells[z][x] == ' ')
 					continue;
 
-				display.DisplayWeights.Cells[z][x] += (float)(lastTimeSeconds*display.Speed.Cells[z][x]);
+				display.DisplayWeights.Cells[z][x]						+= (float)(lastTimeSeconds*display.Speed.Cells[z][x]);
 
 				if(display.Speed.Cells[z][x] < display.SpeedTarget.Cells[z][x])
 					display.Speed.Cells[z][x] += (float)(display.Speed.Cells[z][x]*lastTimeSeconds);

@@ -5,50 +5,47 @@ namespace klib
 {
 
 	template<typename _TEntity, size_t _Size, size_t _SizeDefinitions, size_t _SizeModifiers>
-	void completeProduction
-	(	SEntityContainer<_TEntity, _Size>& playerInventory
-	,	const _TEntity& entity
-	,	std::string& messageSuccess
-	,	const SEntityRecord<_TEntity> (&definitionsTable)[_SizeDefinitions]
-	,	const SEntityRecord<_TEntity> (&modifiersTable)[_SizeModifiers]) 
+	void																	completeProduction
+		(	SEntityContainer<_TEntity, _Size>				& playerInventory
+		,	const _TEntity									& entity
+		,	::std::string									& messageSuccess
+		,	const SEntityRecord<_TEntity>					(&definitionsTable	)[_SizeDefinitions	]
+		,	const SEntityRecord<_TEntity>					(&modifiersTable	)[_SizeModifiers	]
+		) 
 	{
 		playerInventory.AddElement(entity);
-		std::string entityName = getEntityName(entity, definitionsTable, modifiersTable);
-		messageSuccess = entityName + " production completed.";
+		::std::string																entityName						= getEntityName(entity, definitionsTable, modifiersTable);
+		messageSuccess															= entityName + " production completed.";
 	}
 
 	template <typename _EntityType>
-	void completeResearch
-	(	const SEntityResearch		& selectedChoice
-	,	_EntityType					& maxResearch
-	,	SResearchGroup<_EntityType>	& researchCompleted
-	,	std::string					& successMessage
-	)
+	void																	completeResearch
+		(	const SEntityResearch							& selectedChoice
+		,	_EntityType										& maxResearch
+		,	SResearchGroup<_EntityType>						& researchCompleted
+		,	::std::string									& successMessage
+		)
 	{
-		if(selectedChoice.IsModifier)	
-		{
+		if(selectedChoice.IsModifier) {
 			researchCompleted.Modifiers.AddElement(selectedChoice.Entity.Modifier); 
-			maxResearch.Modifier	= nwol::max(maxResearch.Modifier,	selectedChoice.Entity.Modifier);
+			maxResearch.Modifier													= nwol::max(maxResearch.Modifier,	selectedChoice.Entity.Modifier);
 		}
-		else 
-		{
+		else {
 			researchCompleted.Definitions.AddElement(selectedChoice.Entity.Definition); 
-			maxResearch.Definition	= nwol::max(maxResearch.Definition,	selectedChoice.Entity.Definition);
+			maxResearch.Definition													= nwol::max(maxResearch.Definition,	selectedChoice.Entity.Definition);
 		}
-		successMessage = "You have successfully researched " + selectedChoice.Name + ".";
+		successMessage															= "You have successfully researched " + selectedChoice.Name + ".";
 	}
 
 	//-------------------------------------------------------------------------------------------
-	static void acknowledgeResearch(const SEntityResearch& selectedChoice, SPlayerProjects& playerProjects, std::string& successMessage)
-	{
+	static void																acknowledgeResearch				(const SEntityResearch& selectedChoice, SPlayerProjects& playerProjects, std::string& successMessage)	{
 		playerProjects.EnqueueResearch(selectedChoice); 
-		successMessage = selectedChoice.Name + " research has begun. Research cost: " + std::to_string(selectedChoice.PriceUnit - selectedChoice.PricePaid);
+		successMessage															= selectedChoice.Name + " research has begun. Research cost: " + std::to_string(selectedChoice.PriceUnit - selectedChoice.PricePaid);
 	}
 
-	static void acknowledgeProduction(const SEntityResearch& selectedChoice, SPlayerProjects& playerProjects, std::string& successMessage)
-	{
+	static void																acknowledgeProduction			(const SEntityResearch& selectedChoice, SPlayerProjects& playerProjects, std::string& successMessage)	{
 		playerProjects.EnqueueProduction(selectedChoice); 
-		successMessage = selectedChoice.Name + " production has begun. Cost: " + std::to_string(selectedChoice.PriceUnit - selectedChoice.PricePaid);
+		successMessage															= selectedChoice.Name + " production has begun. Cost: " + std::to_string(selectedChoice.PriceUnit - selectedChoice.PricePaid);
 	}
 
 } // namespace

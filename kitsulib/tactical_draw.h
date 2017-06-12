@@ -17,265 +17,250 @@ namespace klib
 	GDEFINE_ENUM_VALUE(TILE_SIDE, DOWN	, 0x10);
 	GDEFINE_ENUM_VALUE(TILE_SIDE, UP	, 0x20);
 
-#define TILE_SIDE_BOTTOM	TILE_SIDE_DOWN
-#define TILE_SIDE_TOP		TILE_SIDE_UP	
+#define TILE_SIDE_BOTTOM				TILE_SIDE_DOWN
+#define TILE_SIDE_TOP					TILE_SIDE_UP	
 
 
-	struct STileASCIIWalls
-	{
-		char				Vertical					;
-		char				Horizontal					;
-		char				CornerTopLeft				;
-		char				CornerTopRight				;
-		char				CornerBottomLeft			;
-		char				CornerBottomRight			;
-		char				ConnectionVerticalLeft		;
-		char				ConnectionVerticalRight		;
-		char				ConnectionHorizontalUp		;
-		char				ConnectionHorizontalDown	;
-		char				ConnectionCross				;
+	struct STileASCIIWalls {
+		char								Vertical					;
+		char								Horizontal					;
+		char								CornerTopLeft				;
+		char								CornerTopRight				;
+		char								CornerBottomLeft			;
+		char								CornerBottomRight			;
+		char								ConnectionVerticalLeft		;
+		char								ConnectionVerticalRight		;
+		char								ConnectionHorizontalUp		;
+		char								ConnectionHorizontalDown	;
+		char								ConnectionCross				;
 	};
 
-	struct STileASCIITopology
-	{
-		char				HeightNonBlockingSmooth		;
-		char				HeightNonBlockingSharp		;
-		char				HeightNonBlockingCombined	;
-		char				HeightPartialSmooth			;
-		char				HeightPartialSharp			;
-		char				HeightPartialCombined		;
-		char				HeightFullSmooth			;
-		char				HeightFullSharp 			;
-		char				HeightFullCombined 			;
+	struct STileASCIITopology {
+		char								HeightNonBlockingSmooth		;
+		char								HeightNonBlockingSharp		;
+		char								HeightNonBlockingCombined	;
+		char								HeightPartialSmooth			;
+		char								HeightPartialSharp			;
+		char								HeightPartialCombined		;
+		char								HeightFullSmooth			;
+		char								HeightFullSharp 			;
+		char								HeightFullCombined 			;
 	};
 
-	struct STileASCIIGender
-	{
-		char				Male						;
-		char				Female						;
-		char				Hermaphrodite				;
+	struct STileASCIIGender {
+		char								Male						;
+		char								Female						;
+		char								Hermaphrodite				;
 	};
 
-	struct STileASCII
-	{
-		char				Unexplored					;
-		char				Ally						;
-		char				Enemy						;
-		char				Chest						;
-		char				Coins						;
-		STileASCIIGender	Gender						;
-		STileASCIIWalls		WallsThin					;
-		STileASCIIWalls		WallsThick					;
-		STileASCIITopology	Topology					;
+	struct STileASCII {
+		char								Unexplored					;
+		char								Ally						;
+		char								Enemy						;
+		char								Chest						;
+		char								Coins						;
+		STileASCIIGender					Gender						;
+		STileASCIIWalls						WallsThin					;
+		STileASCIIWalls						WallsThick					;
+		STileASCIITopology					Topology					;
 	};
 
 	//int32_t getLinearTileIndex(int32_t x, int32_t y, uint32_t width){ return x*width+y; };
 
-	static uint16_t getPlayerColor( const STacticalInfo& tacticalInfo, const SPlayer& boardPlayer, int8_t indexBoardPlayer, int8_t indexPlayerViewer, bool bIsSelected )
-	{
-		uint16_t color = COLOR_BLACK;
-		if(tacticalInfo.Setup.TeamPerPlayer[indexBoardPlayer] == tacticalInfo.Setup.TeamPerPlayer[indexPlayerViewer] )
-		{
+	static uint16_t						getPlayerColor				( const STacticalInfo& tacticalInfo, const SPlayer& boardPlayer, int8_t indexBoardPlayer, int8_t indexPlayerViewer, bool bIsSelected )	{
+		uint16_t								color						= COLOR_BLACK;
+		if(tacticalInfo.Setup.TeamPerPlayer[indexBoardPlayer] == tacticalInfo.Setup.TeamPerPlayer[indexPlayerViewer]) {
 			if(indexBoardPlayer == indexPlayerViewer)
-				color = (bIsSelected) ? COLOR_CYAN :COLOR_DARKBLUE;	
+				color								= (bIsSelected) ? COLOR_CYAN :COLOR_DARKBLUE;	
 			else
-				color = (bIsSelected) ? COLOR_MAGENTA :COLOR_DARKMAGENTA;	
+				color								= (bIsSelected) ? COLOR_MAGENTA :COLOR_DARKMAGENTA;	
 		}
-		else
-		{
+		else {
 			switch(boardPlayer.Control.Type) {
-			case PLAYER_CONTROL_REMOTE:
-			case PLAYER_CONTROL_LOCAL:	
-				if(bIsSelected)
-					color = COLOR_RED;
-				else
-					color = COLOR_DARKRED;	
-
+			case PLAYER_CONTROL_REMOTE	:
+			case PLAYER_CONTROL_LOCAL	: color		= (bIsSelected) ? COLOR_RED : COLOR_DARKRED;
 				break;
 
 			case PLAYER_CONTROL_AI:
-				if(bIsSelected)
-					switch(boardPlayer.Control.AIMode) {
-					case PLAYER_AI_NEUTRAL:	color = COLOR_DARKGREY	; break;
-					case PLAYER_AI_FEARFUL:	color = COLOR_DARKGREY	; break;
-					case PLAYER_AI_CURIOUS:	color = COLOR_DARKGREY	; break;
-					case PLAYER_AI_ASSISTS:	color = COLOR_WHITE	; break;
-					case PLAYER_AI_RIOTERS:	color = COLOR_YELLOW; break;
-					case PLAYER_AI_VIOLENT:	color = COLOR_YELLOW; break;
-					case PLAYER_AI_TEAMERS:	color = COLOR_RED	; break;
-					}
-				else
-					switch(boardPlayer.Control.AIMode) {
-					case PLAYER_AI_NEUTRAL:	color = COLOR_DARKGREY		; break;
-					case PLAYER_AI_FEARFUL:	color = COLOR_DARKGREY		; break;
-					case PLAYER_AI_CURIOUS:	color = COLOR_DARKGREY		; break;
-					case PLAYER_AI_ASSISTS:	color = COLOR_GREEN		; break;
-					case PLAYER_AI_RIOTERS:	color = COLOR_ORANGE	; break;
-					case PLAYER_AI_VIOLENT:	color = COLOR_ORANGE	; break;
-					case PLAYER_AI_TEAMERS:	color = COLOR_DARKRED	; break;
-					}
+				switch(boardPlayer.Control.AIMode) {
+				case PLAYER_AI_NEUTRAL		: color		= bIsSelected ? COLOR_DARKGREY	: COLOR_DARKGREY	; break;
+				case PLAYER_AI_FEARFUL		: color		= bIsSelected ? COLOR_DARKGREY	: COLOR_DARKGREY	; break;
+				case PLAYER_AI_CURIOUS		: color		= bIsSelected ? COLOR_DARKGREY	: COLOR_DARKGREY	; break;
+				case PLAYER_AI_ASSISTS		: color		= bIsSelected ? COLOR_WHITE		: COLOR_GREEN		; break;
+				case PLAYER_AI_RIOTERS		: color		= bIsSelected ? COLOR_YELLOW	: COLOR_ORANGE		; break;
+				case PLAYER_AI_VIOLENT		: color		= bIsSelected ? COLOR_YELLOW	: COLOR_ORANGE		; break;
+				case PLAYER_AI_TEAMERS		: color		= bIsSelected ? COLOR_RED		: COLOR_DARKRED		; break;
+				}
+				//if(bIsSelected)
+				//	switch(boardPlayer.Control.AIMode) {
+				//	case PLAYER_AI_NEUTRAL:	color	= COLOR_DARKGREY	; break;
+				//	case PLAYER_AI_FEARFUL:	color	= COLOR_DARKGREY	; break;
+				//	case PLAYER_AI_CURIOUS:	color	= COLOR_DARKGREY	; break;
+				//	case PLAYER_AI_ASSISTS:	color	= COLOR_WHITE		; break;
+				//	case PLAYER_AI_RIOTERS:	color	= COLOR_YELLOW		; break;
+				//	case PLAYER_AI_VIOLENT:	color	= COLOR_YELLOW		; break;
+				//	case PLAYER_AI_TEAMERS:	color	= COLOR_RED			; break;
+				//	}
+				//else
+				//	switch(boardPlayer.Control.AIMode) {
+				//	case PLAYER_AI_NEUTRAL:	color	= COLOR_DARKGREY	; break;
+				//	case PLAYER_AI_FEARFUL:	color	= COLOR_DARKGREY	; break;
+				//	case PLAYER_AI_CURIOUS:	color	= COLOR_DARKGREY	; break;
+				//	case PLAYER_AI_ASSISTS:	color	= COLOR_GREEN		; break;
+				//	case PLAYER_AI_RIOTERS:	color	= COLOR_ORANGE		; break;
+				//	case PLAYER_AI_VIOLENT:	color	= COLOR_ORANGE		; break;
+				//	case PLAYER_AI_TEAMERS:	color	= COLOR_DARKRED		; break;
+				//	}
 			}
 		}
-
 		return color;
 	}
 
 
-	struct SStatusColor
-	{
-		int8_t	Bright	;//: 4;
-		int8_t	Dark	;//: 4;
+	struct SStatusColor {
+		int8_t								Bright	;//: 4;
+		int8_t								Dark	;//: 4;
 		
-		SStatusColor
-		(	int8_t	bright	= COLOR_WHITE 
-		,	int8_t	dark	= COLOR_BLACK 
-		)
-			:Bright	(bright	)
-			,Dark	(dark	)
+											SStatusColor
+			(	int8_t			bright	= COLOR_WHITE 
+			,	int8_t			dark	= COLOR_BLACK 
+			)
+			: Bright	(bright	)
+			, Dark	(dark	)
 		{}
 	};
 
 
 	template<typename _T>
-	int32_t getBitIndex(const _T& bitToFind, int32_t maxCount)
-	{
-		static const int32_t typeSizeInBits = sizeof(_T)*8;
+	int32_t									getBitIndex				(const _T& bitToFind, int32_t maxCount)																																						{
+		static const int32_t						typeSizeInBits			= sizeof(_T)*8;
 		maxCount = (maxCount > typeSizeInBits) ? typeSizeInBits : maxCount;
-		for(int32_t i=0; i<maxCount; ++i)
+		for(int32_t i = 0; i < maxCount; ++i)
 			if( nwol::bit_true(bitToFind, (_T)(1ULL << i)) )
 				return i;
 		return -1;
 	}
 
 	template<size_t _StatusCount>
-	int32_t initStatusColors(SStatusColor (&statusColors)[_StatusCount])
-	{
-		int32_t nBitIndex;
+	int32_t									initStatusColors		(SStatusColor (&statusColors)[_StatusCount])																																				{
+		int32_t										nBitIndex;
 		// Stun
-		nBitIndex = getBitIndex(COMBAT_STATUS_FROZEN	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_WHITE		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_PANIC		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_ORANGE		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_SLEEP		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_BLACK		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_STUN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_DARKRED		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_SHOCK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_CYAN		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_PETRIFY	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_GREEN		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_CHARMED	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_MAGENTA		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_BERSERK	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_YELLOW		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_FROZEN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_WHITE		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_PANIC		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_ORANGE		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_SLEEP		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_BLACK		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_STUN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_DARKRED		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_SHOCK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_CYAN		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_PETRIFY		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_GREEN		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_CHARMED		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_MAGENTA		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_BERSERK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_YELLOW		};
 
 		// Poison damage
-		nBitIndex = getBitIndex(COMBAT_STATUS_BLEEDING	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_GREEN		, COLOR_RED			};
-		nBitIndex = getBitIndex(COMBAT_STATUS_POISON	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_GREEN		, COLOR_DARKGREEN	};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_BLEEDING	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_GREEN			, COLOR_RED			};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_POISON		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_GREEN			, COLOR_DARKGREEN	};
 		
 		// Shieldable damage
-		nBitIndex = getBitIndex(COMBAT_STATUS_BURN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_RED		, COLOR_DARKRED		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_FREEZING	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_RED		, COLOR_WHITE		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_BURN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_RED			, COLOR_DARKRED		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_FREEZING	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_RED			, COLOR_WHITE		};
 
 		// Debuff
-		nBitIndex = getBitIndex(COMBAT_STATUS_WEAKNESS	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE		, COLOR_BLACK		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_SLOW		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE		, COLOR_DARKRED		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_BULLIED	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE		, COLOR_DARKMAGENTA	};
-		nBitIndex = getBitIndex(COMBAT_STATUS_DRUNK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE		, COLOR_GREEN		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_BLIND		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE		, COLOR_WHITE		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_WEAKNESS	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_BLACK		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_SLOW		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_DARKRED		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_BULLIED		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_DARKMAGENTA	};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_DRUNK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_GREEN		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_BLIND		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_WHITE		};
 
 		// 
-		nBitIndex = getBitIndex(COMBAT_STATUS_RAGE		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_ORANGE		, COLOR_GREEN		};
-		nBitIndex = getBitIndex(COMBAT_STATUS_INVISIBLE	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_ORANGE		, COLOR_WHITE		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_RAGE		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_ORANGE			, COLOR_GREEN		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_INVISIBLE	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_ORANGE			, COLOR_WHITE		};
 
-		nBitIndex = getBitIndex(COMBAT_STATUS_BLACKOUT	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_WHITE		, COLOR_BLACK		};
+		nBitIndex								= getBitIndex(COMBAT_STATUS_BLACKOUT	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_WHITE			, COLOR_BLACK		};
 		return 0;
-	};
+	}
 
-	static uint16_t getStatusColor( COMBAT_STATUS status, bool bSwap, uint16_t defaultColor )
-	{
-		static SStatusColor statusColors[32];
-		static const int32_t initedColors = initStatusColors(statusColors);
+	static uint16_t							getStatusColor			( COMBAT_STATUS status, bool bSwap, uint16_t defaultColor )																																	{
+		static SStatusColor							statusColors	[32];
+		static const int32_t						initedColors			= initStatusColors(statusColors);
 
-		uint32_t bitIndex = -1;
+		uint32_t									bitIndex				= -1;
 
-		  	 if(nwol::bit_true(status, COMBAT_STATUS_FROZEN		))	{	bitIndex = getBitIndex(COMBAT_STATUS_FROZEN		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_PANIC		))	{	bitIndex = getBitIndex(COMBAT_STATUS_PANIC		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_SLEEP		))	{	bitIndex = getBitIndex(COMBAT_STATUS_SLEEP		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_STUN		))	{	bitIndex = getBitIndex(COMBAT_STATUS_STUN		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_SHOCK		))	{	bitIndex = getBitIndex(COMBAT_STATUS_SHOCK		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_PETRIFY		))	{	bitIndex = getBitIndex(COMBAT_STATUS_PETRIFY	, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_CHARMED		))	{	bitIndex = getBitIndex(COMBAT_STATUS_CHARMED	, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_BERSERK		))	{	bitIndex = getBitIndex(COMBAT_STATUS_BERSERK	, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_BLEEDING	))	{	bitIndex = getBitIndex(COMBAT_STATUS_BLEEDING	, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_POISON		))	{	bitIndex = getBitIndex(COMBAT_STATUS_POISON		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_BURN		))	{	bitIndex = getBitIndex(COMBAT_STATUS_BURN		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_FREEZING	))	{	bitIndex = getBitIndex(COMBAT_STATUS_FREEZING	, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_WEAKNESS	))	{	bitIndex = getBitIndex(COMBAT_STATUS_WEAKNESS	, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_SLOW		))	{	bitIndex = getBitIndex(COMBAT_STATUS_SLOW		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_BULLIED		))	{	bitIndex = getBitIndex(COMBAT_STATUS_BULLIED	, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_DRUNK		))	{	bitIndex = getBitIndex(COMBAT_STATUS_DRUNK		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_BLIND		))	{	bitIndex = getBitIndex(COMBAT_STATUS_BLIND		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_RAGE		))	{	bitIndex = getBitIndex(COMBAT_STATUS_RAGE		, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_INVISIBLE	))	{	bitIndex = getBitIndex(COMBAT_STATUS_INVISIBLE	, MAX_COMBAT_STATUS_COUNT); }
-		else if(nwol::bit_true(status, COMBAT_STATUS_BLACKOUT	))	{	bitIndex = getBitIndex(COMBAT_STATUS_BLACKOUT	, MAX_COMBAT_STATUS_COUNT); }
+		  	 if(nwol::bit_true(status, COMBAT_STATUS_FROZEN		)) { bitIndex	= getBitIndex(COMBAT_STATUS_FROZEN		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_PANIC		)) { bitIndex	= getBitIndex(COMBAT_STATUS_PANIC		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_SLEEP		)) { bitIndex	= getBitIndex(COMBAT_STATUS_SLEEP		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_STUN		)) { bitIndex	= getBitIndex(COMBAT_STATUS_STUN		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_SHOCK		)) { bitIndex	= getBitIndex(COMBAT_STATUS_SHOCK		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_PETRIFY	)) { bitIndex	= getBitIndex(COMBAT_STATUS_PETRIFY		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_CHARMED	)) { bitIndex	= getBitIndex(COMBAT_STATUS_CHARMED		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_BERSERK	)) { bitIndex	= getBitIndex(COMBAT_STATUS_BERSERK		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_BLEEDING	)) { bitIndex	= getBitIndex(COMBAT_STATUS_BLEEDING	, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_POISON		)) { bitIndex	= getBitIndex(COMBAT_STATUS_POISON		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_BURN		)) { bitIndex	= getBitIndex(COMBAT_STATUS_BURN		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_FREEZING	)) { bitIndex	= getBitIndex(COMBAT_STATUS_FREEZING	, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_WEAKNESS	)) { bitIndex	= getBitIndex(COMBAT_STATUS_WEAKNESS	, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_SLOW		)) { bitIndex	= getBitIndex(COMBAT_STATUS_SLOW		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_BULLIED	)) { bitIndex	= getBitIndex(COMBAT_STATUS_BULLIED		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_DRUNK		)) { bitIndex	= getBitIndex(COMBAT_STATUS_DRUNK		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_BLIND		)) { bitIndex	= getBitIndex(COMBAT_STATUS_BLIND		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_RAGE		)) { bitIndex	= getBitIndex(COMBAT_STATUS_RAGE		, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_INVISIBLE	)) { bitIndex	= getBitIndex(COMBAT_STATUS_INVISIBLE	, MAX_COMBAT_STATUS_COUNT); }
+		else if(nwol::bit_true(status, COMBAT_STATUS_BLACKOUT	)) { bitIndex	= getBitIndex(COMBAT_STATUS_BLACKOUT	, MAX_COMBAT_STATUS_COUNT); }
 		if(bitIndex != -1)
-			defaultColor = (bSwap ?	statusColors[bitIndex].Bright : statusColors[bitIndex].Dark);
+			defaultColor														= (bSwap ?	statusColors[bitIndex].Bright : statusColors[bitIndex].Dark);
 
 		return defaultColor;
 	}
 
 	template<size_t _Width, size_t _Depth>
-	void boardToDisplay(SGame& instanceGame, const STacticalBoard& board, SWeightedDisplay<_Width, _Depth>& target, int8_t indexBoardPlayer, TEAM_TYPE teamId, const SPlayerSelection& selection, bool bFogOfWar)
-	{
-		const STacticalInfo& tacticalInfo = instanceGame.TacticalInfo;
-		const STacticalSetup& tacticalSetup = tacticalInfo.Setup;
+	void									boardToDisplay			(SGame& instanceGame, const STacticalBoard& board, SWeightedDisplay<_Width, _Depth>& target, int8_t indexBoardPlayer, TEAM_TYPE teamId, const SPlayerSelection& selection, bool bFogOfWar)	{
+		const STacticalInfo							& tacticalInfo			= instanceGame.TacticalInfo;
+		const STacticalSetup						& tacticalSetup			= tacticalInfo.Setup;
 
-		static const int32_t maxSwaps = 32;
-		static bool bSwaps[maxSwaps] = {false};
-		static int8_t swapCounter = 0;
+		static const int32_t						maxSwaps				= 32;
+		static bool									bSwaps[maxSwaps]		= {false};
+		static int8_t								swapCounter				= 0;
 
-		uint32_t y=0;
-		for(uint32_t z=0; z<_Depth; z++)
-		{
-			for(uint32_t x=0; x<_Width; x++)
-			{
-				int32_t topologyHeight	= board.Tiles.Terrain.Topology.Cells[z][x].Smooth+board.Tiles.Terrain.Topology.Cells[z][x].Sharp;
-				float cornerHeight[4] = {};
+		uint32_t									y						= 0;
+		for(uint32_t z = 0; z < _Depth; ++z) {
+			for(uint32_t x = 0; x < _Width; ++x) {
+				int32_t										topologyHeight			= board.Tiles.Terrain.Topology.Cells[z][x].Smooth+board.Tiles.Terrain.Topology.Cells[z][x].Sharp;
+				float										cornerHeight[4]			= {};
 				memcpy(cornerHeight, board.Tiles.Terrain.Geometry.Cells[z][x].fHeight, sizeof(float)*4);
-				::nwol::SCoord3<int32_t> currentCoord = {(int32_t)x, (int32_t)y, (int32_t)z};
-				bool bInRange = false;
-				double initialSight = 0.0;
-				double finalSight	= 0.0;
-				::nwol::SCoord3<float> currentTilePos = currentCoord.Cast<float>();
+				::nwol::SCoord3<int32_t>					currentCoord			= {(int32_t)x, (int32_t)y, (int32_t)z};
+				bool										bInRange				= false;
+				double										initialSight			= 0.0;
+				double										finalSight				= 0.0;
+				::nwol::SCoord3<float>						currentTilePos			= currentCoord.Cast<float>();
 
 				if(false == bFogOfWar)
-					bInRange = true;
-				else
-				{
-					for(uint32_t iTacticalPlayer=0, playerCount = tacticalInfo.Setup.TotalPlayers; iTacticalPlayer < playerCount; ++iTacticalPlayer)
-					{
+					bInRange								= true;
+				else {
+					for(uint32_t iTacticalPlayer = 0, playerCount = tacticalInfo.Setup.TotalPlayers; iTacticalPlayer < playerCount; ++iTacticalPlayer) {
 						if(tacticalSetup.Players[iTacticalPlayer] == PLAYER_INDEX_INVALID)
 							continue;
 
 						if(tacticalSetup.TeamPerPlayer[iTacticalPlayer] != teamId)
 							continue;
 
-						SPlayer& currentPlayer = instanceGame.Players[tacticalSetup.Players[iTacticalPlayer]];
+						SPlayer										& currentPlayer			= instanceGame.Players[tacticalSetup.Players[iTacticalPlayer]];
 
-						for(uint32_t iAgent=0, agentCount=tacticalSetup.SquadSize[iTacticalPlayer]; iAgent < agentCount; ++iAgent)
-						{
+						for(uint32_t iAgent = 0, agentCount = tacticalSetup.SquadSize[iTacticalPlayer]; iAgent < agentCount; ++iAgent) {
 							if(currentPlayer.Squad.Agents[iAgent] == -1)
 								continue;
 
-							CCharacter& playerAgent = *currentPlayer.Army[currentPlayer.Squad.Agents[iAgent]];
+							CCharacter									& playerAgent			= *currentPlayer.Army[currentPlayer.Squad.Agents[iAgent]];
 							if(false == playerAgent.IsAlive())
 								continue;
 
-							::nwol::SCoord3<int32_t> coordPlayer  = playerAgent.Position; 
-							::nwol::SCoord3<float> distance = currentTilePos - coordPlayer.Cast<float>();;
+							::nwol::SCoord3<int32_t>					coordPlayer				= playerAgent.Position; 
+							::nwol::SCoord3<float>						distance				= currentTilePos - coordPlayer.Cast<float>();;
 
-							SEntityPoints	playerAgentPoints	= playerAgent.FinalPoints	;
-							SEntityFlags	playerAgentFlags	= playerAgent.FinalFlags	;
+							SEntityPoints								playerAgentPoints		= playerAgent.FinalPoints	;
+							SEntityFlags								playerAgentFlags		= playerAgent.FinalFlags	;
 						
-							initialSight = (playerAgentPoints.Fitness.Sight+SIGHT_OFFSET);
-							finalSight = getFinalSight(initialSight, playerAgent);
+							initialSight							= (playerAgentPoints.Fitness.Sight+SIGHT_OFFSET);
+							finalSight								= getFinalSight(initialSight, playerAgent);
 
-							if(distance.Length() < finalSight)
-							{
-								bInRange = true;
+							if(distance.Length() < finalSight) {
+								bInRange								= true;
 								break;
 							}
 						}
@@ -287,17 +272,16 @@ namespace klib
 				if(false == bInRange)
 					continue;
 
-				if(board.Tiles.Entities.Agents.Cells[z][x].PlayerIndex != -1)	
-				{ 
-					int32_t agentIndex = board.Tiles.Entities.Agents.Cells[z][x].AgentIndex;
-					int32_t cellPlayerIndex = board.Tiles.Entities.Agents.Cells[z][x].PlayerIndex;
+				if(board.Tiles.Entities.Agents.Cells[z][x].PlayerIndex != -1) {
+					int32_t											agentIndex					= board.Tiles.Entities.Agents.Cells[z][x].AgentIndex;
+					int32_t											cellPlayerIndex				= board.Tiles.Entities.Agents.Cells[z][x].PlayerIndex;
 
-					bool bIsAlly = tacticalInfo.Setup.TeamPerPlayer[indexBoardPlayer] == tacticalInfo.Setup.TeamPerPlayer[cellPlayerIndex];
-					target.Screen.Cells[z][x] = ascii_face[bIsAlly ? FACE_BLACK : FACE_WHITE];
+					bool											bIsAlly						= tacticalInfo.Setup.TeamPerPlayer[indexBoardPlayer] == tacticalInfo.Setup.TeamPerPlayer[cellPlayerIndex];
+					target.Screen.Cells[z][x]					= ascii_face[bIsAlly ? FACE_BLACK : FACE_WHITE];
 					//target.Screen.Cells[z][x] = std::to_string(agentIndex+1)[0]; 
 
 
-					bool bIsSelected =	(cellPlayerIndex == indexBoardPlayer		&& board.Tiles.Entities.Agents.Cells[z][x].AgentIndex == selection.PlayerUnit) 
+					bool											bIsSelected					=	(cellPlayerIndex == indexBoardPlayer		&& board.Tiles.Entities.Agents.Cells[z][x].AgentIndex == selection.PlayerUnit) 
 									||	(cellPlayerIndex == selection.TargetPlayer	&& board.Tiles.Entities.Agents.Cells[z][x].AgentIndex == selection.TargetUnit);
 
 					const SPlayer& boardPlayer	= instanceGame.Players[tacticalInfo.Setup.Players[cellPlayerIndex]];
@@ -473,13 +457,15 @@ namespace klib
 				//	else if(topologyHeight <= -PARTIAL_COVER_HEIGHT	)	{ target.Screen.Cells[z][x] = ascii_tones[(topologyHeight == -PARTIAL_COVER_HEIGHT	) ? 1 : (topologyHeight*-1)	-PARTIAL_COVER_HEIGHT	]	; target.TextAttributes.Cells[z][x] = (COLOR_DARKGREEN	) | (COLOR_DARKBLUE		<<4)	; }
 				//	else if(topologyHeight < 0						)	{ target.Screen.Cells[z][x] = ascii_tones[1+(topologyHeight*-1)/3]																			; target.TextAttributes.Cells[z][x] = (COLOR_DARKGREEN	) | (COLOR_DARKGREY			<<4)	; } 
 				//}
-				else { target.Screen.Cells[z][x] = ' '; target.TextAttributes.Cells[z][x] = (COLOR_DARKGREEN << 4); }
+				else { 
+					target.Screen			.Cells[z][x]	= ' '; 
+					target.TextAttributes	.Cells[z][x]	= (COLOR_DARKGREEN << 4); 
+				}
 
 				if(initialSight != finalSight)
-					target.TextAttributes.Cells[z][x] = (target.TextAttributes.Cells[z][x] & 0xF) | (COLOR_WHITE << 4);
+					target.TextAttributes.Cells[z][x]		= (target.TextAttributes.Cells[z][x] & 0xF) | (COLOR_WHITE << 4);
 				
-				for(uint32_t iAOE=0, countAOE=board.AreaOfEffect.AOE.Count; iAOE <countAOE; ++iAOE)
-				{
+				for(uint32_t iAOE=0, countAOE=board.AreaOfEffect.AOE.Count; iAOE <countAOE; ++iAOE) {
 					const SAOE& aoeInstance = board.AreaOfEffect.AOE[iAOE].Entity;
 					const ::nwol::SCoord3<int32_t>& aoeCell = aoeInstance.Position.Cell;
 					::nwol::SCoord3<float> aoePos = {(float)aoeCell.x, (float)aoeCell.y, (float)aoeCell.z};
@@ -498,8 +484,7 @@ namespace klib
 					if(failBVTest)
 						continue;
 
-					if((aoePos-currentTilePos).Length() <= aoeInstance.RadiusOrHalfSize)
-					{
+					if((aoePos-currentTilePos).Length() <= aoeInstance.RadiusOrHalfSize) {
 						if(aoeInstance.StatusInflict)
 							target.TextAttributes.Cells[z][x] = (target.TextAttributes.Cells[z][x] & 0xF) | (getStatusColor(aoeInstance.StatusInflict, bSwaps[2], COLOR_ORANGE) << 4);
 						else
@@ -509,36 +494,33 @@ namespace klib
 			}
 		}
 
-		static ::nwol::STimer animationTimer = {};
-		static ::nwol::SAccumulator<double> animationAccum = {0.0, 0.20};
+		static ::nwol::STimer						animationTimer					= {};
+		static ::nwol::SAccumulator<double>			animationAccum					= {0.0, 0.20};
 
 		animationTimer.Frame();
 
-		if( animationAccum.Accumulate(animationTimer.LastTimeSeconds) )
-		{
+		if( animationAccum.Accumulate(animationTimer.LastTimeSeconds) ) {
 			for(uint32_t i=0; i<maxSwaps; ++i)
 				if(0 == swapCounter%(i+1))	
-					bSwaps[i] = !bSwaps[i];
+					bSwaps[i]								= !bSwaps[i];
 
 			++swapCounter;
-			animationAccum.Value = 0;
-		};
+			animationAccum.Value					= 0;
+		}
 	}
 
 	template<size_t _Width, size_t _Depth>
-	void drawTacticalBoard(SGame& instanceGame, STacticalInfo& tacticalInfo, SWeightedDisplay<_Width, _Depth>& target, int8_t playerIndex, TEAM_TYPE teamId, const SPlayerSelection& selection, bool bFogOfWar)
-	{
-		char hiddenTile = -78;
+	void									drawTacticalBoard				(SGame& instanceGame, STacticalInfo& tacticalInfo, SWeightedDisplay<_Width, _Depth>& target, int8_t playerIndex, TEAM_TYPE teamId, const SPlayerSelection& selection, bool bFogOfWar)			{
+		char										hiddenTile						= -78;
 		memset(&target.Screen.Cells[0][0], hiddenTile, _Width*_Depth);
 				
-		uint16_t gridColor = COLOR_DARKGREEN << 4;
-		uint64_t gridColorPacked = gridColor;
-		gridColorPacked |= (gridColorPacked << 16) | (gridColorPacked << 32) | (gridColorPacked << 48);
-		int32_t widthOverColorSize = _Width>>2;
-		for(uint32_t z=0; z<_Depth; ++z) {
+		uint16_t									gridColor						= COLOR_DARKGREEN << 4;
+		uint64_t									gridColorPacked					= gridColor;
+		gridColorPacked							|= (gridColorPacked << 16) | (gridColorPacked << 32) | (gridColorPacked << 48);
+		int32_t										widthOverColorSize				= _Width>>2;
+		for(uint32_t z = 0; z < _Depth; ++z) {
 			valueToGrid(target.TextAttributes, z, 0, ::nwol::SCREEN_LEFT, (uint16_t*)&gridColorPacked, 4, widthOverColorSize);
 		}
-
 		boardToDisplay(instanceGame, tacticalInfo.Board, target, playerIndex, teamId, selection, bFogOfWar);
 	}
 }

@@ -81,8 +81,8 @@ namespace klib
 							SCharacterEquip						CurrentEquip			= SCharacterEquip		();
 							SCharacterGoods						Goods					= SCharacterGoods		();
 
-		constexpr												SCharacter()			= default;
-		constexpr												SCharacter(int maxHP, int hitChance, int attack, int coins, SFitnessPoints speed, SEntityEffect characterEffect, SEntityStatus characterStatus ) 
+																SCharacter				()						= default;
+																SCharacter				(int maxHP, int hitChance, int attack, int coins, SFitnessPoints speed, SEntityEffect characterEffect, SEntityStatus characterStatus ) 
 			:Points				({{maxHP}, {maxHP}, {hitChance, attack, {}, 0, 0}, speed, coins, coins, coins/10})
 			,Flags				({characterEffect, characterStatus})
 			,Gauges				({{maxHP, maxHP}, {0, 0}, {0, 0}})

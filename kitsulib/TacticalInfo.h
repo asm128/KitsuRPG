@@ -61,7 +61,7 @@ namespace klib
 		uint8_t													TurnsLeft										;
 
 		bool													operator==										(const SAOE& other)						const	noexcept	{
-			const bool bResult = 
+			const bool													bResult											= 
 				(Position			== other.Position) 
 			 && (RadiusOrHalfSize	== other.RadiusOrHalfSize) 
 			 && (Caster				== other.Caster) 
@@ -84,7 +84,7 @@ namespace klib
 		SBulletPoints											Points											;
 
 		bool													operator==										(const SBullet& other)					const	noexcept	{
-			const bool bResult = 
+			const bool													bResult											= 
 				(Position			== other.Position		) 
 			 && (Direction.x		== other.Direction.x	) 
 			 && (Direction.y		== other.Direction.y	) 
@@ -133,8 +133,7 @@ namespace klib
 	GDEFINE_ENUM_TYPE(PLAYER_INDEX, int8_t);
 	GDEFINE_ENUM_VALUE(PLAYER_INDEX, USER, 0);
 
-	struct STacticalSetup
-	{
+	struct STacticalSetup {
 		uint64_t												Seed																;//= 15731;
 		uint32_t												TotalPlayers														;//= 0;
 		uint32_t												TotalTeams															;//= 0;
@@ -146,9 +145,9 @@ namespace klib
 		uint8_t													SquadSize			[MAX_TACTICAL_PLAYERS]							;//= {};
 
 		void													Clear											()															{
-			Seed			= 15731;
-			TotalPlayers	= 0;
-			TotalTeams		= 0;
+			Seed													= 15731;
+			TotalPlayers											= 0;
+			TotalTeams												= 0;
 	
 			memset(Players				, -1, sizeof(PLAYER_INDEX	)*nwol::size(Players			));
 			memset(Controls				,  0, sizeof(SPlayerControl	)*nwol::size(Controls			));
@@ -180,8 +179,8 @@ namespace klib
 
 		void													Clear											()															{
 			Tiles.Clear();
-			Shots				= SMapShots	();
-			AreaOfEffect		= SMapAOE	();
+			Shots													= SMapShots	();
+			AreaOfEffect											= SMapAOE	();
 		};
 	};
 
@@ -220,9 +219,9 @@ namespace klib
 
 		void													Clear											()															{
 			Setup.Clear();
-			CurrentPlayer	= -1;
-			CurrentTeam		= -1;
-			Drops			= SMapInventory();
+			CurrentPlayer											= -1;
+			CurrentTeam												= -1;
+			Drops													= SMapInventory();
 			memset(CurrentPlayerPerTeam	, -1, sizeof(int8_t				)*::nwol::size(CurrentPlayerPerTeam	));
 			memset(AgentsInTeamSight	,  0, sizeof(SAgentsReference	)*::nwol::size(AgentsInTeamSight	));
 			Board.Clear();

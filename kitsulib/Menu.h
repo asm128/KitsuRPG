@@ -8,11 +8,10 @@ namespace klib
 {
 #pragma pack(push, 1)
 	template <typename _ReturnType>
-	class SMenuItem
-	{
+	class SMenuItem {
 	public:
-		_ReturnType			ReturnValue;
-		::nwol::glabel		Text;
+		_ReturnType								ReturnValue;
+		::nwol::glabel							Text;
 	};
 #pragma pack(pop)
 };

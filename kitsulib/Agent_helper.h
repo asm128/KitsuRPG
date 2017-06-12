@@ -186,10 +186,10 @@ namespace klib
 		sprintf_s(formattedGauge, "%i"		, agentFinalPoints.Fitness.Sight				); printfToGrid(display, offsetY++, offsetX, nwol::SCREEN_LEFT, formatAgentPoints, "Sight"					, formattedGauge);
 
 		const SEntityPoints							& agentBasePoints				= character.Points;
-		sprintf_s(formattedGauge, "%i", agentBasePoints.Coins				); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Coins in wallet"	, formattedGauge); valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);	//																				  
-		sprintf_s(formattedGauge, "%i", agentFinalPoints.Coins				); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Coins per turn"	, formattedGauge); valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = (agentFinalPoints.Coins >= 0) ? COLOR_ORANGE : COLOR_RED), 1, 11);	//									  
-		sprintf_s(formattedGauge, "%i", agentBasePoints.CostMaintenance		); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Salary"			, formattedGauge); valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);	//																				  
-		sprintf_s(formattedGauge, "%i", agentFinalPoints.CostMaintenance	); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Total Cost"		, formattedGauge); valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);
+		sprintf_s(formattedGauge, "%i"		, agentBasePoints.Coins							); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Coins in wallet"	, formattedGauge); valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);	//																				  
+		sprintf_s(formattedGauge, "%i"		, agentFinalPoints.Coins						); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Coins per turn"	, formattedGauge); valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = (agentFinalPoints.Coins >= 0) ? COLOR_ORANGE : COLOR_RED), 1, 11);	//									  
+		sprintf_s(formattedGauge, "%i"		, agentBasePoints.CostMaintenance				); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Salary"			, formattedGauge); valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);	//																				  
+		sprintf_s(formattedGauge, "%i"		, agentFinalPoints.CostMaintenance				); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Total Cost"		, formattedGauge); valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);
 	}
 
 	template <size_t _Width, size_t _Depth>
@@ -245,12 +245,12 @@ namespace klib
 		bool										bStop							= false;
 		for(int32_t y = 0, countY=MAX_AGENT_ROWS; y < countY; ++y) {
 			for(int32_t x = 0, countX=MAX_AGENT_COLUMNS; x < countX; ++x)  {
-				int32_t linearIndex						= y*countX+x;
+				int32_t										linearIndex						= y*countX+x;
 				if(linearIndex >= player.Squad.Size) {					
 					bStop									= true;
 					break;
 				}
-				int32_t agentIndexOffset				= linearIndex+playerOffset;
+				int32_t										agentIndexOffset				= linearIndex+playerOffset;
 			
 				if(agentIndexOffset < (int32_t)nwol::size(player.Squad.Agents))  {
 					if( player.Squad.Agents[agentIndexOffset] != -1 )

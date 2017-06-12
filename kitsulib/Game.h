@@ -13,9 +13,8 @@
 
 namespace klib
 {
-	static			double	getFinalSight(double initialSight, const CCharacter& playerAgent)
-	{
-		double finalSight = initialSight;
+	static				double										getFinalSight			(double initialSight, const CCharacter& playerAgent)						{
+		double																	finalSight				= initialSight;
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_SHOCK		))	finalSight *= 1.5	;
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_BURN		))	finalSight *= 1.3	;
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_RAGE		))	finalSight *= 1.2	;
@@ -33,28 +32,26 @@ namespace klib
 #define SIGHT_OFFSET	1.7
 #define RANGE_OFFSET	1.7
 
-	static inline	double	getFinalSight(const CCharacter& playerAgent, const SEntityPoints& playerAgentPoints)	{	return getFinalSight(playerAgentPoints.Fitness	.Sight + SIGHT_OFFSET, playerAgent);	}
-	static inline	double	getFinalRange(const CCharacter& playerAgent, const SEntityPoints& playerAgentPoints)	{	return getFinalSight(playerAgentPoints.Attack	.Range + RANGE_OFFSET, playerAgent);	}
-
+	static inline		double										getFinalSight			(const CCharacter& playerAgent, const SEntityPoints& playerAgentPoints)						{	return getFinalSight(playerAgentPoints.Fitness	.Sight + SIGHT_OFFSET, playerAgent);	}
+	static inline		double										getFinalRange			(const CCharacter& playerAgent, const SEntityPoints& playerAgentPoints)						{	return getFinalSight(playerAgentPoints.Attack	.Range + RANGE_OFFSET, playerAgent);	}
 
 	template<size_t _Width, size_t _Depth>
 	struct SWeightedDisplay {
-		static constexpr	const uint32_t								Width			= (uint32_t)_Width;
-		static constexpr	const uint32_t								Depth			= (uint32_t)_Depth;
+		static constexpr	const uint32_t								Width					= (uint32_t)_Width;
+		static constexpr	const uint32_t								Depth					= (uint32_t)_Depth;
 
-							::nwol::SGrid<char		, _Width, _Depth>	Screen			= {};
-							::nwol::SGrid<uint16_t	, _Width, _Depth>	TextAttributes	= {};
-							::nwol::SGrid<float		, _Width, _Depth>	DisplayWeights	= {};
-							::nwol::SGrid<float		, _Width, _Depth>	Speed			= {};
-							::nwol::SGrid<float		, _Width, _Depth>	SpeedTarget		= {};
+							::nwol::SGrid<char		, _Width, _Depth>	Screen					= {};
+							::nwol::SGrid<uint16_t	, _Width, _Depth>	TextAttributes			= {};
+							::nwol::SGrid<float		, _Width, _Depth>	DisplayWeights			= {};
+							::nwol::SGrid<float		, _Width, _Depth>	Speed					= {};
+							::nwol::SGrid<float		, _Width, _Depth>	SpeedTarget				= {};
 
-		inline				void										Clear			()
-		{
-			clearGrid(Screen			, ' ');
-			clearGrid(TextAttributes	, (uint16_t)COLOR_WHITE);
-			clearGrid(DisplayWeights	, 0.0f);
-			clearGrid(Speed				, 0.0f);
-			clearGrid(SpeedTarget		, 0.0f);
+		inline				void										Clear					()																							{
+			::nwol::clearGrid(Screen			, ' ');
+			::nwol::clearGrid(TextAttributes	, (uint16_t)COLOR_WHITE);
+			::nwol::clearGrid(DisplayWeights	, 0.0f);
+			::nwol::clearGrid(Speed				, 0.0f);
+			::nwol::clearGrid(SpeedTarget		, 0.0f);
 		}
 	};
 
@@ -124,54 +121,54 @@ namespace klib
 	struct SGame
 	{
 		struct SLogLine {
-									uint16_t								Color;
-									const std::string						Message;
+								uint16_t								Color;
+								const std::string						Message;
 		};
 
-								// Game Flags tell us about the			current state of the application.
-								GAME_FLAGS								Flags							= (GAME_FLAGS)(GAME_FLAGS_NETWORK_ENABLED | GAME_FLAGS_TURN_BUSY);
-								GAME_MODE								Mode							= GAME_MODE_CAMPAIGN;	// This is the default because it's the only available mode at the moment
-								SGameState								State							= {GAME_STATE_MENU_MAIN,};
-								SGameState								PreviousState					= {GAME_STATE_MENU_MAIN,};
-								uint64_t								ServerTime						= 0;
-								int64_t									Seed							= 0;
+							// Game Flags tell us about the			current state of the application.
+							GAME_FLAGS								Flags							= (GAME_FLAGS)(GAME_FLAGS_NETWORK_ENABLED | GAME_FLAGS_TURN_BUSY);
+							GAME_MODE								Mode							= GAME_MODE_CAMPAIGN;	// This is the default because it's the only available mode at the moment
+							SGameState								State							= {GAME_STATE_MENU_MAIN,};
+							SGameState								PreviousState					= {GAME_STATE_MENU_MAIN,};
+							uint64_t								ServerTime						= 0;
+							int64_t									Seed							= 0;
 
-								SPlayer									Players[MAX_PLAYER_TYPES]		= {};
+							SPlayer									Players[MAX_PLAYER_TYPES]		= {};
 
-								nwol::SInput							FrameInput						= {};
-								nwol::STimer							FrameTimer						= {};
+							nwol::SInput							FrameInput						= {};
+							nwol::STimer							FrameTimer						= {};
 
-								// Tactical board.
-								STacticalInfo							TacticalInfo					= {};
+							// Tactical board.
+							STacticalInfo							TacticalInfo					= {};
 
-								// Displays.
-								STacticalDisplay						TacticalDisplay					= {};
-								SPostEffectDisplay						PostEffectDisplay				= {};
-								SGlobalDisplay							GlobalDisplay					= {};
-								SMenuDisplay							MenuDisplay						= {};
+							// Displays.
+							STacticalDisplay						TacticalDisplay					= {};
+							SPostEffectDisplay						PostEffectDisplay				= {};
+							SGlobalDisplay							GlobalDisplay					= {};
+							SMenuDisplay							MenuDisplay						= {};
 
-								// Feedback messages.
-								::std::string							StateMessage					= "";
-								::std::string							UserMessage						= "";
-								::std::string							UserSuccess						= "";
-								::std::string							UserMiss						= "";
-								::std::string							UserError						= "";
-								::std::vector<SLogLine>					UserLog							= {};
+							// Feedback messages.
+							::std::string							StateMessage					= "";
+							::std::string							UserMessage						= "";
+							::std::string							UserSuccess						= "";
+							::std::string							UserMiss						= "";
+							::std::string							UserError						= "";
+							::std::vector<SLogLine>					UserLog							= {};
 
-								// For the special effect
-								char									SlowMessage[256]				= {'_',};
+							// For the special effect
+							char									SlowMessage[256]				= {'_',};
 
-								::nwol::CMutex							PlayerMutex						= {};
-								::nwol::CMutex							ServerTimeMutex					= {};
+							::nwol::CMutex							PlayerMutex						= {};
+							::nwol::CMutex							ServerTimeMutex					= {};
 
-								void									ClearDisplays					()											{
+							void									ClearDisplays					()																						{
 			TacticalDisplay		.Clear();	
 			GlobalDisplay		.Clear();	
 			PostEffectDisplay	.Clear();	
 			clearGrid(MenuDisplay);
 		}
 
-								void									ClearMessages					()
+							void									ClearMessages					()
 		{
 			UserError	= 
 			UserMessage	= 
@@ -179,45 +176,35 @@ namespace klib
 			UserSuccess	= "";
 		}
 
-		inline					void									LogMessage						()											 { UserLog.push_back({COLOR_YELLOW	, UserMessage	}); }
-		inline					void									LogSuccess						()											 { UserLog.push_back({COLOR_CYAN	, UserSuccess	}); }
-		inline					void									LogError						()											 { UserLog.push_back({COLOR_RED		, UserError		}); }
-		inline					void									LogMiss							()											 { UserLog.push_back({COLOR_RED		, UserMiss		}); }
-		inline					void									LogStateMessage					()											 { UserLog.push_back({COLOR_CYAN	, StateMessage	}); }
+		inline				void									LogMessage						()																						{ UserLog.push_back({COLOR_YELLOW	, UserMessage	}); }
+		inline				void									LogSuccess						()																						{ UserLog.push_back({COLOR_CYAN		, UserSuccess	}); }
+		inline				void									LogError						()																						{ UserLog.push_back({COLOR_RED		, UserError		}); }
+		inline				void									LogMiss							()																						{ UserLog.push_back({COLOR_RED		, UserMiss		}); }
+		inline				void									LogStateMessage					()																						{ UserLog.push_back({COLOR_CYAN		, StateMessage	}); }
 	};	// struct
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------
 	// functions
-					void			initGame				(SGame& instanceGame);
-					void			resetGame				(SGame& instanceGame);
-					void			showMenu				(SGame& instanceGame);
-					void			initTacticalMap			(SGame& instanceGame);
-	static inline	PLAYER_INDEX	getCurrentPlayerIndex	(const STacticalInfo& tacticalInfo)														{
-		if( tacticalInfo.CurrentPlayer == -1)
-			return PLAYER_INDEX_INVALID;
-
-		return tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer];
-	};
-
-
-	static			uint32_t		missionCost				(SPlayer& player, const SSquad& squadSetup, uint32_t maxAgents=MAX_AGENT_SQUAD_SLOTS)	{
-		int32_t totalCost = 0;
-		for(size_t iAgent=0, agentCount= maxAgents < nwol::size(squadSetup.Agents) ? maxAgents : nwol::size(squadSetup.Agents); iAgent<agentCount; ++iAgent)
-		{
+						void									initGame						(SGame& instanceGame);
+						void									resetGame						(SGame& instanceGame);
+						void									showMenu						(SGame& instanceGame);
+						void									initTacticalMap					(SGame& instanceGame);
+	static inline		PLAYER_INDEX							getCurrentPlayerIndex			(const STacticalInfo& tacticalInfo)														{ return ( tacticalInfo.CurrentPlayer == -1) ? PLAYER_INDEX_INVALID : tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer]; }
+	static				uint32_t								missionCost						(SPlayer& player, const SSquad& squadSetup, uint32_t maxAgents=MAX_AGENT_SQUAD_SLOTS)	{
+		int32_t															totalCost						= 0;
+		for(size_t iAgent=0, agentCount= maxAgents < nwol::size(squadSetup.Agents) ? maxAgents : nwol::size(squadSetup.Agents); iAgent<agentCount; ++iAgent) {
 			if(squadSetup.Agents[iAgent] == -1)
 				continue;
 
-			CCharacter& agent = *player.Army[squadSetup.Agents[iAgent]];
-
-			const SEntityPoints & finalPoints = agent.FinalPoints;
-			if(agent.Points.LifeCurrent.Health <= 0)
-			{
-				agent.Points.LifeCurrent.Health = 0;
+			CCharacter														& agent							= *player.Army[squadSetup.Agents[iAgent]];
+			const SEntityPoints												& finalPoints					= agent.FinalPoints;
+			if(agent.Points.LifeCurrent.Health <= 0) {
+				agent.Points.LifeCurrent.Health								= 0;
 				continue;
 			}
 
-			double penaltyFromHealth = agent.Points.LifeCurrent.Health/(double)finalPoints.LifeMax.Health;//agent.Points.LifeCurrent.Health/(double)finalPoints.LifeMax.Health;
-			totalCost += finalPoints.CostMaintenance+(int32_t)((1.0-penaltyFromHealth)*agent.Points.CostMaintenance);
+			double														penaltyFromHealth				= agent.Points.LifeCurrent.Health/(double)finalPoints.LifeMax.Health;//agent.Points.LifeCurrent.Health/(double)finalPoints.LifeMax.Health;
+			totalCost												+= finalPoints.CostMaintenance+(int32_t)((1.0-penaltyFromHealth)*agent.Points.CostMaintenance);
 			//totalCost += agent.Points.CostMaintenance+(int32_t)((penaltyFromHealth-1.0)*agent.Points.CostMaintenance);
 		}
 		return totalCost;

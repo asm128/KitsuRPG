@@ -148,5 +148,5 @@ int WINAPI										WinMain
 	,	_In_		int			nShowCmd
 	)
 {
-	return (0 > main(__argc, __argv) ? EXIT_FAILURE : EXIT_SUCCESS;
+	return (0 > main(__argc, __argv)) ? EXIT_FAILURE : EXIT_SUCCESS;
 }

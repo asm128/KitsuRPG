@@ -11,26 +11,25 @@ namespace klib
 	//	SEntityFlags	Flags;
 	//};
 
-	struct STileCounter
-	{
-				int8_t			Count[32]	= {};
+	struct STileCounter {
+				int8_t												Count[32]		= {};
 		
-		inline	void			Clear		()																					{ memset(Count, 0, sizeof(int8_t)*32); }
+		inline	void												Clear			()																					{ memset(Count, 0, sizeof(int8_t)*32); }
 	};
 
 	struct STopologyDetail {
-				int8_t			Smooth		;
-				int8_t			Sharp		;
-				int8_t			Collision	;
+				int8_t												Smooth			;
+				int8_t												Sharp			;
+				int8_t												Collision		;
 	};
 
 	// The difference between SItemTile and SEntity is that SEntity member values must be always valid whereas these can be -1.
 	// Setting IndexDefinition to -1 will effectively disable the tile whereas setting only Modifier or Level to -1 must default to 0 when converting to an SEntity.
 	struct STileProp {
-				int8_t				Definition	;
-				int8_t				Modifier	;
-				int8_t				Level		;
-				int8_t				Owner		;
+				int8_t												Definition		;
+				int8_t												Modifier		;
+				int8_t												Level			;
+				int8_t												Owner			;
 	};
 
 	//struct STileStatus	{
@@ -41,15 +40,13 @@ namespace klib
 
 #pragma pack(pop)
 
-	struct STileGeometry
-	{
-				float			fHeight[4]	;		// west->east, north->south ordering
-				int16_t			Flags		;		// GND v <= 1.5 // maybe a color key? a terrain property? We're going to use it to tell if the triangle is inverted.
+	struct STileGeometry {
+				float												fHeight[4]		;		// west->east, north->south ordering
+				int16_t												Flags			;		// GND v <= 1.5 // maybe a color key? a terrain property? We're going to use it to tell if the triangle is inverted.
 	};
 
 	template <size_t _Width, size_t _Depth> 
-	struct STerrainTiles
-	{
+	struct STerrainTiles {
 				::nwol::SGrid<STileGeometry		, _Width, _Depth>	Geometry;
 				::nwol::SGrid<STopologyDetail	, _Width, _Depth>	Topology;
 
@@ -74,8 +71,7 @@ namespace klib
 	};
 
 	template <size_t _Width, size_t _Depth> 
-	struct SGameTiles 
-	{
+	struct SGameTiles {
 				STerrainTiles	<_Width, _Depth>					Terrain;
 				SEntityTiles	<_Width, _Depth>					Entities;
 
@@ -93,11 +89,11 @@ namespace klib
 
 		inline	void												Clear			()											{
 			Entities.Clear();
-			Terrain.Clear();
+			Terrain	.Clear();
 		}
 
-		static const uint32_t Width = (uint32_t)_Width;
-		static const uint32_t Depth = (uint32_t)_Depth;
+		static	const uint32_t										Width			= (uint32_t)_Width;
+		static	const uint32_t										Depth			= (uint32_t)_Depth;
 	};
 };
 
