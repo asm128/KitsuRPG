@@ -33,7 +33,7 @@ namespace klib
 	,	{10+20+19,		50+19,		15+19,	 29000	,	{1, 4+ 4,  0, 10}, {}	,	{COMBAT_STATUS_NONE	,	COMBAT_STATUS_BLEEDING	},	"Anhur"				}
 	,	{10+20+20,		50+20,		15+20,	 30000	,	{1, 4+ 4,  0, 10}, {}	,	{COMBAT_STATUS_NONE	,	TIAMAT_STATUS_IMMUNITY	},	"Tiamat"			}
 	,	{10+40+21,		50+21,		15+21,	 31000	,	{1, 4+ 4,  0, 10}, {}	,	{COMBAT_STATUS_NONE	,	DEATH_STATUS_IMMUNITY	},	"Death"				}
-	,	{10+80+23,		50+23,		15+23,	 33000	,	{1, 4+ 4, 10, 10}, {}	,	{COMBAT_STATUS_NONE	,	SELDON_STATUS_IMMUNITY	},	"654"				}
+	,	{10+80+23,		50+23,		15+23,	 33000	,	{1, 4+ 4, 10, 10}, {}	,	{COMBAT_STATUS_NONE	,	SELDON_STATUS_IMMUNITY	},	"asm128"			}
 	};
 
 	// set

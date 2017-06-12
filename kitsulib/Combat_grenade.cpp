@@ -28,51 +28,51 @@ COMBAT_STATUS getGrenadeStatusFromProperty(PROPERTY_TYPE grenadeProperty) {
 	return result;
 }
 
-bool klib::useGrenade(const SItem& itemGrenade, CCharacter& thrower, CCharacter& target) {
-	const CItem& itemDescription = itemDescriptions[itemGrenade.Definition];
+bool										klib::useGrenade						(const SItem& itemGrenade, CCharacter& thrower, CCharacter& target)											{
+	const CItem										& itemDescription						= itemDescriptions[itemGrenade.Definition];
 
 	if(0 == itemGrenade.Level) {
 		printf("The prop grenade thrown by %s puffs in the air and quickly falls to the ground.\n", thrower.Name.c_str());
 		return true;
 	}
 
-	const int itemGrade = itemGrenade.Level; 
+	const int										itemGrade								= itemGrenade.Level; 
 
 	// Currently the hit chance for all the grenade types are calculated with the same formula.
-	int	lotteryRange	= 60+(10*itemGrade);	// calculate hit chance from item grade
-	int	lotteryResult	= rand()%100;
+	int												lotteryRange							= 60+(10*itemGrade);	// calculate hit chance from item grade
+	int												lotteryResult							= rand()%100;
 
 	thrower.Recalculate(), 
 	target .Recalculate();
 
-	const SEntityPoints &	finalPointsThrower	= thrower	.FinalPoints; 
-	const SEntityPoints &	finalPointsTarget	= target	.FinalPoints;
-	const SEntityFlags &	finalFlagsThrower	= thrower	.FinalFlags;
-	const SEntityFlags &	finalFlagsTarget	= target	.FinalFlags;
+	const SEntityPoints								& finalPointsThrower					= thrower	.FinalPoints; 
+	const SEntityPoints								& finalPointsTarget						= target	.FinalPoints;
+	const SEntityFlags								& finalFlagsThrower						= thrower	.FinalFlags;
+	const SEntityFlags								& finalFlagsTarget						= target	.FinalFlags;
 
-	int32_t itemEffectValue				= int32_t(finalPointsTarget .LifeMax.Health*(0.2f*itemGrade));
-	int32_t itemEffectValueSelf			= int32_t(finalPointsThrower.LifeMax.Health*(0.2f*itemGrade)) >> 1;
+	int32_t											itemEffectValue							= int32_t(finalPointsTarget .LifeMax.Health*(0.2f*itemGrade));
+	int32_t											itemEffectValueSelf						= int32_t(finalPointsThrower.LifeMax.Health*(0.2f*itemGrade)) >> 1;
 
-	ATTACK_TARGET hitTarget = ATTACK_TARGET_MISS;
+	ATTACK_TARGET									hitTarget								= ATTACK_TARGET_MISS;
 
 	printf("%s throws %s to %s.\n", thrower.Name.c_str(), getItemName(itemGrenade).c_str(), target.Name.c_str());
-	bool bAddStatus = false;
+	bool											bAddStatus								= false;
 
-	int32_t targetArmorAbsorption = getArmorAbsorption(target.CurrentEquip.Armor), finalPassthroughDamage = 0, reflectedDamage = 0;
-	DEFEND_EFFECT attackerArmorEffect	= finalFlagsThrower.Effect.Defend;
-	DEFEND_EFFECT targetArmorEffect		= finalFlagsTarget.Effect.Defend;
+	int32_t											targetArmorAbsorption					= getArmorAbsorption(target.CurrentEquip.Armor), finalPassthroughDamage = 0, reflectedDamage = 0;
+	DEFEND_EFFECT									attackerArmorEffect						= finalFlagsThrower.Effect.Defend;
+	DEFEND_EFFECT									targetArmorEffect						= finalFlagsTarget.Effect.Defend;
 
-	PROPERTY_TYPE	grenadeProperty = itemDescription.Property;
-	COMBAT_STATUS	grenadeStatus = getGrenadeStatusFromProperty(grenadeProperty);
-	const std::string targetArmorName = getArmorName(target.CurrentEquip.Armor);
+	PROPERTY_TYPE									grenadeProperty							= itemDescription.Property;
+	COMBAT_STATUS									grenadeStatus							= getGrenadeStatusFromProperty(grenadeProperty);
+	const ::std::string								targetArmorName							= getArmorName(target.CurrentEquip.Armor);
 	switch(grenadeProperty) {
-	case PROPERTY_TYPE_SMOKE:
-	case PROPERTY_TYPE_STUN:
-	case PROPERTY_TYPE_FREEZE:
-	case PROPERTY_TYPE_COLD:
-	case PROPERTY_TYPE_SLEEP:
-	case PROPERTY_TYPE_FLASHBANG:
-	case PROPERTY_TYPE_EMP:
+	case PROPERTY_TYPE_SMOKE		:
+	case PROPERTY_TYPE_STUN			:
+	case PROPERTY_TYPE_FREEZE		:
+	case PROPERTY_TYPE_COLD			:
+	case PROPERTY_TYPE_SLEEP		:
+	case PROPERTY_TYPE_FLASHBANG	:
+	case PROPERTY_TYPE_EMP			:
 	// Apply status with fixed 50% chance
 		if( lotteryResult < lotteryRange )
 			applyAttackStatus(target, grenadeStatus, itemGrade ? 1+itemGrade : 0, itemDescription.Name);
@@ -80,20 +80,20 @@ bool klib::useGrenade(const SItem& itemGrenade, CCharacter& thrower, CCharacter&
 			printf("%s throws the grenade too far away.\n", thrower.Name.c_str());
 		break;
 
-	case PROPERTY_TYPE_PIERCING:
-	case PROPERTY_TYPE_FRAG:
-	case PROPERTY_TYPE_FIRE:
-	case PROPERTY_TYPE_POISON:
-	case PROPERTY_TYPE_SHOCK:
-		itemEffectValue		>>= 1;
-		itemEffectValueSelf >>= 1;
-		bAddStatus			= true;
+	case PROPERTY_TYPE_PIERCING		:
+	case PROPERTY_TYPE_FRAG			:
+	case PROPERTY_TYPE_FIRE			:
+	case PROPERTY_TYPE_POISON		:
+	case PROPERTY_TYPE_SHOCK		:
+		itemEffectValue								>>= 1;
+		itemEffectValueSelf							>>= 1;
+		bAddStatus									= true;
 
 	case PROPERTY_TYPE_BLAST:
 		if(lotteryResult == lotteryRange) {
 			applySuccessfulHit(thrower, thrower, itemEffectValueSelf, bAddStatus, grenadeStatus, 1+itemGrade, getItemName(itemGrenade));
 
-			hitTarget = ATTACK_TARGET_SELF;
+			hitTarget									= ATTACK_TARGET_SELF;
 			printf("%s throws the grenade too close...\n"		
 				"The grenade explodes near %s doing %u damage!\n", thrower.Name.c_str(), thrower.Name.c_str(), itemEffectValueSelf);
 		}
@@ -101,32 +101,32 @@ bool klib::useGrenade(const SItem& itemGrenade, CCharacter& thrower, CCharacter&
 			applySuccessfulHit(thrower, target,		itemEffectValue		>> 1, bAddStatus, grenadeStatus, itemGrade, getItemName(itemGrenade));
 			applySuccessfulHit(thrower, thrower,	itemEffectValueSelf	>> 1, bAddStatus, grenadeStatus, (itemGrade > 0) ? itemGrade-1 : 0, getItemName(itemGrenade));
 
-			hitTarget = (ATTACK_TARGET)(ATTACK_TARGET_SELF | ATTACK_TARGET_OTHER);
+			hitTarget									= (ATTACK_TARGET)(ATTACK_TARGET_SELF | ATTACK_TARGET_OTHER);
 			printf("%s doesn't throw the grenade far enough so %s receives %u damage but also %s receives %u damage.\n", thrower.Name.c_str(), target.Name.c_str(), itemEffectValue >> 1, thrower.Name.c_str(), itemEffectValueSelf >> 1);
 		}
 		else if( lotteryResult < lotteryRange ) {
 			applySuccessfulHit(thrower, target, itemEffectValue, bAddStatus, grenadeStatus, 1+itemGrade, getItemName(itemGrenade));
-			hitTarget = ATTACK_TARGET_OTHER;
+			hitTarget									= ATTACK_TARGET_OTHER;
 			printf("The grenade hits the target doing %u damage.\n", itemEffectValue);
 		}
 		else
 			printf("%s throws the grenade too far away.\n", thrower.Name.c_str());
 
 		if(hitTarget & ATTACK_TARGET_OTHER) {
-			thrower	.Score.DamageDealt += itemEffectValue; 
-			target	.Score.DamageTaken += itemEffectValue; 
+			thrower	.Score.DamageDealt					+= itemEffectValue; 
+			target	.Score.DamageTaken					+= itemEffectValue; 
 		}
 	
 		if(hitTarget & ATTACK_TARGET_SELF)  {
-			thrower	.Score.DamageDealt += itemEffectValueSelf; 
-			thrower	.Score.DamageTaken += itemEffectValueSelf; 
+			thrower	.Score.DamageDealt					+= itemEffectValueSelf; 
+			thrower	.Score.DamageTaken					+= itemEffectValueSelf; 
 		}
 		break;
 	default:
 		printf("Grenade type not implemented!");
 	}
 
-	thrower.Score.GrenadesUsed++;
+	++thrower.Score.GrenadesUsed;
 
 	return true;
 }

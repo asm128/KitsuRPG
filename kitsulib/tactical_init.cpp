@@ -46,65 +46,56 @@
 
 using namespace klib;
 
-bool initCampaignGame(SGame& instanceGame);
-
-bool initTacticalGame(SGame& instanceGame)
-{
+bool												initCampaignGame									(SGame& instanceGame);
+bool												initTacticalGame									(SGame& instanceGame) {
 	if(instanceGame.Mode == GAME_MODE_CAMPAIGN)
 		return initCampaignGame(instanceGame);
 
 	return false;
 }
 
-static bool isEnemyTeam(TEAM_TYPE teamIdCurrent, TEAM_TYPE teamIdPossibleEnemy)
-{
-	return isRelevantTeam(teamIdPossibleEnemy) && (teamIdCurrent != teamIdPossibleEnemy);
-};
+static bool											isEnemyTeam											(TEAM_TYPE teamIdCurrent, TEAM_TYPE teamIdPossibleEnemy) { return isRelevantTeam(teamIdPossibleEnemy) && (teamIdCurrent != teamIdPossibleEnemy); }
 
-void deployCampaignAgents
-	( SPlayer&			player
-	, const int8_t		playerIndex
-	, STacticalSetup&	tacticalSetup
+void												deployCampaignAgents
+	( SPlayer																				& player
+	, const int8_t																			playerIndex
+	, STacticalSetup																		& tacticalSetup
 	, const ::nwol::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology	 
-	, SEntityTiles<STacticalBoard::Width, STacticalBoard::Depth>					& terrainEntities	
+	, SEntityTiles<STacticalBoard::Width, STacticalBoard::Depth>							& terrainEntities	
 	)
 {
-	const uint32_t	terrainWidth	= terrainTopology.Width, 
-					terrainDepth	= terrainTopology.Depth;
+	const uint32_t											terrainWidth										= terrainTopology.Width, 
+															terrainDepth										= terrainTopology.Depth;
 
-	const TEAM_TYPE	teamId			= tacticalSetup.TeamPerPlayer[playerIndex];
-	const int32_t	squadSize		= tacticalSetup.SquadSize[playerIndex];
-	int64_t			seed			= tacticalSetup.Seed + playerIndex;
+	const TEAM_TYPE											teamId												= tacticalSetup.TeamPerPlayer[playerIndex];
+	const int32_t											squadSize											= tacticalSetup.SquadSize[playerIndex];
+	int64_t													seed												= tacticalSetup.Seed + playerIndex;
 
-	int32_t			rangeX			= terrainWidth / 5;
-	int32_t			rangeZ			= terrainDepth / 5;
+	int32_t													rangeX												= terrainWidth / 5;
+	int32_t													rangeZ												= terrainDepth / 5;
 
 
-	for(uint32_t iAgent=0, agentCount = squadSize; iAgent<agentCount; iAgent++)
-	{
+	for(uint32_t iAgent=0, agentCount = squadSize; iAgent<agentCount; iAgent++)	{
 		if(player.Squad.Agents[iAgent] == -1)
 			continue;
 
-		CCharacter&		playerAgent		= *player.Army[player.Squad.Agents[iAgent]];
+		CCharacter												& playerAgent										= *player.Army[player.Squad.Agents[iAgent]];
 
 		if(!playerAgent.IsAlive())
 			continue;
 
-		::nwol::SCoord3<int32_t> agentPosition = {0,0,0};
-		if(isRelevantTeam(teamId)) 
-		{
-			agentPosition.x = 1+(int32_t)(rangeX * ::nwol::noiseNormal1D(iAgent, seed)	);
-			agentPosition.z = 1+(int32_t)(rangeZ * ::nwol::noiseNormal1D(iAgent, seed<<8)	);
-			if(teamId == TEAM_TYPE_ENEMY) 
-			{
-				agentPosition.x += terrainWidth-rangeX-2;
-				agentPosition.z += terrainDepth-rangeZ-2;
+		::nwol::SCoord3<int32_t>								agentPosition										= {0,0,0};
+		if(isRelevantTeam(teamId))  {
+			agentPosition.x										= 1 + (int32_t)(rangeX * ::nwol::noiseNormal1D(iAgent, seed			) );
+			agentPosition.z										= 1 + (int32_t)(rangeZ * ::nwol::noiseNormal1D(iAgent, seed << 8	) );
+			if(teamId == TEAM_TYPE_ENEMY) {
+				agentPosition.x										+= terrainWidth - rangeX - 2;
+				agentPosition.z										+= terrainDepth - rangeZ - 2;
 			}
 		}
-		else
-		{
-			agentPosition.x = 1+(int32_t)((terrainWidth-1) * ::nwol::noiseNormal1D(iAgent, seed)		);
-			agentPosition.z = 1+(int32_t)((terrainDepth-1) * ::nwol::noiseNormal1D(iAgent, seed<<8)	);
+		else {
+			agentPosition.x										= 1 + (int32_t)((terrainWidth - 1) * ::nwol::noiseNormal1D(iAgent, seed)	);
+			agentPosition.z										= 1 + (int32_t)((terrainDepth - 1) * ::nwol::noiseNormal1D(iAgent, seed<<8)	);
 		}
 
 		while( terrainTopology			[agentPosition.z][agentPosition.x].Sharp		>=	PARTIAL_COVER_HEIGHT
@@ -115,44 +106,37 @@ void deployCampaignAgents
 			|| terrainEntities.Props	[agentPosition.z][agentPosition.x].Definition	!= -1 
 			)
 		{
-			if(isRelevantTeam(teamId)) 
-			{
-				agentPosition.x = 1+(int32_t)(rangeX * ::nwol::noiseNormal1D(	(1+iAgent)		*agentPosition.z*(iAgent+agentPosition.x), seed+rangeZ)	);
-				agentPosition.z = 1+(int32_t)(rangeZ * ::nwol::noiseNormal1D(((1+iAgent)<<16)	*agentPosition.x, seed = (int32_t)time(0))	);
-				if(teamId == TEAM_TYPE_ENEMY) 
-				{
-					agentPosition.x += terrainWidth-rangeX-2;
-					agentPosition.z += terrainDepth-rangeZ-2;
+			if(isRelevantTeam(teamId)) {
+				agentPosition.x										= 1 + (int32_t)(rangeX * ::nwol::noiseNormal1D(	(1+iAgent)		* agentPosition.z * (iAgent+agentPosition.x), seed+rangeZ) );
+				agentPosition.z										= 1 + (int32_t)(rangeZ * ::nwol::noiseNormal1D(((1+iAgent)<<16)	* agentPosition.x, seed = (int32_t)time(0))	);
+				if(teamId == TEAM_TYPE_ENEMY)  {
+					agentPosition.x										+= terrainWidth-rangeX-2;
+					agentPosition.z										+= terrainDepth-rangeZ-2;
 				}
 			}
-			else
-			{
-				agentPosition.x = 1+(int32_t)((terrainWidth-1) * ::nwol::noiseNormal1D((1+iAgent)*agentPosition.z*(iAgent+agentPosition.x), seed+rangeZ)	);
-				agentPosition.z = 1+(int32_t)((terrainDepth-1) * ::nwol::noiseNormal1D(((1+iAgent)<<16)*agentPosition.x, seed = (int32_t)time(0))			);
+			else {
+				agentPosition.x										= 1+(int32_t)((terrainWidth-1) * ::nwol::noiseNormal1D((1+iAgent)*agentPosition.z*(iAgent+agentPosition.x), seed+rangeZ)	);
+				agentPosition.z										= 1+(int32_t)((terrainDepth-1) * ::nwol::noiseNormal1D(((1+iAgent)<<16)*agentPosition.x, seed = (int32_t)time(0))			);
 			}
 		}
 
-		playerAgent.Position						= agentPosition;
-		player.Squad.TargetPositions[iAgent]									= agentPosition;
+		playerAgent.Position								= agentPosition;
+		player.Squad.TargetPositions[iAgent]				= agentPosition;
+		::klib::STileCharacter									& terrainAgent										= terrainEntities.Agents[agentPosition.z][agentPosition.x];
 		terrainEntities.Agents[agentPosition.z][agentPosition.x].TeamId			= teamId;
 		terrainEntities.Agents[agentPosition.z][agentPosition.x].PlayerIndex	= playerIndex;
 		terrainEntities.Agents[agentPosition.z][agentPosition.x].SquadIndex		= 0;
 		terrainEntities.Agents[agentPosition.z][agentPosition.x].AgentIndex		= iAgent;
 
 		//playerAgent.Recalculate();
-		player.Squad.ActionsLeft[iAgent].Moves = playerAgent.FinalPoints.Fitness.Movement;
+		player.Squad.ActionsLeft[iAgent].Moves				= playerAgent.FinalPoints.Fitness.Movement;
 	}
 }
 
-void generateTopology
-	( ::nwol::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology	 
-	, int64_t seed
-	)
-{
-	const uint32_t	terrainWidth	= terrainTopology.Width
-		,			terrainDepth	= terrainTopology.Depth
+void												generateTopology									( ::nwol::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology, int64_t seed )		{
+	const uint32_t											terrainWidth										= terrainTopology.Width
+		,													terrainDepth										= terrainTopology.Depth
 		;
-	
 	//fillCellsFromNoise(terrainTopology, {  0,-10},		(int32_t)(seed+10+0), {0, 0}, 200);
 	//fillCellsFromNoise(terrainTopology, {  1,- 9},		(int32_t)(seed+10+1), {0, 0}, 200);
 	//fillCellsFromNoise(terrainTopology, {  2,- 8},		(int32_t)(seed+10+2), {0, 0}, 200);
@@ -246,48 +230,47 @@ void generateTopology
 	//fillCellsFromNoise(terrainTopology, {-10,  0},		(int32_t)(seed+1337+9), {0, 0}, 100);
 
 
-	STopologyDetail*	cellsHeight		= &terrainTopology	.Cells[0][0];
-	for(uint32_t i=0, count = terrainDepth*terrainWidth; i<count; i++) {
-		cellsHeight[i].Collision = cellsHeight[i].Sharp + cellsHeight[i].Smooth;
-	};
+	STopologyDetail											* cellsHeight										= &terrainTopology	.Cells[0][0];
+	for(uint32_t i=0, count = terrainDepth*terrainWidth; i<count; i++) 
+		cellsHeight[i].Collision							= cellsHeight[i].Sharp + cellsHeight[i].Smooth;
 }
 //
-void populateProps
+void												populateProps
 	( ::nwol::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology	 
-	, SEntityTiles<STacticalBoard::Width, STacticalBoard::Depth>			& terrainEntities	
-	, int64_t seed
-	, int32_t maxCoins
+	, SEntityTiles<STacticalBoard::Width, STacticalBoard::Depth>					& terrainEntities	
+	, int64_t																		seed
+	, int32_t																		maxCoins
 	)
 {
-	const uint32_t	terrainWidth	= terrainTopology.Width, 
-					terrainDepth	= terrainTopology.Depth;
+	const uint32_t											terrainWidth										= terrainTopology.Width, 
+															terrainDepth										= terrainTopology.Depth;
 
-	static const	::nwol::glabel	labelWall	= "Wall";
+	static const ::nwol::glabel								labelWall											= "Wall";
 	for(uint32_t z=0; z<terrainDepth; ++z)
-		for(uint32_t x=0; x<terrainWidth; ++x)
-		{
-			double	noise[]		= 
-			{	::nwol::noiseNormal1D(z*terrainDepth+x, seed)
-			,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*7187)
-			,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*6719)
-			,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8443)
-			,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*7883)
-			,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8087)
-			,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8081)
-			,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*9419)
-			,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*9413)			
-			}; 
-			bool	bReinforced	= noise[3] > .5;
-			if(terrainTopology.Cells[z][x].Sharp < PARTIAL_COVER_HEIGHT && terrainTopology.Cells[z][x].Smooth < PARTIAL_COVER_HEIGHT 
-				&& (terrainTopology.Cells[z][x].Smooth+terrainTopology.Cells[z][x].Sharp) < PARTIAL_COVER_HEIGHT 
-				&& terrainEntities.Props.Cells[z][x].Definition == -1 
-				&& noise[0] > 0.98
-			) 
+		for(uint32_t x=0; x<terrainWidth; ++x) {
+			double													noise[]												= 
+				{	::nwol::noiseNormal1D(z*terrainDepth+x, seed)
+				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*7187)
+				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*6719)
+				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8443)
+				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*7883)
+				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8087)
+				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8081)
+				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*9419)
+				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*9413)			
+				}; 
+			bool													bReinforced											= noise[3] > .5;
+			if( terrainTopology.Cells[z][x].Sharp	< PARTIAL_COVER_HEIGHT 
+			 && terrainTopology.Cells[z][x].Smooth	< PARTIAL_COVER_HEIGHT 
+			 && (terrainTopology.Cells[z][x].Smooth + terrainTopology.Cells[z][x].Sharp) < PARTIAL_COVER_HEIGHT 
+			 && terrainEntities.Props.Cells[z][x].Definition == -1 
+			 && noise[0] > 0.98
+			 ) 
 			{ 
-				int16_t		defCheck	= 1+(int16_t)(rand()%(nwol::size(definitionsStageProp)-1));
-				terrainEntities.Props.Cells[z][x].Definition	= (int8_t)defCheck;
-				terrainEntities.Props.Cells[z][x].Modifier		= bReinforced ? 1 : 0;
-				terrainEntities.Props.Cells[z][x].Level			= 1;
+				int16_t													defCheck											= 1+(int16_t)(rand()%(nwol::size(definitionsStageProp)-1));
+				terrainEntities.Props.Cells[z][x].Definition		= (int8_t)defCheck;
+				terrainEntities.Props.Cells[z][x].Modifier			= bReinforced ? 1 : 0;
+				terrainEntities.Props.Cells[z][x].Level				= 1;
 				if(definitionsStageProp[defCheck].Name == labelWall)
 				{
 					uint32_t	wallmaxz	= std::min(z+3+uint32_t(noise[1]*10), terrainDepth-1);
@@ -307,58 +290,55 @@ void populateProps
 		}
 }
 
-
-int32_t getEnemyCoinsForTerrainFun(SGame& instanceGame)
-{
-	int32_t				maxCoins		= 0;
-	STacticalSetup&		tacticalSetup	= instanceGame.TacticalInfo.Setup;
-	int32_t				totalAgents		= 0;
-	for(size_t iTacticalPlayer=0, playerCount = tacticalSetup.TotalPlayers; iTacticalPlayer<playerCount; ++iTacticalPlayer)
-	{
+int32_t												getEnemyCoinsForTerrainFun							(SGame& instanceGame)																	{
+	int32_t													maxCoins											= 0;
+	STacticalSetup											& tacticalSetup										= instanceGame.TacticalInfo.Setup;
+	int32_t													totalAgents											= 0;
+	for(size_t iTacticalPlayer=0, playerCount = tacticalSetup.TotalPlayers; iTacticalPlayer<playerCount; ++iTacticalPlayer) {
 		if(tacticalSetup.Players[iTacticalPlayer] == -1)
 			continue;
 
-		SPlayer& enemy = instanceGame.Players[tacticalSetup.Players[iTacticalPlayer]];
-
+		SPlayer													& enemy												= instanceGame.Players[tacticalSetup.Players[iTacticalPlayer]];
 		if( enemy.Control.Type == PLAYER_CONTROL_AI && enemy.Control.AIMode != PLAYER_AI_TEAMERS )
 			continue;
 
-		for(size_t iAgent=0, count=tacticalSetup.SquadSize[iTacticalPlayer]; iAgent<count; ++iAgent)
-		{
-			if(enemy.Squad.Agents[iAgent] != -1)
-			{
-				CCharacter& characterAgent = *enemy.Army[enemy.Squad.Agents[iAgent]];
-				if(characterAgent.IsAlive())
-				{
-					maxCoins += characterAgent.FinalPoints.CostMaintenance;
+		for(size_t iAgent=0, count=tacticalSetup.SquadSize[iTacticalPlayer]; iAgent<count; ++iAgent) {
+			if(enemy.Squad.Agents[iAgent] != -1) {
+				CCharacter												& characterAgent									= *enemy.Army[enemy.Squad.Agents[iAgent]];
+				if(characterAgent.IsAlive()) {
+					maxCoins											+= characterAgent.FinalPoints.CostMaintenance;
 					++totalAgents;
 				}
 			}
 		}
 	}
 
-	return totalAgents ? maxCoins/totalAgents/4 : 1;
+	return totalAgents ? maxCoins / totalAgents / 4 : 1;
 }
 
-void recalculateAgentsInRangeAndSight(SGame& instanceGame);
+void												recalculateAgentsInRangeAndSight					(SGame& instanceGame);
 
-void klib::initTacticalMap(SGame& instanceGame)
-{
-	STacticalInfo& tacticalInfo = instanceGame.TacticalInfo;
+void												klib::initTacticalMap								(SGame& instanceGame)																	{
+	STacticalInfo											& tacticalInfo										= instanceGame.TacticalInfo;
 	tacticalInfo.Board.Clear();
 
-	::nwol::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology	= tacticalInfo.Board.Tiles.Terrain.Topology;
-	SEntityTiles<STacticalBoard::Width, STacticalBoard::Depth>				& terrainEntities	= tacticalInfo.Board.Tiles.Entities;
-	int64_t seed = tacticalInfo.Setup.Seed;
+	::nwol::SGrid<STopologyDetail
+		, STacticalBoard::Width
+		, STacticalBoard::Depth
+		>													& terrainTopology									= tacticalInfo.Board.Tiles.Terrain.Topology;
+	SEntityTiles
+		< STacticalBoard::Width
+		, STacticalBoard::Depth
+		>													& terrainEntities									= tacticalInfo.Board.Tiles.Entities;
+	int64_t													seed												= tacticalInfo.Setup.Seed;
 
-	int32_t maxCoins = getEnemyCoinsForTerrainFun(instanceGame);
+	int32_t													maxCoins											= getEnemyCoinsForTerrainFun(instanceGame);
 
 	generateTopology(terrainTopology, seed);
 	populateProps	(terrainTopology, terrainEntities, seed, maxCoins);
 
 	// We need to deploy the agents after we generated the map so all the player initialization is done before calling this function
-	for(uint32_t iTacticalPlayer=0, tacticalPlayerCount = tacticalInfo.Setup.TotalPlayers; iTacticalPlayer<tacticalPlayerCount; ++iTacticalPlayer)
-	{
+	for(uint32_t iTacticalPlayer = 0, tacticalPlayerCount = tacticalInfo.Setup.TotalPlayers; iTacticalPlayer<tacticalPlayerCount; ++iTacticalPlayer) {
 		if(tacticalInfo.Setup.Players[iTacticalPlayer] != -1)
 			deployCampaignAgents(instanceGame.Players[tacticalInfo.Setup.Players[iTacticalPlayer]], iTacticalPlayer, tacticalInfo.Setup, terrainTopology, terrainEntities);
 
@@ -368,51 +348,42 @@ void klib::initTacticalMap(SGame& instanceGame)
 }
 
 
-void initTacticalPlayer(SGame& instanceGame, int32_t playerSlot, const STacticalSetup& tacticalSetup)
-{
-	SPlayer& player = instanceGame.Players[tacticalSetup.Players[playerSlot]];
-	player.Squad.Size			= tacticalSetup.SquadSize	[playerSlot];
-	player.Control				= tacticalSetup.Controls	[playerSlot];
-	player.Selection			= {0, 0, -1, -1, -1};
-	player.Squad.LockedAgent	= -1;
+void												initTacticalPlayer									(SGame& instanceGame, int32_t playerSlot, const STacticalSetup& tacticalSetup)			{
+	SPlayer													& player											= instanceGame.Players[tacticalSetup.Players[playerSlot]];
+	player.Squad.Size									= tacticalSetup.SquadSize	[playerSlot];
+	player.Control										= tacticalSetup.Controls	[playerSlot];
+	player.Selection									= {0, 0, -1, -1, -1};
+	player.Squad.LockedAgent							= -1;
 
-	for(uint32_t iAgent=0, count=tacticalSetup.SquadSize[playerSlot]; iAgent<count; ++iAgent)
-	{
-		// Resize non-human armies.
+	for(uint32_t iAgent = 0, count = tacticalSetup.SquadSize[playerSlot]; iAgent<count; ++iAgent) {	// Resize non-human armies.
 		if(player.Squad.Agents[iAgent] == -1)
 			continue;
 
-		CCharacter& playerAgent = *player.Army[player.Squad.Agents[iAgent]];
-		playerAgent.ActiveBonus			= SCharacterTurnBonus();
+		CCharacter												& playerAgent										= *player.Army[player.Squad.Agents[iAgent]];
+		playerAgent.ActiveBonus								= SCharacterTurnBonus();
 		playerAgent.Recalculate();
-		const SEntityPoints& agentPoints = playerAgent.FinalPoints;
-		playerAgent.Points.LifeCurrent = agentPoints.LifeMax;
+		const SEntityPoints										& agentPoints										= playerAgent.FinalPoints;
+		playerAgent.Points.LifeCurrent						= agentPoints.LifeMax;
 
 		player.Squad.ActionsLeft		[iAgent].Moves		= agentPoints.Fitness.Movement;
 		player.Squad.ActionsLeft		[iAgent].Actions	= 1;
 		player.Squad.TargetPositions	[iAgent]			= playerAgent.Position;
 		player.Squad.TargetAgents		[iAgent]			= {TEAM_TYPE_INVALID, -1, -1, -1};
 	}
-
-
 }
 
 template<size_t _Size>
-uint32_t getRelevantTeams(SGame& instanceGame, const STacticalInfo& tacticalInfo, TEAM_TYPE (&teams)[_Size] )
-{
-	uint32_t teamCount = 0;
+uint32_t											getRelevantTeams									(SGame& instanceGame, const STacticalInfo& tacticalInfo, TEAM_TYPE (&teams)[_Size] )	{
+	uint32_t												teamCount											= 0;
 
-	for(size_t iPlayer=0; iPlayer<_Size; ++iPlayer)
-	{
+	for(size_t iPlayer = 0; iPlayer < _Size; ++iPlayer) {
 		if(!isRelevantTeam(tacticalInfo.Setup.TeamPerPlayer[iPlayer]))
 			continue;
 
-		bool bAdded = false;
-		for(size_t iPlayerOther=0; iPlayerOther < teamCount; ++iPlayerOther)
-		{
-			if(tacticalInfo.Setup.TeamPerPlayer[iPlayer] == teams[iPlayerOther])
-			{
-				bAdded = true;
+		bool													bAdded												= false;
+		for(size_t iPlayerOther=0; iPlayerOther < teamCount; ++iPlayerOther) {
+			if(tacticalInfo.Setup.TeamPerPlayer[iPlayer] == teams[iPlayerOther]) {
+				bAdded												= true;
 				break;
 			}
 		}
@@ -420,9 +391,8 @@ uint32_t getRelevantTeams(SGame& instanceGame, const STacticalInfo& tacticalInfo
 		if(bAdded)
 			continue;
 
-		teams[teamCount++] = tacticalInfo.Setup.TeamPerPlayer[iPlayer];
+		teams[teamCount++]									= tacticalInfo.Setup.TeamPerPlayer[iPlayer];
 	}
-
 	return teamCount;
 };
 
@@ -454,16 +424,11 @@ namespace klib
 	GDEFINE_ENUM_VALUE(PLAYER_INDEX, SPECTATOR	, 23);
 }
 
-void setupAIPlayer(SGame& instanceGame)
-{
+void												setupAIPlayer										(SGame& instanceGame) { }
 
-}
-
-
-bool initFromTacticalSetup(SGame& instanceGame, const STacticalSetup& tacticalSetup)
-{
-	STacticalInfo&	tacticalInfo		= instanceGame.TacticalInfo;
-	uint32_t		effectivePlayers	= 0;
+bool												initFromTacticalSetup								(SGame& instanceGame, const STacticalSetup& tacticalSetup) {
+	STacticalInfo											& tacticalInfo										= instanceGame.TacticalInfo;
+	uint32_t												effectivePlayers									= 0;
 	for(uint32_t iTacticalPlayer = 0, playerCount = tacticalSetup.TotalPlayers; iTacticalPlayer < playerCount; ++iTacticalPlayer)
 		initTacticalPlayer(instanceGame, effectivePlayers++, tacticalSetup);
 
@@ -569,21 +534,17 @@ bool initCampaignPlayers(SGame& instanceGame)
 			//}
 			CCharacter			& agentAI	= *playerAI		.Army[playerAI	.Squad.Agents[iSquadAgentSlot]];
 			const CCharacter	& agentUser	= *playerUser	.Army[playerUser.Squad.Agents[iSquadAgentSlot]];
-			if(playerUser.Score.BattlesWon <= 0)
-			{
+			if(playerUser.Score.BattlesWon <= 0) {
 				if(tacticalSetup.TeamPerPlayer[iPlayer] != TEAM_TYPE_ALLY)
 					agentAI = enemyDefinitions[2+(rand()&1)];
-				if(bHeroSet)
-				{
+				if(bHeroSet) {
 					setupAgent(agentAI, agentAI);
 					agentAI.Flags.Tech.Gender = GENDER_FEMALE;
 				}
-				else
-				{
+				else {
 					if(tacticalSetup.TeamPerPlayer[iPlayer] != TEAM_TYPE_ALLY)
 						setupAgent(agentAI, agentAI);
-					else
-					{
+					else {
 						bHeroSet	= true;
 						agentAI		= enemyDefinitions[::nwol::size(enemyDefinitions)-1];
 						setupAgent(agentAI, agentAI);
@@ -607,8 +568,7 @@ bool initCampaignPlayers(SGame& instanceGame)
 					}
 				}
 			}
-			else
-			{
+			else {
 				setupAgent(agentUser, agentAI);
 			}
 		}

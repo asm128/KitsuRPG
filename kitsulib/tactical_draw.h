@@ -91,26 +91,6 @@ namespace klib
 				case PLAYER_AI_VIOLENT		: color		= bIsSelected ? COLOR_YELLOW	: COLOR_ORANGE		; break;
 				case PLAYER_AI_TEAMERS		: color		= bIsSelected ? COLOR_RED		: COLOR_DARKRED		; break;
 				}
-				//if(bIsSelected)
-				//	switch(boardPlayer.Control.AIMode) {
-				//	case PLAYER_AI_NEUTRAL:	color	= COLOR_DARKGREY	; break;
-				//	case PLAYER_AI_FEARFUL:	color	= COLOR_DARKGREY	; break;
-				//	case PLAYER_AI_CURIOUS:	color	= COLOR_DARKGREY	; break;
-				//	case PLAYER_AI_ASSISTS:	color	= COLOR_WHITE		; break;
-				//	case PLAYER_AI_RIOTERS:	color	= COLOR_YELLOW		; break;
-				//	case PLAYER_AI_VIOLENT:	color	= COLOR_YELLOW		; break;
-				//	case PLAYER_AI_TEAMERS:	color	= COLOR_RED			; break;
-				//	}
-				//else
-				//	switch(boardPlayer.Control.AIMode) {
-				//	case PLAYER_AI_NEUTRAL:	color	= COLOR_DARKGREY	; break;
-				//	case PLAYER_AI_FEARFUL:	color	= COLOR_DARKGREY	; break;
-				//	case PLAYER_AI_CURIOUS:	color	= COLOR_DARKGREY	; break;
-				//	case PLAYER_AI_ASSISTS:	color	= COLOR_GREEN		; break;
-				//	case PLAYER_AI_RIOTERS:	color	= COLOR_ORANGE		; break;
-				//	case PLAYER_AI_VIOLENT:	color	= COLOR_ORANGE		; break;
-				//	case PLAYER_AI_TEAMERS:	color	= COLOR_DARKRED		; break;
-				//	}
 			}
 		}
 		return color;

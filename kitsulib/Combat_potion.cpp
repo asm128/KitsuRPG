@@ -3,62 +3,60 @@
 
 using namespace klib;
 
-bool potionRestore(CCharacter& potionDrinker, const int32_t potionGrade, const int32_t maxPoints, int32_t& currentPoints, const std::string& pointName) {
+bool									potionRestore						(CCharacter& potionDrinker, const int32_t potionGrade, const int32_t maxPoints, int32_t& currentPoints, const std::string& pointName)				{
 	if(maxPoints <= currentPoints) {
 		printf("Your %s is full!\n", pointName.c_str());
 		return false;
 	}
-	int32_t lifeFractionBase	= (maxPoints>>3)+1;
-	int32_t lifeFractionExtra	= (maxPoints>>4);
+	int32_t										lifeFractionBase					= (maxPoints>>3)+1;
+	int32_t										lifeFractionExtra					= (maxPoints>>4);
 
-	int32_t itemEffectValue = lifeFractionBase+(rand()%(lifeFractionExtra+1));
-	itemEffectValue *= potionGrade;
-	int32_t actualPointsRequiredToMax = maxPoints-currentPoints;
-	itemEffectValue = (itemEffectValue < actualPointsRequiredToMax) ? itemEffectValue : actualPointsRequiredToMax;
-	currentPoints += itemEffectValue;
+	int32_t										itemEffectValue						= lifeFractionBase+(rand()%(lifeFractionExtra+1));
+	itemEffectValue							*= potionGrade;
+	int32_t										actualPointsRequiredToMax			= maxPoints-currentPoints;
+	itemEffectValue							= (itemEffectValue < actualPointsRequiredToMax) ? itemEffectValue : actualPointsRequiredToMax;
+	currentPoints							+= itemEffectValue;
 	
 	potionDrinker.Recalculate();
 	
-	const SEntityPoints& finalPoints	= potionDrinker.FinalPoints;
+	const SEntityPoints							& finalPoints						= potionDrinker.FinalPoints;
 	
-	printf("The potion restores %u %s to %s! %s now has %u %s.\n", 
-		itemEffectValue, pointName.c_str(), potionDrinker.Name.c_str(), potionDrinker.Name.c_str(), currentPoints, pointName.c_str());
+	printf("The potion restores %u %s to %s! %s now has %u %s.\n", itemEffectValue, pointName.c_str(), potionDrinker.Name.c_str(), potionDrinker.Name.c_str(), currentPoints, pointName.c_str());
 	return true;
 }
 
-bool potionAttackBonus(CCharacter& potionDrinker, const int32_t potionGrade, int32_t& currentPoints, int32_t& turnsLeft, const std::string& pointName) {
-	int32_t pointsGainedBase	= 5*potionGrade;
-	int32_t pointsGainedExtra	= pointsGainedBase>>2;
+bool									potionAttackBonus					(CCharacter& potionDrinker, const int32_t potionGrade, int32_t& currentPoints, int32_t& turnsLeft, const std::string& pointName)					{
+	int32_t										pointsGainedBase					= 5*potionGrade;
+	int32_t										pointsGainedExtra					= pointsGainedBase>>2;
 
-	int32_t itemEffectValue = pointsGainedBase + rand() % (pointsGainedExtra+1);
+	int32_t										itemEffectValue						= pointsGainedBase + rand() % (pointsGainedExtra+1);
 
-	currentPoints		+= itemEffectValue;
+	currentPoints							+= itemEffectValue;
 	if(0 == turnsLeft)
 		turnsLeft = 1;
-	turnsLeft	+= potionGrade;
+	turnsLeft								+= potionGrade;
 	
 	potionDrinker.Recalculate();
 
-	const SEntityPoints & finalPoints	= potionDrinker.FinalPoints;
-	printf("The potion gives %s %u %s points for %u turns. %s now has %u %s points for the next %u turns.\n", 
-		potionDrinker.Name.c_str(), itemEffectValue, pointName.c_str(), potionGrade, potionDrinker.Name.c_str(), finalPoints.Attack.Damage, pointName.c_str(), turnsLeft-1);
+	const SEntityPoints						& finalPoints							= potionDrinker.FinalPoints;
+	printf("The potion gives %s %u %s points for %u turns. %s now has %u %s points for the next %u turns.\n", potionDrinker.Name.c_str(), itemEffectValue, pointName.c_str(), potionGrade, potionDrinker.Name.c_str(), finalPoints.Attack.Damage, pointName.c_str(), turnsLeft-1);
 
 	return true;
 }
 
-bool klib::usePotion(const SItem& itemPotion, CCharacter& potionDrinker) {
+bool									klib::usePotion						(const SItem& itemPotion, CCharacter& potionDrinker)																								{
 	if(0 == itemPotion.Level) {
 		printf("The prop potion drank by %s doesn't seem to taste very well...\n", potionDrinker.Name.c_str());
 		return true;
 	}
 
-	const CItem&	itemDescription	= itemDescriptions[itemPotion.Definition];
+	const CItem									& itemDescription					= itemDescriptions[itemPotion.Definition];
 
-	bool			bUsedItem		= false;
+	bool										bUsedItem							= false;
 
-	SLifePoints&		currentPoints	= potionDrinker.Points.LifeCurrent;
-	SCombatBonus&		drinkerBonus	= potionDrinker.ActiveBonus.Points;
-	const SLifePoints	maxPoints		= potionDrinker.FinalPoints.LifeMax;
+	SLifePoints									& currentPoints						= potionDrinker.Points.LifeCurrent;
+	SCombatBonus								& drinkerBonus						= potionDrinker.ActiveBonus.Points;
+	const SLifePoints							maxPoints							= potionDrinker.FinalPoints.LifeMax;
 
 	if(	itemDescription.Property	&	 PROPERTY_TYPE_HEALTH			)	bUsedItem = bUsedItem || potionRestore		(potionDrinker, itemPotion.Level,	maxPoints.Health								, currentPoints.Health										, "Health"			);
 	if(	itemDescription.Property	&	 PROPERTY_TYPE_MANA				)	bUsedItem = bUsedItem || potionRestore		(potionDrinker, itemPotion.Level,	maxPoints.Mana									, currentPoints.Mana										, "Mana"			);
@@ -77,7 +75,7 @@ bool klib::usePotion(const SItem& itemPotion, CCharacter& potionDrinker) {
 
 	if(bUsedItem) {
 		potionDrinker.Recalculate();
-		potionDrinker.Score.PotionsUsed++;
+		++potionDrinker.Score.PotionsUsed;
 	}
 
 	return bUsedItem;
