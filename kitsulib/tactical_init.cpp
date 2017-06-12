@@ -424,9 +424,9 @@ namespace klib
 	GDEFINE_ENUM_VALUE(PLAYER_INDEX, SPECTATOR	, 23);
 }
 
-void												setupAIPlayer										(SGame& instanceGame) { }
+void												setupAIPlayer										(SGame& instanceGame)											{ }
 
-bool												initFromTacticalSetup								(SGame& instanceGame, const STacticalSetup& tacticalSetup) {
+bool												initFromTacticalSetup								(SGame& instanceGame, const STacticalSetup& tacticalSetup)		{
 	STacticalInfo											& tacticalInfo										= instanceGame.TacticalInfo;
 	uint32_t												effectivePlayers									= 0;
 	for(uint32_t iTacticalPlayer = 0, playerCount = tacticalSetup.TotalPlayers; iTacticalPlayer < playerCount; ++iTacticalPlayer)
@@ -435,65 +435,59 @@ bool												initFromTacticalSetup								(SGame& instanceGame, const STactic
 	return true;
 }
 
-static const STacticalSetup tacticalSetupForCampaign = 
-{	15731U										//, uint64_t		Seed					= 15731;
-,	4U											//,	uint32_t		TotalPlayers			= 0;
-,	2U											//	uint32_t		TotalTeams				= 0;
-,	{ PLAYER_INDEX_USER
-	, (PLAYER_INDEX)1
-	, (PLAYER_INDEX)2
-	, (PLAYER_INDEX)3
-	, (PLAYER_INDEX)4
-	, (PLAYER_INDEX)5
-	, (PLAYER_INDEX)6
-	, (PLAYER_INDEX)7
-	, (PLAYER_INDEX)8
-	, (PLAYER_INDEX)9
-	}											//PLAYER_INDEX	Players						[MAX_TACTICAL_PLAYERS]	= {};
-	, 
-	{ {PLAYER_CONTROL_LOCAL, PLAYER_AI_TEAMERS}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_TEAMERS}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_TEAMERS}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_TEAMERS}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_NEUTRAL}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_CURIOUS}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_FEARFUL}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_ASSISTS}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_RIOTERS}
-	, {PLAYER_CONTROL_AI, PLAYER_AI_VIOLENT}
-	}											//SPlayerControl	Controls				[MAX_TACTICAL_PLAYERS]	= {};
-,	{ TEAM_TYPE_ALLY
-	, TEAM_TYPE_ALLY
-	, TEAM_TYPE_ENEMY
-	, TEAM_TYPE_ENEMY
-	, TEAM_TYPE_CIVILIAN
-	, TEAM_TYPE_CIVILIAN
-	, TEAM_TYPE_CIVILIAN
-	, TEAM_TYPE_CIVILIAN
-	, TEAM_TYPE_CIVILIAN
-	, TEAM_TYPE_CIVILIAN
-	}											//TEAM_TYPE			Teams					[MAX_TACTICAL_PLAYERS]	= {};
-,	{{0,1}, {2,3}, {4,5,6,7,8,9}}				//int8_t			PlayersPerTeam			[MAX_TACTICAL_PLAYERS][MAX_TACTICAL_PLAYERS]	= {};
-,	{2,2,5}										//int8_t			PlayerCountPerTeam		[MAX_TACTICAL_PLAYERS]	= {};
-,	{DEFAULT_SQUAD_SIZE,DEFAULT_SQUAD_SIZE,DEFAULT_SQUAD_SIZE,DEFAULT_SQUAD_SIZE, 2,2,2,2, 1,1}						//uint8_t			SquadSize				[MAX_TACTICAL_PLAYERS]	= {};
-};
+static const STacticalSetup							tacticalSetupForCampaign							= 
+	{	15731U										//, uint64_t		Seed					= 15731;
+	,	4U											//,	uint32_t		TotalPlayers			= 0;
+	,	2U											//	uint32_t		TotalTeams				= 0;
+	,	{ PLAYER_INDEX_USER
+		, (PLAYER_INDEX)1
+		, (PLAYER_INDEX)2
+		, (PLAYER_INDEX)3
+		, (PLAYER_INDEX)4
+		, (PLAYER_INDEX)5
+		, (PLAYER_INDEX)6
+		, (PLAYER_INDEX)7
+		, (PLAYER_INDEX)8
+		, (PLAYER_INDEX)9
+		}											//PLAYER_INDEX	Players						[MAX_TACTICAL_PLAYERS]	= {};
+	,	{ {PLAYER_CONTROL_LOCAL, PLAYER_AI_TEAMERS}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_TEAMERS}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_TEAMERS}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_TEAMERS}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_NEUTRAL}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_CURIOUS}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_FEARFUL}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_ASSISTS}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_RIOTERS}
+		, {PLAYER_CONTROL_AI, PLAYER_AI_VIOLENT}
+		}											//SPlayerControl	Controls				[MAX_TACTICAL_PLAYERS]	= {};
+	,	{ TEAM_TYPE_ALLY
+		, TEAM_TYPE_ALLY
+		, TEAM_TYPE_ENEMY
+		, TEAM_TYPE_ENEMY
+		, TEAM_TYPE_CIVILIAN
+		, TEAM_TYPE_CIVILIAN
+		, TEAM_TYPE_CIVILIAN
+		, TEAM_TYPE_CIVILIAN
+		, TEAM_TYPE_CIVILIAN
+		, TEAM_TYPE_CIVILIAN
+		}											//TEAM_TYPE			Teams					[MAX_TACTICAL_PLAYERS]	= {};
+	,	{{0,1}, {2,3}, {4,5,6,7,8,9}}				//int8_t			PlayersPerTeam			[MAX_TACTICAL_PLAYERS][MAX_TACTICAL_PLAYERS]	= {};
+	,	{2,2,5}										//int8_t			PlayerCountPerTeam		[MAX_TACTICAL_PLAYERS]	= {};
+	,	{DEFAULT_SQUAD_SIZE,DEFAULT_SQUAD_SIZE,DEFAULT_SQUAD_SIZE,DEFAULT_SQUAD_SIZE, 2,2,2,2, 1,1}						//uint8_t			SquadSize				[MAX_TACTICAL_PLAYERS]	= {};
+	};
 
-void getDefaultTacticalSetupForCampaign(STacticalSetup& tacticalSetup)
-{
-	tacticalSetup = tacticalSetupForCampaign;
-}
+void												getDefaultTacticalSetupForCampaign					(STacticalSetup& tacticalSetup)									{ tacticalSetup = tacticalSetupForCampaign; }
 
-uint32_t resolveNextPlayer(SGame& instanceGame);
-
-bool initCampaignPlayers(SGame& instanceGame)
-{
-	STacticalInfo	& tacticalInfo	= instanceGame.TacticalInfo;
-	STacticalSetup	& tacticalSetup	= tacticalInfo.Setup;
+uint32_t											resolveNextPlayer									(SGame& instanceGame);
+bool												initCampaignPlayers									(SGame& instanceGame)											{
+	STacticalInfo											& tacticalInfo										= instanceGame.TacticalInfo;
+	STacticalSetup											& tacticalSetup										= tacticalInfo.Setup;
 	// Team players
 	//instanceGame.Players[tacticalSetup.Players[0]].Name = "ALLY_0";
-	instanceGame.Players[tacticalSetup.Players[1]].Name = "Ivan"	;
-	instanceGame.Players[tacticalSetup.Players[2]].Name = "G0"		;
-	instanceGame.Players[tacticalSetup.Players[3]].Name = "G1"		;
+	instanceGame.Players[tacticalSetup.Players[1]].Name	= "Ivan"	;
+	instanceGame.Players[tacticalSetup.Players[2]].Name	= "G0"		;
+	instanceGame.Players[tacticalSetup.Players[3]].Name	= "G1"		;
 	
 	// Civilian players
 	for(uint32_t iTacticalPlayer=0, maxPlayers=tacticalSetup.TotalPlayers; iTacticalPlayer<maxPlayers; ++iTacticalPlayer)
@@ -501,10 +495,9 @@ bool initCampaignPlayers(SGame& instanceGame)
 			instanceGame.Players[tacticalSetup.Players[iTacticalPlayer]].Name = ::nwol::get_value_label(tacticalSetup.Controls[iTacticalPlayer].AIMode);
 
 	// Clear selection and reset player stuff relevant to the tactical mode.
-	SPlayer			& playerUser		= instanceGame.Players[PLAYER_INDEX_USER];
+	SPlayer													& playerUser										= instanceGame.Players[PLAYER_INDEX_USER];
 	// Set up AI player's agents using the main human player as reference in order to determine the level and equipment.
-	for(uint32_t iPlayer = 0; iPlayer<tacticalSetup.TotalPlayers; ++iPlayer)
-	{
+	for(uint32_t iPlayer = 0; iPlayer<tacticalSetup.TotalPlayers; ++iPlayer) {
 		if(tacticalSetup.Players[iPlayer] == PLAYER_INDEX_INVALID || tacticalSetup.Players[iPlayer] == PLAYER_INDEX_USER)
 			continue;
 
@@ -512,59 +505,57 @@ bool initCampaignPlayers(SGame& instanceGame)
 		if(tacticalSetup.Controls[iPlayer].Type != PLAYER_CONTROL_AI)
 			continue;
 
-		SPlayer			& playerAI		= instanceGame.Players[tacticalSetup.Players[iPlayer]];
+		SPlayer													& playerAI											= instanceGame.Players[tacticalSetup.Players[iPlayer]];
 		if(tacticalSetup.Controls[iPlayer].Type == PLAYER_CONTROL_AI && tacticalSetup.Players[iPlayer] != PLAYER_INDEX_USER) 
 			playerAI.Army.resize(tacticalSetup.SquadSize[iPlayer]);
 
-		bool				bHeroSet		= true;
-		for(uint32_t iSquadAgentSlot=0, squadAgentCount=tacticalSetup.SquadSize[iPlayer]; iSquadAgentSlot<squadAgentCount; ++iSquadAgentSlot) 
-		{
-			if( playerUser.Squad.Agents[iSquadAgentSlot] == -1 || 0 == playerUser.Army[playerUser.Squad.Agents[iSquadAgentSlot]] )
-			{
-				playerAI.Squad.Agents[iSquadAgentSlot] = -1;
+		bool													bHeroSet											= true;
+		for(uint32_t iSquadAgentSlot=0, squadAgentCount=tacticalSetup.SquadSize[iPlayer]; iSquadAgentSlot<squadAgentCount; ++iSquadAgentSlot) {
+			if( playerUser.Squad.Agents[iSquadAgentSlot] == -1 || 0 == playerUser.Army[playerUser.Squad.Agents[iSquadAgentSlot]] ) {
+				playerAI.Squad.Agents[iSquadAgentSlot]				= -1;
 				continue;
 			}
 			else 
-				playerAI.Squad.Agents[iSquadAgentSlot] = iSquadAgentSlot;
+				playerAI.Squad.Agents[iSquadAgentSlot]				= iSquadAgentSlot;
 
 			//if( 0 == playerAI.Army[playerAI.Squad.Agents[iSquadAgentSlot]] ) 
 			//{
-				GPtrObj(CCharacter) newAgent(enemyDefinitions[1+rand()%3]);
+				GPtrObj(CCharacter)										newAgent											(enemyDefinitions[1+rand()%3]);
 				playerAI.Army.set(newAgent, playerAI.Squad.Agents[iSquadAgentSlot]);
 			//}
-			CCharacter			& agentAI	= *playerAI		.Army[playerAI	.Squad.Agents[iSquadAgentSlot]];
-			const CCharacter	& agentUser	= *playerUser	.Army[playerUser.Squad.Agents[iSquadAgentSlot]];
+			CCharacter												& agentAI											= *playerAI		.Army[playerAI	.Squad.Agents[iSquadAgentSlot]];
+			const CCharacter										& agentUser											= *playerUser	.Army[playerUser.Squad.Agents[iSquadAgentSlot]];
 			if(playerUser.Score.BattlesWon <= 0) {
 				if(tacticalSetup.TeamPerPlayer[iPlayer] != TEAM_TYPE_ALLY)
-					agentAI = enemyDefinitions[2+(rand()&1)];
+					agentAI												= enemyDefinitions[2+(rand()&1)];
 				if(bHeroSet) {
 					setupAgent(agentAI, agentAI);
-					agentAI.Flags.Tech.Gender = GENDER_FEMALE;
+					agentAI.Flags.Tech.Gender							= GENDER_FEMALE;
 				}
 				else {
 					if(tacticalSetup.TeamPerPlayer[iPlayer] != TEAM_TYPE_ALLY)
 						setupAgent(agentAI, agentAI);
 					else {
-						bHeroSet	= true;
-						agentAI		= enemyDefinitions[::nwol::size(enemyDefinitions)-1];
+						bHeroSet											= true;
+						agentAI												= enemyDefinitions[::nwol::size(enemyDefinitions)-1];
 						setupAgent(agentAI, agentAI);
-						agentAI.CurrentEquip.Weapon		.Definition	= (int16_t)::nwol::size(definitionsWeapon)-1;
-						agentAI.CurrentEquip.Armor		.Definition	= (int16_t)::nwol::size(definitionsArmor)-1;
-						agentAI.CurrentEquip.Profession	.Definition	= (int16_t)::nwol::size(definitionsProfession)-1;
-						agentAI.CurrentEquip.Accessory	.Definition	= (int16_t)::nwol::size(definitionsAccessory)-1;
-						agentAI.CurrentEquip.Weapon		.Modifier	= (int16_t)::nwol::size(modifiersWeapon)-1;
-						agentAI.CurrentEquip.Armor		.Modifier	= (int16_t)::nwol::size(modifiersArmor)-1;
-						agentAI.CurrentEquip.Profession	.Modifier	= (int16_t)::nwol::size(modifiersProfession)-1;
-						agentAI.CurrentEquip.Accessory	.Modifier	= (int16_t)::nwol::size(modifiersAccessory)-1;
-						agentAI.CurrentEquip.Weapon		.Level		= 
-						agentAI.CurrentEquip.Armor		.Level		=  
-						agentAI.CurrentEquip.Profession	.Level		= 
-						agentAI.CurrentEquip.Accessory	.Level		= 15;
+						agentAI.CurrentEquip.Weapon		.Definition			= (int16_t)::nwol::size(definitionsWeapon)-1;
+						agentAI.CurrentEquip.Armor		.Definition			= (int16_t)::nwol::size(definitionsArmor)-1;
+						agentAI.CurrentEquip.Profession	.Definition			= (int16_t)::nwol::size(definitionsProfession)-1;
+						agentAI.CurrentEquip.Accessory	.Definition			= (int16_t)::nwol::size(definitionsAccessory)-1;
+						agentAI.CurrentEquip.Weapon		.Modifier			= (int16_t)::nwol::size(modifiersWeapon)-1;
+						agentAI.CurrentEquip.Armor		.Modifier			= (int16_t)::nwol::size(modifiersArmor)-1;
+						agentAI.CurrentEquip.Profession	.Modifier			= (int16_t)::nwol::size(modifiersProfession)-1;
+						agentAI.CurrentEquip.Accessory	.Modifier			= (int16_t)::nwol::size(modifiersAccessory)-1;
+						agentAI.CurrentEquip.Weapon		.Level				= 
+						agentAI.CurrentEquip.Armor		.Level				=  
+						agentAI.CurrentEquip.Profession	.Level				= 
+						agentAI.CurrentEquip.Accessory	.Level				= 15;
 						agentAI.Recalculate();
-						const SEntityPoints	& finalAgentPoints	= agentAI.FinalPoints;
-						agentAI.Points.LifeCurrent				= finalAgentPoints.LifeMax;
-						agentAI.Points.Coins					= agentAI.Points.CostMaintenance;
-						agentAI.Flags.Tech.Gender				= GENDER_MALE;
+						const SEntityPoints										& finalAgentPoints									= agentAI.FinalPoints;
+						agentAI.Points.LifeCurrent							= finalAgentPoints.LifeMax;
+						agentAI.Points.Coins								= agentAI.Points.CostMaintenance;
+						agentAI.Flags.Tech.Gender							= GENDER_MALE;
 					}
 				}
 			}
@@ -579,14 +570,13 @@ bool initCampaignPlayers(SGame& instanceGame)
 	return false;
 }
 
-bool initCampaignGame(SGame& instanceGame)
-{
-	STacticalInfo	& tacticalInfo	= instanceGame.TacticalInfo;
+bool												initCampaignGame									(SGame& instanceGame)											{
+	STacticalInfo											& tacticalInfo										= instanceGame.TacticalInfo;
 	tacticalInfo.Clear();
 
-	STacticalSetup	& tacticalSetup	= tacticalInfo.Setup;
+	STacticalSetup											& tacticalSetup										= tacticalInfo.Setup;
 	getDefaultTacticalSetupForCampaign(tacticalSetup);
-	tacticalSetup.Seed = instanceGame.Seed + instanceGame.Players[PLAYER_INDEX_USER].Score.BattlesWon;
+	tacticalSetup.Seed									= instanceGame.Seed + instanceGame.Players[PLAYER_INDEX_USER].Score.BattlesWon;
 
 	initCampaignPlayers(instanceGame);
 
@@ -595,6 +585,6 @@ bool initCampaignGame(SGame& instanceGame)
 	klib::drawTacticalBoard(instanceGame, tacticalInfo, instanceGame.PostEffectDisplay, PLAYER_INDEX_USER, TEAM_TYPE_CIVILIAN, instanceGame.Players[PLAYER_INDEX_USER].Selection, true);
 
 	::nwol::bit_set(instanceGame.Flags, klib::GAME_FLAGS_TACTICAL);
-	tacticalInfo.CurrentPlayer = resolveNextPlayer(instanceGame);
+	tacticalInfo.CurrentPlayer							= resolveNextPlayer(instanceGame);
 	return true;
 }

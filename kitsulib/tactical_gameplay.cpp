@@ -241,12 +241,10 @@ bool klib::isTacticalValid(SGame& instanceGame)
 	return bResult;
 }
 
-bool fixAgentSelection(SPlayer&	currentPlayer)
-{
+bool fixAgentSelection(SPlayer&	currentPlayer) {
 	if(currentPlayer.Selection.PlayerUnit == -1 || currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] == -1)
 		return currentPlayer.SelectNextAgent();
-	else
-	{
+	else {
 		const CCharacter& agent = *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 		if(agent.DidLoseTurn() || !agent.IsAlive())
 			return currentPlayer.SelectNextAgent();
@@ -255,26 +253,23 @@ bool fixAgentSelection(SPlayer&	currentPlayer)
 	return true;
 }
 
-uint32_t resolveNextPlayer(SGame& instanceGame)
-{
-	STacticalInfo& tacticalInfo = instanceGame.TacticalInfo;
-	STacticalSetup& tacticalSetup = tacticalInfo.Setup;
-	int32_t currentPlayerSlot = -1;
+uint32_t resolveNextPlayer(SGame& instanceGame) {
+	STacticalInfo				& tacticalInfo					= instanceGame.TacticalInfo;
+	STacticalSetup				& tacticalSetup					= tacticalInfo.Setup;
+	int32_t						currentPlayerSlot				= -1;
 
-	uint32_t playerCountToCheck	= 0;
+	uint32_t					playerCountToCheck				= 0;
 
-	bool bNeedSkipCurrentPlayer ;
-	bool bCantMove				;
+	bool						bNeedSkipCurrentPlayer			;
+	bool						bCantMove						;
 
-	do
-	{
+	do {
 		++tacticalInfo.CurrentTeam;
 		if(tacticalInfo.CurrentTeam >= (int32_t)tacticalSetup.TotalTeams)
 			tacticalInfo.CurrentTeam = 0;
 
 		int32_t totalPlayersForThisTeam = 0;
-		do
-		{
+		do {
 			++tacticalInfo.CurrentPlayerPerTeam	[tacticalInfo.CurrentTeam];
 			if(tacticalInfo.CurrentPlayerPerTeam	[tacticalInfo.CurrentTeam] >= (int32_t)tacticalSetup.PlayerCountPerTeam[tacticalInfo.CurrentTeam])
 				tacticalInfo.CurrentPlayerPerTeam	[tacticalInfo.CurrentTeam] = 0;

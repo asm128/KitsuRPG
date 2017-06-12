@@ -79,14 +79,13 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	}
 
 	memcpy(bbColor, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], instanceGame.GlobalDisplay.TextAttributes.Width*instanceGame.GlobalDisplay.TextAttributes.Depth*sizeof(uint16_t));
-	uint32_t							y							= 0;
 
 	switch(instanceGame.State.State) { 
 	//case GAME_STATE_MENU_ACTION:
 	case GAME_STATE_MENU_LAN_MISSION	:
 	case GAME_STATE_TACTICAL_CONTROL	:
 	case GAME_STATE_START_MISSION		:
-		for(y=0; y<instanceGame.PostEffectDisplay.TextAttributes.Depth; ++y)
+		for(uint32_t y = 0; y<instanceGame.PostEffectDisplay.TextAttributes.Depth; ++y)
 			memcpy(&bbColor[(TACTICAL_DISPLAY_POSY+y)*bbWidth+((bbWidth>>1)-(instanceGame.TacticalDisplay.TextAttributes.Width>>1))], &instanceGame.TacticalDisplay.TextAttributes.Cells[y][0], instanceGame.TacticalDisplay.TextAttributes.Width*sizeof(uint16_t));
 		break;
 	case GAME_STATE_CREDITS				:
@@ -95,7 +94,7 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	case GAME_STATE_MENU_SQUAD_SETUP	:
 	case GAME_STATE_MENU_EQUIPMENT		: break;
 	default:
-		for(y=0; y<instanceGame.PostEffectDisplay.TextAttributes.Depth; ++y)
+		for(uint32_t y = 0; y<instanceGame.PostEffectDisplay.TextAttributes.Depth; ++y)
 			memcpy(&bbColor[(TACTICAL_DISPLAY_POSY+y)*bbWidth+((bbWidth>>1)-(instanceGame.PostEffectDisplay.TextAttributes.Width>>1))], &instanceGame.PostEffectDisplay.TextAttributes.Cells[y][0], instanceGame.PostEffectDisplay.TextAttributes.Width*sizeof(uint16_t));
 	}
 
@@ -103,7 +102,7 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	frameMeasure.Frame();
 	instanceGame.FrameTimer.Frame();
 	if(instanceGame.FrameTimer.LastTimeSeconds >= 0.150001)
-		instanceGame.FrameTimer.LastTimeSeconds = 0.150001;
+		instanceGame.FrameTimer.LastTimeSeconds		= 0.150001;
 
 	int32_t											actualOffsetX;
 	// Print log
@@ -138,7 +137,6 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 		//												::																																		 
 		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_YELLOW		, offsetYHelp+39-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Melee attacks and grenades currently require ");
 		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_YELLOW		, offsetYHelp+40-5, bbWidth/4*3, nwol::SCREEN_LEFT, "a valid target selected in order to work!");
-			
 	}
 	else
 		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_YELLOW, TACTICAL_DISPLAY_POSY+instanceGame.TacticalDisplay.Depth+18-5, 2, ::nwol::SCREEN_RIGHT, "Press F1 to display help.");	
