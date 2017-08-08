@@ -69,17 +69,17 @@ namespace klib
 
 
 	struct SCharacter {
-							SEntityPoints						Points					= SEntityPoints			();	
-							SEntityFlags						Flags					= SEntityFlags			();	
+							SEntityPoints						Points					= {};	
+							SEntityFlags						Flags					= {};	
 
-							SEntityPoints						FinalPoints				= SEntityPoints			();	
-							SEntityFlags						FinalFlags				= SEntityFlags			();	
-							SEntityGauges						Gauges					= SEntityGauges			();
+							SEntityPoints						FinalPoints				= {};	
+							SEntityFlags						FinalFlags				= {};	
+							SEntityGauges						Gauges					= {};
 
-							SCharacterTurnBonus					ActiveBonus				= SCharacterTurnBonus	();
-							SCharacterScore						Score					= SCharacterScore		();	
-							SCharacterEquip						CurrentEquip			= SCharacterEquip		();
-							SCharacterGoods						Goods					= SCharacterGoods		();
+							SCharacterTurnBonus					ActiveBonus				= {};
+							SCharacterScore						Score					= {};	
+							SCharacterEquip						CurrentEquip			= {};
+							SCharacterGoods						Goods					= {};
 
 																SCharacter				()						= default;
 																SCharacter				(int maxHP, int hitChance, int attack, int coins, SFitnessPoints speed, SEntityEffect characterEffect, SEntityStatus characterStatus ) 
@@ -112,6 +112,7 @@ namespace klib
 		character.Recalculate();
 		character.Points.LifeCurrent = character.FinalPoints.LifeMax;
 	}
+#pragma pack(pop)
 
 
 
@@ -130,7 +131,7 @@ namespace klib
 
 	class CDeadCharacter {
 	public:
-						SCharacterScore							Score					= SCharacterScore();	
+						SCharacterScore							Score					= {};	
 						::nwol::glabel							Name					= "Unnamed";
 
 		inline													CDeadCharacter			(const CCharacter& deadCharacter)
@@ -184,7 +185,6 @@ namespace klib
 			return true;
 		}
 	}
-#pragma pack(pop)
 
 } // namespace
 

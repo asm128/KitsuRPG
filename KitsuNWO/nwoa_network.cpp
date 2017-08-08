@@ -1,5 +1,5 @@
-
 #include "kitsunwo.h"
+#include "netlib_command.h"
 
 #include <thread>
 
@@ -17,7 +17,7 @@ int											runCommunications						(::nwol::SApplicationNetworkClient& appNetw
 
 		// --- Get server time
 		uint64_t										current_time;
-		break_error_if(errored(result = ::nwol::serverTime(instanceClient, current_time)), "Failed to get server time.");
+		break_error_if(errored(result = ::nwol::time(instanceClient.pClient, instanceClient.pServer, current_time)), "Failed to get server time.");
 		{	// here we update the game instance with the data received from the server.
 			::nwol::CLock									thelock									(appNetwork.ServerTimeMutex);
 			appNetwork.ServerTime						= current_time;
@@ -46,7 +46,7 @@ void										runCommunications						(void* pInstanceApp)								{
 }
 
 ::nwol::error_t								networkEnable							(::SApplication& instanceApp)						{
-	nwol_necall(::nwol::initNetwork(), "Failed to initialize network.");
+	nwol_necall(::nwol::networkInit(), "Failed to initialize network.");
 	info_printf("%s", "Network successfully initialized.");
 
 	::nwol::SApplicationNetworkClient				& instanceAppNetwork					= instanceApp.NetworkClient;
@@ -67,6 +67,6 @@ void										runCommunications						(void* pInstanceApp)								{
 		::std::this_thread::sleep_for(::std::chrono::milliseconds(250));
 
 	::std::this_thread::sleep_for(::std::chrono::milliseconds(250));
-	::nwol::shutdownNetwork();
+	::nwol::networkShutdown();
 	return 0;
 }

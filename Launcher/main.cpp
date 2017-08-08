@@ -25,11 +25,11 @@ int32_t									getLines				(const char* source, int32_t maxLen, ::nwol::array_o
 		int32_t										nameLen					= 0;
 		while(nameLen < 256 && bufferIndex < maxLen) {
 			nameBuffer[nameLen++]					= source[bufferIndex++];
-			if(nameBuffer[nameLen-1] == '\n') {
-				if(nameBuffer[nameLen-2] == '\r')
-					nameBuffer[nameLen-2]					= 0;
+			if(nameBuffer[nameLen - 1] == '\n') {
+				if(nameLen > 1 && nameBuffer[nameLen - 2] == '\r')
+					nameBuffer[nameLen - 2]					= 0;
 				else
-					nameBuffer[nameLen-1]					= 0;
+					nameBuffer[nameLen - 1]					= 0;
 				break;
 			}
 		}
@@ -560,7 +560,7 @@ APPLICATION_STATE executeStep(APPLICATION_STATE applicationState, HINSTANCE hIns
 		{
 			log_printf("Error downloading patch history from server.\n");
 			return APPLICATION_STATE_INVALID;
-		};
+		}
 		break;
 
 	case APPLICATION_STATE_PATCH_INFO_LIST	:

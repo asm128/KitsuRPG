@@ -5,7 +5,7 @@
 #include "nwol_enum.h"
 #include "nwol_mutex.h"
 #include "member_registry.h"
-#include "runtime.h"
+#include "nwol_runtime.h"
 #include "application.h"
 
 #ifndef __NWOA_H__983264902__

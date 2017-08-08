@@ -1,7 +1,7 @@
 #define NETLIB_SERVER_MODE_CLIENT
 #include "draw.h"
 #include "netlib_client.h"
-//#include "label.h"
+#include "netlib_command.h"
 
 #include <time.h>
 #include <process.h>
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
 	::nwol::initASCIIScreen(klib::SGlobalDisplay::Width, klib::SGlobalDisplay::Depth);
 	
-	if( nwol::initNetwork() )
+	if( nwol::networkInit() )
 	{
 		error_printf("Failed to initialize network.");
 		return -1;
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 		delete(pInstancedGame);
 
 	::nwol::shutdownASCIIScreen();
-	::nwol::shutdownNetwork();
+	::nwol::networkShutdown();
 
 	return 0;
 }
@@ -104,11 +104,8 @@ int runCommunications(klib::SGame& instanceGame)
 	}
 
 	::nwol::error_t result = 0;
-	while(nwol::bit_true(instanceGame.Flags, klib::GAME_FLAGS_RUNNING))
-	{
-		// Ping before anything else to make sure everything is more or less in order.
-		if(false == nwol::ping(instanceClient.pClient, instanceClient.pServer))
-		{
+	while(nwol::bit_true(instanceGame.Flags, klib::GAME_FLAGS_RUNNING)) {
+		if(false == nwol::ping(instanceClient.pClient, instanceClient.pServer)) {	// Ping before anything else to make sure everything is more or less in order.
 			error_print("Ping timeout.");
 			result = -1;
 			break;
@@ -116,12 +113,11 @@ int runCommunications(klib::SGame& instanceGame)
 
 		// get server time
 		uint64_t current_time;
-		if(0 > nwol::serverTime(instanceClient, current_time) )
-		{
+		if(0 > nwol::time(instanceClient.pClient, instanceClient.pServer, current_time) ) {
 			error_print("Failed to get server time.");
 			result = -1;
 			break;
-		};
+		}
 		
 		{	// here we update the game instance with the data received from the server.
 			::nwol::CLock thelock(instanceGame.ServerTimeMutex);
@@ -141,7 +137,7 @@ int runCommunications(klib::SGame& instanceGame)
 	bAreCommsRunningInThisDamnStuffCode = false; 
 	nwol::bit_clear(instanceGame.Flags, klib::GAME_FLAGS_CONNECTED);
 
-	disconnectClient(instanceClient);
+	::nwol::disconnectClient(instanceClient);
 	return result;
 }
 
