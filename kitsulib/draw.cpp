@@ -22,7 +22,10 @@ void										blitGrid						(::nwol::SGrid<_TCell, _Width, _Depth>& source, int3
 
 template<typename _TCell, size_t _Width, size_t _Depth>
 void										drawDisplay						(::nwol::SGrid<_TCell, _Width, _Depth>& source, uint32_t offsetY, uint32_t offsetX )																				{
-	blitGrid(source, offsetY, offsetX, nwol::getASCIIBackBuffer(), nwol::getASCIIBackBufferWidth(), nwol::getASCIIBackBufferHeight());
+	::nwol::SASCIITarget					asciiTarget;
+	::nwol::getASCIIBackBuffer(asciiTarget);
+
+	blitGrid(source, offsetY, offsetX, (_TCell*)asciiTarget.Characters.begin(), asciiTarget.Characters.width(), asciiTarget.Characters.height());
 }
 
 void										drawStateBackground				( SGame& instanceGame )																																				{
@@ -33,11 +36,6 @@ void										drawStateBackground				( SGame& instanceGame )																				
 	case	GAME_STATE_MENU_SQUAD_SETUP	:	//drawRainBackground(instanceGame.GlobalDisplay, instanceGame.FrameTimer.LastTimeSeconds);	; break;
 	case	GAME_STATE_MENU_EQUIPMENT	:	drawRainBackground(instanceGame.GlobalDisplay, instanceGame.FrameTimer.LastTimeSeconds);	; break;
 	}
-}
-
-template <typename... _Args>
-int32_t										lineToScreen					( int32_t offsetLine, int32_t offsetColumn, ::nwol::ALIGN_SCREEN align, const char_t* format, _Args... args )														{
-	return printfToRect(::nwol::getASCIIBackBuffer(), (size_t)::nwol::getASCIIBackBufferWidth(), (size_t)::nwol::getASCIIBackBufferHeight(), offsetLine, offsetColumn, align, format, args...);
 }
 
 SGameState									drawMemorial					(SGame& instanceGame, const SGameState& returnState)																												{ return returnState; }
@@ -60,8 +58,8 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 
 	uint32_t										bbWidth							= target.Width		();
 	uint32_t										bbHeight						= target.Height		();
-	char_t											* bbChar						= target.Text		.begin();
-	uint16_t										* bbColor						= target.Attributes	.begin();
+	uint8_t											* bbChar						= target.Characters	.begin();
+	uint16_t										* bbColor						= target.Colors		.begin();
 
 	//drawDisplay(instanceGame.MenuDisplay, 0);
 	switch(instanceGame.State.State) { 
@@ -69,8 +67,8 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	case GAME_STATE_MENU_LAN_MISSION	:
 	case GAME_STATE_TACTICAL_CONTROL	:
 	case GAME_STATE_START_MISSION		: drawDisplay(instanceGame.TacticalDisplay.Screen, TACTICAL_DISPLAY_POSY, (instanceGame.GlobalDisplay.Screen.Width>>1)-(instanceGame.TacticalDisplay.Width>>1));									break;
-	case GAME_STATE_CREDITS				: drawCredits(bbChar, bbWidth, bbHeight, instanceGame.FrameTimer.LastTimeSeconds, namesSpecialThanks, instanceGame.State);																			break;
-	case GAME_STATE_MEMORIAL			: drawMemorial(bbChar, bbWidth, bbHeight, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], instanceGame.FrameTimer.LastTimeSeconds, instanceGame.Players[0].Memorial, instanceGame.State);	break;
+	case GAME_STATE_CREDITS				: drawCredits((char_t*)bbChar, bbWidth, bbHeight, instanceGame.FrameTimer.LastTimeSeconds, namesSpecialThanks, instanceGame.State);																			break;
+	case GAME_STATE_MEMORIAL			: drawMemorial((char_t*)bbChar, bbWidth, bbHeight, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], instanceGame.FrameTimer.LastTimeSeconds, instanceGame.Players[0].Memorial, instanceGame.State);	break;
 	case GAME_STATE_WELCOME_COMMANDER	:
 	case GAME_STATE_MENU_SQUAD_SETUP	:
 	case GAME_STATE_MENU_EQUIPMENT		: break;
@@ -146,7 +144,7 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	actualOffsetX								= ::nwol::printfToRectColored(target, COLOR_CYAN		, bbHeight-2, 1, nwol::SCREEN_LEFT, "Frames last second: %f."	, instanceGame.FrameTimer.FramesLastSecond	);
 	time_t											curTimeWithUnreliableSize		= 0; 
 	{ 
-		::nwol::CLock									thelock							(instanceGame.ServerTimeMutex);
+		::nwol::CMutexGuard								thelock							(instanceGame.ServerTimeMutex);
 		curTimeWithUnreliableSize					= instanceGame.ServerTime;
 	}
 	char											send_buffer[64]					= {};
@@ -154,8 +152,8 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 
 	::std::string									serverTime						= ::std::string("Server time: ") + send_buffer;
 	serverTime									= serverTime.substr(0, serverTime .size()-2);
-	actualOffsetX								= nwol::printfToRectColored(bbChar, bbWidth, bbHeight, bbColor, COLOR_CYAN		, bbHeight-2, 1, ::nwol::SCREEN_RIGHT, "%s."	, serverTime.c_str());	
-	actualOffsetX								= nwol::printfToRectColored(bbChar, bbWidth, bbHeight, bbColor, COLOR_DARKGREY	, bbHeight-1, 1, ::nwol::SCREEN_CENTER, "%s."	, instanceGame.StateMessage.c_str()); 
+	actualOffsetX								= nwol::printfToRectColored((char_t*)bbChar, bbWidth, bbHeight, bbColor, COLOR_CYAN		, bbHeight-2, 1, ::nwol::SCREEN_RIGHT, "%s."	, serverTime.c_str());	
+	actualOffsetX								= nwol::printfToRectColored((char_t*)bbChar, bbWidth, bbHeight, bbColor, COLOR_DARKGREY	, bbHeight-1, 1, ::nwol::SCREEN_CENTER, "%s."	, instanceGame.StateMessage.c_str()); 
 
 	// Print user error messages and draw cursor.
 	if(instanceGame.State.State != GAME_STATE_CREDITS) {

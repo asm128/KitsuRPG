@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "grid.h"
+#include "nwol_grid.h"
 #include "menus.h"
 #include "TacticalInfo.h"
 
@@ -14,7 +14,7 @@
 namespace klib
 {
 	static				double										getFinalSight			(double initialSight, const CCharacter& playerAgent)						{
-		double																	finalSight				= initialSight;
+		double																finalSight				= initialSight;
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_SHOCK		))	finalSight *= 1.5	;
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_BURN		))	finalSight *= 1.3	;
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_RAGE		))	finalSight *= 1.2	;
@@ -25,7 +25,6 @@ namespace klib
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_BLIND		))	finalSight *= 0.3	;
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_SLEEP		))	finalSight *= 0.2	;
 		if(::nwol::bit_true(playerAgent.ActiveBonus.Status.Status, COMBAT_STATUS_STUN		))	finalSight *= 0.1	;
-
 		return finalSight;
 	}
 

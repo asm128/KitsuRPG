@@ -1,4 +1,4 @@
-#include "label.h"
+#include "nwol_label.h"
 #include <iostream>
 
 #ifndef __MENU_H__926349827164392740982169862598423__

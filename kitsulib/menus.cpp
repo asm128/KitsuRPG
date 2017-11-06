@@ -12,12 +12,11 @@ using namespace klib;
 
 CONSOLE_FONT_INFOEX getFontParams()
 {
-	CONSOLE_FONT_INFOEX infoFont;
-	infoFont.cbSize			= sizeof(CONSOLE_FONT_INFOEX);
-	infoFont.FontFamily		= 0;
-	infoFont.FontWeight		= 0;
-	infoFont.nFont			= 0;
-	wcscpy_s(infoFont.FaceName, L"Terminal");
+	CONSOLE_FONT_INFOEX								infoFont				= {sizeof(CONSOLE_FONT_INFOEX)};
+	infoFont.FontFamily							= 0;
+	infoFont.FontWeight							= 0;
+	infoFont.nFont								= 0;
+	::wcscpy_s(infoFont.FaceName, L"Terminal");
 	return infoFont;
 }
 
@@ -26,49 +25,42 @@ SGameState processMenuReturn(SGame& instanceGame, const SGameState& returnValue_
 	SGameState returnValue;
 	static bool bSmallFonts = false;
 
-	static const HANDLE hConsoleOut = GetStdHandle( STD_OUTPUT_HANDLE );
-	static CONSOLE_FONT_INFOEX infoFont = getFontParams();
+	static const HANDLE hConsoleOut = ::GetStdHandle( STD_OUTPUT_HANDLE );
+	static CONSOLE_FONT_INFOEX infoFont = ::getFontParams();
 
 	switch(returnValue_.State) { 
 	case GAME_STATE_MENU_MAIN:
 	default: return returnValue_;
 
 	case GAME_STATE_MENU_OPTIONS:
-		switch(returnValue_.Substate)
-		{
+		switch(returnValue_.Substate) {
+		default: return returnValue_;
 		case GAME_SUBSTATE_SCREEN:
 			bSmallFonts = !bSmallFonts;
-			if(bSmallFonts)
-			{
+			if(bSmallFonts) {
 				infoFont.dwFontSize.X	= 6;
 				infoFont.dwFontSize.Y	= 8;
 			}
-			else
-			{
+			else {
 				infoFont.dwFontSize.X	= 8;
 				infoFont.dwFontSize.Y	= 12;
 			}
 			SetCurrentConsoleFontEx(hConsoleOut, FALSE, &infoFont);
-
-
 			returnValue = returnValue_;
 			returnValue.Substate = GAME_SUBSTATE_MAIN;
 			break;
-
-		default: return returnValue_;
 		}
 	}
 	
 	return returnValue;
-};
+}
 
-SGameState processMenuReturn(SGame& instanceGame, TURN_ACTION returnValue)
-{
+SGameState processMenuReturn(SGame& instanceGame, TURN_ACTION returnValue) {
 	switch(returnValue) { 
 	case TURN_ACTION_CONTINUE:
 	default: return {GAME_STATE_TACTICAL_CONTROL, };
 	}
-};
+}
 
 void handleSubstateChange(SGame& instanceGame, const SGameState& newState, const SGameState& prevState) 
 {
@@ -76,10 +68,9 @@ void handleSubstateChange(SGame& instanceGame, const SGameState& newState, const
 	instanceGame.GlobalDisplay		.Clear();
 	//instanceGame.TacticalDisplay	.Clear();	
 	//instanceGame.PostEffectDisplay	.Clear();	
-	clearGrid(instanceGame.MenuDisplay);
+	::nwol::clearGrid(instanceGame.MenuDisplay);
 
-	switch(newState.State)
-	{
+	switch(newState.State) {
 	case GAME_STATE_MENU_OPTIONS:
 	case GAME_STATE_MENU_SELL:
 	case GAME_STATE_MENU_UPGRADE:

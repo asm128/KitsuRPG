@@ -1,10 +1,10 @@
 #include "draw.h"
 
 #include "gui.h"
-#include "netlib_client.h"
-#include "nwol_enum.h"
+#include "netlib_node.h"
+//#include "nwol_enum.h"
 #include "nwol_mutex.h"
-#include "member_registry.h"
+#include "nwol_member_registry.h"
 #include "nwol_runtime.h"
 #include "application.h"
 
@@ -16,12 +16,12 @@ GDEFINE_ENUM_VALUE	(NETWORK_STATE, NONE	, 0);
 GDEFINE_ENUM_VALUE	(NETWORK_STATE, ENABLED	, 1);
 GDEFINE_ENUM_VALUE	(NETWORK_STATE, RUNNING	, 2);
 
-struct SApplication	: public ::nwol::SApplicationBase {
+struct SApplication	: public ::gddm::SFramework {
 	NWOM(, SApplication, ::klib, SGame,	Game, ::nwol::GDATA_TYPE_OBJ, "Game instance", "Game information is stored in this object.");
 	NWOM_REGISTRY
 		(	NWOM_NAME(Game)
 		);
-	inline						SApplication	(::nwol::SRuntimeValues	* runtimeValues)	: SApplicationBase(runtimeValues)	{ GUI = {{640, 480}, {::klib::SGlobalDisplay::Width, ::klib::SGlobalDisplay::Depth},}; }
+	inline						SApplication	(::nwol::SRuntimeValues	* runtimeValues)	: SFramework(runtimeValues)	{ GUI = {{640, 480}, {::klib::SGlobalDisplay::Width, ::klib::SGlobalDisplay::Depth},}; }
 };
 
 int32_t						setup			(::SApplication	& instanceApp);

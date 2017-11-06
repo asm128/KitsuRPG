@@ -1,6 +1,6 @@
 #include "nwol_misc.h"
 #include "EntityPoints.h"
-#include "label.h"
+#include "nwol_label.h"
 
 #ifndef __ENTITY_H__38924092634721346098170219783096__
 #define __ENTITY_H__38924092634721346098170219783096__

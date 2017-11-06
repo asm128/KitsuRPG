@@ -1,7 +1,7 @@
 #include "drawMenu.h"
 #include "ascii_screen.h"
 #include "nwol_misc.h"
-#include "grid.h"
+#include "nwol_grid.h"
 
 #ifndef __MENUS_H__9237409126340927634987234__
 #define __MENUS_H__9237409126340927634987234__

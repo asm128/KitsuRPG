@@ -44,7 +44,6 @@ namespace klib
 				SAgentsReference						AgentsInSight		[MAX_AGENT_SQUAD_SLOTS]	= {};
 				SAgentsReference						AgentsInSquadSight							= {};
 				int8_t									LockedAgent									= -1;
-	
 
 				bool									IsAgentAssigned								(int32_t indexAgent)	const	{
 			bool										bAlreadySet									= false;
@@ -59,13 +58,13 @@ namespace klib
 
 		inline	void								Clear										(int32_t index)					{
 			if(index == -1) {
-				memset(Agents				, -1, sizeof(int16_t					)*::nwol::size(Agents			));
-				memset(TargetAgents			, -1, sizeof(STileCharacter				)*::nwol::size(TargetAgents		));
-				memset(TargetPositions		, -1, sizeof(::nwol::SCoord3<int32_t>	)*::nwol::size(TargetPositions	));
-				memset(AgentStates			,  0, sizeof(AGENT_STATE				)*::nwol::size(AgentStates		));
-				memset(ActionsLeft			, -1, sizeof(SAgentActions				)*::nwol::size(ActionsLeft		));
-				memset(AgentsInRange		,  0, sizeof(SAgentsReference			)*::nwol::size(AgentsInRange	));
-				memset(AgentsInSight		,  0, sizeof(SAgentsReference			)*::nwol::size(AgentsInSight	));
+				::memset(Agents				, -1, sizeof(int16_t					)*::nwol::size(Agents			));
+				::memset(TargetAgents		, -1, sizeof(STileCharacter				)*::nwol::size(TargetAgents		));
+				::memset(TargetPositions	, -1, sizeof(::nwol::SCoord3<int32_t>	)*::nwol::size(TargetPositions	));
+				::memset(AgentStates		,  0, sizeof(AGENT_STATE				)*::nwol::size(AgentStates		));
+				::memset(ActionsLeft		, -1, sizeof(SAgentActions				)*::nwol::size(ActionsLeft		));
+				::memset(AgentsInRange		,  0, sizeof(SAgentsReference			)*::nwol::size(AgentsInRange	));
+				::memset(AgentsInSight		,  0, sizeof(SAgentsReference			)*::nwol::size(AgentsInSight	));
 				AgentsInSquadSight.Count				= 0;
 				LockedAgent								= -1;
 			}

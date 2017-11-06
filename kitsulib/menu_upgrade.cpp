@@ -156,8 +156,8 @@ SGameState drawUpgradeMenu(SGame& instanceGame, const SGameState& returnState)
 		,	"Available Production"
 		,	menuItems
 		,	instanceGame.FrameInput
-		,	{(int32_t)researchedCount}
-		,	{-1}
+		,	SEntityResearch{"Exit upgrade menu"	, {(int32_t)researchedCount}}
+		,	SEntityResearch{"No action selected", -1}
 		,	50U
 		);
 	if(selectedChoice.ResearchIndex == researchedCount)

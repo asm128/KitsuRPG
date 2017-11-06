@@ -22,11 +22,11 @@ namespace klib
 	GDEFINE_ENUM_VALUE(ENTITY_TYPE, TILE		, 9);
 
 	struct SEntityResearch  {
+								::std::string						Name;
 								int32_t								ResearchIndex;
 								int32_t								PriceUnit;
 								int32_t								PricePaid;
 								bool_t								IsModifier;
-								::std::string						Name;
 								SEntity								Entity;
 								ENTITY_TYPE							Type;
 	};

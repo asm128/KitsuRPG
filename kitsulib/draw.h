@@ -253,7 +253,7 @@ namespace klib
 
 		for(uint32_t i=0, count = (uint32_t)nwol::size(namesCredits); i < count && curLine < bbHeight; ++i)
 			if((curLine+=2) >= 0)
-				printfToRect(display, width, depth, curLine, 0, ::nwol::SCREEN_CENTER, "%s", namesCredits[i].c_str());
+				printfToRect((char_t*)display, width, depth, curLine, 0, ::nwol::SCREEN_CENTER, "%s", namesCredits[i].c_str());
 
 		maxDifference = std::max(curLine - curDifference, maxDifference);
 
@@ -341,11 +341,11 @@ namespace klib
 			int32_t messageColor = COLOR_GREEN;
 			int32_t offsetX = 4;
 			if((curLine+=2) >= 0 && (curLine < bbHeight))
-				printfToRectColored(display, width, depth, textAttributes, messageColor, curLine, 0, ::nwol::SCREEN_CENTER, "-- %s --", deadCharacter.Name.c_str());
+				printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, 0, ::nwol::SCREEN_CENTER, "-- %s --", deadCharacter.Name.c_str());
 
 			messageColor = COLOR_DARKGREY;
 			if((curLine+=2) >= 0 && curLine < bbHeight)
-				offsetX = printfToRectColored(display, width, depth, textAttributes, messageColor, curLine, 3, nwol::SCREEN_LEFT, format1
+				offsetX = printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, 3, nwol::SCREEN_LEFT, format1
 					, bufferDamageDealt			
 					, bufferDamageTaken			
 					, bufferTurnsPlayed			
@@ -355,7 +355,7 @@ namespace klib
 					//, bufferEscapesFailed		
 					);
 			if((curLine+=1) >= 0 && curLine < bbHeight)
-				printfToRectColored(display, width, depth, textAttributes, messageColor, curLine, offsetX, nwol::SCREEN_LEFT, format2
+				printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, offsetX, nwol::SCREEN_LEFT, format2
 					, bufferEnemiesKilled		
 					, bufferAttacksHit			
 					, bufferAttacksMissed		
@@ -365,17 +365,17 @@ namespace klib
 					, bufferGrenadesUsed		
 					);
 			if((curLine+=1) >= 0 && curLine < bbHeight)
-				printfToRectColored(display, width, depth, textAttributes, messageColor, curLine, offsetX, nwol::SCREEN_LEFT, format3
+				printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, offsetX, nwol::SCREEN_LEFT, format3
 					, bufferMoneyEarned			
 					, bufferMoneySpent			
 					);
 		}
 
 		maxDifference	= std::max(curLine - curDifference, maxDifference);
-		offset			-= lastFrameTime*6.0;
+		offset			-= lastFrameTime * 6.0;
 
 		if( offset <= -maxDifference )
-			offset			+= depth+maxDifference;
+			offset			+= depth + maxDifference;
 
 		return returnValue;
 	}
@@ -385,6 +385,5 @@ namespace klib
 } // namespace
 
 #define TACTICAL_DISPLAY_POSY 6
-
 
 #endif // __DRAW_H_2394623987462983746823749623__

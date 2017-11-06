@@ -1,6 +1,6 @@
 #define NETLIB_SERVER_MODE_CLIENT
 #include "draw.h"
-#include "netlib_client.h"
+#include "netlib_node.h"
 #include "netlib_command.h"
 
 #include <time.h>
@@ -18,6 +18,7 @@ void draw( klib::SGame& instanceGame ) //
 
 bool bAreCommsRunningInThisDamnStuffCode = false;
 
+::nwol::error_t								nodeHandleUserData						(::gdnet::SNetworkNode* /*client*/, const char* /*buffer*/, uint32_t /*bufferLen*/)		{ return 0; }
 int runCommunications(klib::SGame& instanceGame);
 void runCommunications(void* pInstanceGame)
 {
@@ -47,7 +48,7 @@ int main(int argc, char **argv)
 
 	::nwol::initASCIIScreen(klib::SGlobalDisplay::Width, klib::SGlobalDisplay::Depth);
 	
-	if( nwol::networkInit() )
+	if( ::gdnet::endpointSystemInitialize() )
 	{
 		error_printf("Failed to initialize network.");
 		return -1;
@@ -81,46 +82,31 @@ int main(int argc, char **argv)
 		delete(pInstancedGame);
 
 	::nwol::shutdownASCIIScreen();
-	::nwol::networkShutdown();
+	::gdnet::endpointSystemShutdown();
 
 	return 0;
 }
 
 int runCommunications(klib::SGame& instanceGame)
 {
-	::nwol::SClientConnection instanceClient;
-	int32_t bytesTransmitted=-1;
-
-	if(initClientConnection(instanceClient))
-	{
-		error_print("Failed to connect to server.");
-		return -1;
-	}
-
-	if(connect(instanceClient))
-	{
-		error_print("Failed to connect to server.");
-		return -1;
-	}
+	::gdnet::SNetworkNode	instanceClient;
+	nwol_necall(::gdnet::nodeInit(instanceClient, { {}, {{192, 168, 1, 27}, 45678} }, ::gdnet::TRANSPORT_PROTOCOL_UDP), "Failed to connect to server.");
+	nwol_necall(::gdnet::nodeConnect(instanceClient), "Failed to connect to server.");
 
 	::nwol::error_t result = 0;
 	while(nwol::bit_true(instanceGame.Flags, klib::GAME_FLAGS_RUNNING)) {
-		if(false == nwol::ping(instanceClient.pClient, instanceClient.pServer)) {	// Ping before anything else to make sure everything is more or less in order.
+		if(false == ::gdnet::ping(instanceClient.Endpoints)) {	// Ping before anything else to make sure everything is more or less in order.
 			error_print("Ping timeout.");
-			result = -1;
+			result = -1; 
 			break;
 		}
 
 		// get server time
 		uint64_t current_time;
-		if(0 > nwol::time(instanceClient.pClient, instanceClient.pServer, current_time) ) {
-			error_print("Failed to get server time.");
-			result = -1;
-			break;
-		}
+		be_if(errored(result = ::gdnet::time(instanceClient.Endpoints, current_time)), "Failed to get server time.");
 		
 		{	// here we update the game instance with the data received from the server.
-			::nwol::CLock thelock(instanceGame.ServerTimeMutex);
+			::nwol::CMutexGuard thelock(instanceGame.ServerTimeMutex);
 			instanceGame.ServerTime = current_time;
 			info_printf("Client instance updated successfully.");
 		}
@@ -132,21 +118,20 @@ int runCommunications(klib::SGame& instanceGame)
 		Sleep(1000);
 	}
 
-	nwol::requestDisconnect(instanceClient);
+	::gdnet::nodeRequestDisconnect(instanceClient);
+	bAreCommsRunningInThisDamnStuffCode		= false; 
+	gbit_clear(instanceGame.Flags, klib::GAME_FLAGS_CONNECTED);
+	instanceClient.Endpoints				= {};
 
-	bAreCommsRunningInThisDamnStuffCode = false; 
-	nwol::bit_clear(instanceGame.Flags, klib::GAME_FLAGS_CONNECTED);
-
-	::nwol::disconnectClient(instanceClient);
 	return result;
 }
 
 int WINAPI WinMain 
-(    _In_		HINSTANCE	hInstance
-,    _In_opt_	HINSTANCE	hPrevInstance
-,    _In_		LPSTR		lpCmdLine
-,    _In_		int			nShowCmd
-)
+	(	_In_		HINSTANCE	// hInstance
+	,	_In_opt_	HINSTANCE	// hPrevInstance
+	,	_In_		LPSTR		// lpCmdLine
+	,	_In_		int			// nShowCmd
+	)
 {
 	if(0 > main(__argc, __argv))
 		return EXIT_FAILURE;

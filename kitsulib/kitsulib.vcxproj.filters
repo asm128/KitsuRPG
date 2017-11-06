@@ -135,6 +135,9 @@
     <ClInclude Include="EntityDetail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ascii_screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp">
@@ -198,6 +201,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ascii_screen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

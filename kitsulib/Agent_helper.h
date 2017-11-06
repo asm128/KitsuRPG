@@ -1,4 +1,4 @@
-#include "grid.h"
+#include "nwol_grid.h"
 #include "Game.h"
 #include "nwol_misc.h"
 
@@ -98,7 +98,6 @@ namespace klib
 		valueToGrid(display_.TextAttributes, offsetY, offsetX+13, nwol::SCREEN_LEFT, &color, 1, LINE_SIZE-14);
 		offsetY									+= 2;
 
-		
 		std::string									equipName;	
 		equipName	 = getProfessionName	(character.CurrentEquip.Profession	); printfToGrid(display, offsetY++, offsetX, nwol::SCREEN_LEFT, formatAgentEquip, "Class"		, equipName.c_str(), character.CurrentEquip.Profession	.Level);
 		equipName	 = getWeaponName		(character.CurrentEquip.Weapon		); printfToGrid(display, offsetY++, offsetX, nwol::SCREEN_LEFT, formatAgentEquip, "Weapon"		, equipName.c_str(), character.CurrentEquip.Weapon		.Level);
@@ -251,7 +250,6 @@ namespace klib
 					break;
 				}
 				int32_t										agentIndexOffset				= linearIndex+playerOffset;
-			
 				if(agentIndexOffset < (int32_t)nwol::size(player.Squad.Agents))  {
 					if( player.Squad.Agents[agentIndexOffset] != -1 )
 						displayAgentSlot(display, offsetYBase+slotRowSpace*y, offsetXBase+slotWidth*x, agentIndexOffset+1, *player.Army[player.Squad.Agents[agentIndexOffset]], true);

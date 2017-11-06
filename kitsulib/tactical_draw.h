@@ -20,7 +20,6 @@ namespace klib
 #define TILE_SIDE_BOTTOM				TILE_SIDE_DOWN
 #define TILE_SIDE_TOP					TILE_SIDE_UP	
 
-
 	struct STileASCIIWalls {
 		char								Vertical					;
 		char								Horizontal					;
@@ -65,8 +64,6 @@ namespace klib
 		STileASCIITopology					Topology					;
 	};
 
-	//int32_t getLinearTileIndex(int32_t x, int32_t y, uint32_t width){ return x*width+y; };
-
 	static uint16_t						getPlayerColor				( const STacticalInfo& tacticalInfo, const SPlayer& boardPlayer, int8_t indexBoardPlayer, int8_t indexPlayerViewer, bool bIsSelected )	{
 		uint16_t								color						= COLOR_BLACK;
 		if(tacticalInfo.Setup.TeamPerPlayer[indexBoardPlayer] == tacticalInfo.Setup.TeamPerPlayer[indexPlayerViewer]) {
@@ -96,7 +93,6 @@ namespace klib
 		return color;
 	}
 
-
 	struct SStatusColor {
 		int8_t								Bright	;//: 4;
 		int8_t								Dark	;//: 4;
@@ -109,7 +105,6 @@ namespace klib
 			, Dark	(dark	)
 		{}
 	};
-
 
 	template<typename _T>
 	int32_t									getBitIndex				(const _T& bitToFind, int32_t maxCount)																																						{
@@ -267,39 +262,32 @@ namespace klib
 					const SPlayer& boardPlayer	= instanceGame.Players[tacticalInfo.Setup.Players[cellPlayerIndex]];
 					const SCharacter& agent		= *boardPlayer.Army[boardPlayer.Squad.Agents[agentIndex]];
 					uint16_t color = COLOR_BLACK;
-					if(agent.IsAlive())
-					{
+					if(agent.IsAlive()) {
 						double fractionLife		= agent.Points.LifeCurrent.Health / (double)agent.FinalPoints.LifeMax.Health;
 						color = getPlayerColor(tacticalInfo, boardPlayer, cellPlayerIndex, indexBoardPlayer, bSwaps[4] && bIsSelected);
 						if(agent.ActiveBonus.Status.Status && bSwaps[1])
 							color = getStatusColor(agent.ActiveBonus.Status.Status, bSwaps[3], color);
 
-						if(bSwaps[5] && fractionLife < 0.25)
-						{
+						if(bSwaps[5] && fractionLife < 0.25) {
 							target.Screen.Cells[z][x] = ascii_fraction[1];
 							color = bSwaps[0] ? color : COLOR_RED;
 						}
-						else if(bSwaps[5] && fractionLife < 0.5)
-						{
+						else if(bSwaps[5] && fractionLife < 0.5) {
 							target.Screen.Cells[z][x] = ascii_fraction[2];
 							color = bSwaps[0] ? color : COLOR_YELLOW;
 						}
-						else
-						{
+						else {
 							bool bIsMale			= agent.Flags.Tech.Gender == GENDER_MALE;
 							bool bIsHermaphrodite	= agent.Flags.Tech.Gender == GENDER_HERMAPHRODITE;
 							target.Screen.Cells[z][x] = ascii_gender[bIsMale ? MALE : bIsHermaphrodite ? HERMAPHRODITE : FEMALE];
 						}
 					}
 					else if(bSwaps[4] && tacticalInfo.HasDrops(currentCoord))
-					{
 						color = COLOR_DARKYELLOW;
-					}
 
 					target.TextAttributes.Cells[z][x] |= color; 
 				}
-				else if( board.Shots.Coords.FindElement(currentCoord) != -1)			
-				{ 
+				else if( board.Shots.Coords.FindElement(currentCoord) != -1) { 
 					static const float GAME_EPSILON = 0.000001f;
 					char bulletAscii = '*';
 					uint16_t bulletColor = bSwaps[2] ? COLOR_DARKGREY : COLOR_DARKGREY;
@@ -311,10 +299,8 @@ namespace klib
 
 						if(nwol::bit_true(bullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_ROCKET))
 							bulletAscii = 0x0F; // bigger asterisk
-						else if(nwol::bit_false(bullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_SHELL))
-						{
+						else if(nwol::bit_false(bullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_SHELL)) {
 							const ::nwol::SCoord2<float> dirVector = {bullet.Direction.x, bullet.Direction.z}; 
-
 							if( ( dirVector.x < (-GAME_EPSILON) && dirVector.y < (-GAME_EPSILON) )
 								|| ( dirVector.x > GAME_EPSILON && dirVector.y > GAME_EPSILON )
 								)
@@ -332,35 +318,29 @@ namespace klib
 					target.Screen.Cells[z][x] = bulletAscii; 
 					target.TextAttributes.Cells[z][x] |= bulletColor;
 				} 
-				else if( board.Tiles.Entities.Coins	.Cells[z][x] !=  0)	
-				{ 
+				else if( board.Tiles.Entities.Coins	.Cells[z][x] !=  0)	{ 
 					target.Screen.Cells			[z][x] = ascii_cards[DECK_DIAMONDS]; 
 					target.TextAttributes.Cells	[z][x] |= bSwaps[6] ? COLOR_DARKYELLOW : COLOR_ORANGE; 
 				} 
-				else if(board.Tiles.Entities.Props.Cells[z][x].Definition != -1)
-				{ 
+				else if(board.Tiles.Entities.Props.Cells[z][x].Definition != -1) { 
 					static const ::nwol::glabel chestLabel	= "Chest";
 					static const ::nwol::glabel wallLabel	= "Wall";
-					if(chestLabel == definitionsStageProp[board.Tiles.Entities.Props.Cells[z][x].Definition].Name)
-					{
+					if(chestLabel == definitionsStageProp[board.Tiles.Entities.Props.Cells[z][x].Definition].Name) {
 						target.Screen.Cells[z][x] = ascii_cards[DECK_CLUBS];
 						target.TextAttributes.Cells[z][x] |= bSwaps[10] ? COLOR_YELLOW : COLOR_BLACK; 
 					}
-					else if(wallLabel == definitionsStageProp[board.Tiles.Entities.Props.Cells[z][x].Definition].Name)
-					{
+					else if(wallLabel == definitionsStageProp[board.Tiles.Entities.Props.Cells[z][x].Definition].Name){
 						target.Screen.Cells[z][x] = getASCIIWall(board.Tiles.Entities.Props, x, z);
 						target.TextAttributes.Cells[z][x] |= COLOR_BLACK; 
 					}
-					else
-					{
+					else {
 						target.Screen.Cells[z][x] = definitionsStageProp[board.Tiles.Entities.Props	.Cells[z][x].Definition].Name[0];
 						target.TextAttributes.Cells[z][x] |= COLOR_BLACK; 
 					}
 					if(board.Tiles.Entities.Props.Cells[z][x].Level == -1)
 						target.TextAttributes.Cells[z][x] |= COLOR_DARKGREY; 
 				} 
-				else if(topologyHeight || cornerHeight[0] || cornerHeight[1] || cornerHeight[2] || cornerHeight[3])
-				{
+				else if(topologyHeight || cornerHeight[0] || cornerHeight[1] || cornerHeight[2] || cornerHeight[3]) {
 					// I suppose this chooses a color depending on the slope between tile corners.
 						 if(cornerHeight[0]	<	cornerHeight[3] && cornerHeight[0]	<	cornerHeight[1] && cornerHeight[0]	<	cornerHeight[2])	{	target.Screen.Cells[z][x] = -80; target.TextAttributes.Cells[z][x] = COLOR_DARKGREEN	<< 4 | COLOR_DARKGREY		; }
 					else if(cornerHeight[1]	<	cornerHeight[0] && cornerHeight[1]	<	cornerHeight[3] && cornerHeight[1]	<	cornerHeight[2])	{	target.Screen.Cells[z][x] = -78; target.TextAttributes.Cells[z][x] = COLOR_DARKGREEN	<< 4 | COLOR_DARKGREY		; }

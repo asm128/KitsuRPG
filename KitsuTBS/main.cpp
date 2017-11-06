@@ -25,8 +25,7 @@ int main(int argc, char **argv)
 
 	klib::initGame(instanceGame);
 
-	while(instanceGame.Flags & klib::GAME_FLAGS_RUNNING)
-	{
+	while(instanceGame.Flags & klib::GAME_FLAGS_RUNNING) {
 		::nwol::pollInput(instanceGame.FrameInput);
 		draw(instanceGame);
 	}

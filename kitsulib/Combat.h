@@ -22,7 +22,7 @@ namespace klib
 	void					applyTurnStatusAndBonusesAndSkipTurn		(::klib::CCharacter& character);
 	void					applyEnemyTurnStatus						(::klib::CCharacter& character);
 	void					applyEnemyTurnStatusAndBonusesAndSkipTurn	(::klib::CCharacter& character);
-	void					applyRoundStatus							(::klib::CCharacter& character);
+	//void					applyRoundStatus							(::klib::CCharacter& character);
 	void					applyRoundStatusAndBonusesAndSkipRound		(::klib::CCharacter& character);
 
 	bool_t					useGrenade									(const ::klib::SItem& itemGrenade	, ::klib::CCharacter& thrower, ::klib::CCharacter& target);

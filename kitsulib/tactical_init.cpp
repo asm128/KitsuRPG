@@ -85,7 +85,7 @@ void												deployCampaignAgents
 			continue;
 
 		::nwol::SCoord3<int32_t>								agentPosition										= {0,0,0};
-		if(isRelevantTeam(teamId))  {
+		if(::isRelevantTeam(teamId))  {
 			agentPosition.x										= 1 + (int32_t)(rangeX * ::nwol::noiseNormal1D(iAgent, seed			) );
 			agentPosition.z										= 1 + (int32_t)(rangeZ * ::nwol::noiseNormal1D(iAgent, seed << 8	) );
 			if(teamId == TEAM_TYPE_ENEMY) {
@@ -106,7 +106,7 @@ void												deployCampaignAgents
 			|| terrainEntities.Props	[agentPosition.z][agentPosition.x].Definition	!= -1 
 			)
 		{
-			if(isRelevantTeam(teamId)) {
+			if(::isRelevantTeam(teamId)) {
 				agentPosition.x										= 1 + (int32_t)(rangeX * ::nwol::noiseNormal1D(	(1+iAgent)		* agentPosition.z * (iAgent+agentPosition.x), seed+rangeZ) );
 				agentPosition.z										= 1 + (int32_t)(rangeZ * ::nwol::noiseNormal1D(((1+iAgent)<<16)	* agentPosition.x, seed = (int32_t)time(0))	);
 				if(teamId == TEAM_TYPE_ENEMY)  {
@@ -137,98 +137,8 @@ void												generateTopology									( ::nwol::SGrid<STopologyDetail, STacti
 	const uint32_t											terrainWidth										= terrainTopology.Width
 		,													terrainDepth										= terrainTopology.Depth
 		;
-	//fillCellsFromNoise(terrainTopology, {  0,-10},		(int32_t)(seed+10+0), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  1,- 9},		(int32_t)(seed+10+1), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  2,- 8},		(int32_t)(seed+10+2), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  3,- 7},		(int32_t)(seed+10+3), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  4,- 6},		(int32_t)(seed+10+4), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  5,- 5},		(int32_t)(seed+10+5), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  6,- 4},		(int32_t)(seed+10+6), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  7,- 3},		(int32_t)(seed+10+7), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  8,- 2},		(int32_t)(seed+10+8), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  9,- 1},		(int32_t)(seed+10+9), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, { 10,- 0},		(int32_t)(seed+10+9), {0, 0}, 200);
-	////																				  2
-	//fillCellsFromNoise(terrainTopology, {- 0, 10},		(int32_t)(seed+20+0), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 1,  9},		(int32_t)(seed+20+1), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 2,  8},		(int32_t)(seed+20+2), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 3,  7},		(int32_t)(seed+20+3), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 4,  6},		(int32_t)(seed+20+4), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 5,  5},		(int32_t)(seed+20+5), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 6,  4},		(int32_t)(seed+20+6), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 7,  3},		(int32_t)(seed+20+7), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 8,  2},		(int32_t)(seed+20+8), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 9,  1},		(int32_t)(seed+20+9), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {-10,  0},		(int32_t)(seed+20+9), {0, 0}, 200);
-	//																				  2
-	//fillCellsFromNoise(terrainTopology, {  1,  0},		(int32_t)(seed+ 321+ 1), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  2,  0},		(int32_t)(seed+ 321+ 2), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  3,  0},		(int32_t)(seed+ 321+ 3), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  4,  0},		(int32_t)(seed+ 321+ 4), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  5,  0},		(int32_t)(seed+ 321+ 5), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  6,  0},		(int32_t)(seed+ 321+ 6), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  7,  0},		(int32_t)(seed+ 321+ 7), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  8,  0},		(int32_t)(seed+ 321+ 8), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  9,  0},		(int32_t)(seed+ 321+ 9), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, { 10,  0},		(int32_t)(seed+ 123+ 0), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, { 11,  0},		(int32_t)(seed+ 123+ 1), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, { 12,  0},		(int32_t)(seed+ 123+ 2), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, { 13,  0},		(int32_t)(seed+ 123+ 3), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, { 14,  0},		(int32_t)(seed+ 123+ 4), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, { 15,  0},		(int32_t)(seed+ 123+ 5), {0, 0}, 200);
-	//																	 			  2	 2
-	fillCellsFromNoise(terrainTopology, {- 1,  0},		(int32_t)(seed+ 987+ 1), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 2,  0},		(int32_t)(seed+ 987+ 2), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 3,  0},		(int32_t)(seed+ 987+ 3), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 4,  0},		(int32_t)(seed+ 987+ 4), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 5,  0},		(int32_t)(seed+ 654+ 5), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 6,  0},		(int32_t)(seed+ 654+ 6), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 7,  0},		(int32_t)(seed+ 654+ 7), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 8,  0},		(int32_t)(seed+ 654+ 8), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 9,  0},		(int32_t)(seed+ 654+ 9), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {-10,  0},		(int32_t)(seed+1337+ 0), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {-11,  0},		(int32_t)(seed+1337+ 1), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {-12,  0},		(int32_t)(seed+1337+ 2), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {-13,  0},		(int32_t)(seed+1337+ 3), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {-14,  0},		(int32_t)(seed+1337+ 4), {0, 0}, 200);
-	fillCellsFromNoise(terrainTopology, {-15,  0},		(int32_t)(seed+7331+ 5), {0, 0}, 200);
-	//																				  2
-	//fillCellsFromNoise(terrainTopology, {  0,  0},		(int32_t)(seed+40+0), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  1},		(int32_t)(seed+40+1), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  2},		(int32_t)(seed+40+2), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  3},		(int32_t)(seed+40+3), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  4},		(int32_t)(seed+40+4), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  5},		(int32_t)(seed+40+5), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  6},		(int32_t)(seed+40+6), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  7},		(int32_t)(seed+40+7), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  8},		(int32_t)(seed+40+8), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0,  9},		(int32_t)(seed+40+9), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {  0, 10},		(int32_t)(seed+40+9), {0, 0}, 200);
-	//									  											  2
-	//fillCellsFromNoise(terrainTopology, {- 0,- 0},		(int32_t)(seed+50+0), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 1,- 1},		(int32_t)(seed+50+1), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 2,- 2},		(int32_t)(seed+50+2), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 3,- 3},		(int32_t)(seed+50+3), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 4,- 4},		(int32_t)(seed+50+4), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 5,- 5},		(int32_t)(seed+50+5), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 6,- 6},		(int32_t)(seed+50+6), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 7,- 7},		(int32_t)(seed+50+7), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 8,- 8},		(int32_t)(seed+50+8), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {- 9,- 9},		(int32_t)(seed+50+9), {0, 0}, 200);
-	//fillCellsFromNoise(terrainTopology, {-10,-10},		(int32_t)(seed+50+9), {0, 0}, 200);
-	////																				  2
-	//fillCellsFromNoise(terrainTopology, {- 0,  0},		(int32_t)(seed+1337+0), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 1,  0},		(int32_t)(seed+1337+1), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 2,  0},		(int32_t)(seed+1337+2), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 3,  0},		(int32_t)(seed+1337+3), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 4,  0},		(int32_t)(seed+1337+4), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 5,  0},		(int32_t)(seed+1337+5), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 6,  0},		(int32_t)(seed+1337+6), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 7,  0},		(int32_t)(seed+1337+7), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 8,  0},		(int32_t)(seed+1337+8), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {- 9,  0},		(int32_t)(seed+1337+9), {0, 0}, 100);
-	//fillCellsFromNoise(terrainTopology, {-10,  0},		(int32_t)(seed+1337+9), {0, 0}, 100);
-
+	::nwol::fillCellsFromNoise(terrainTopology, {- 1,  0},		(int32_t)(seed+ 987+ 1), {0, 0}, 200);
+	::nwol::fillCellsFromNoise(terrainTopology, {-15,  0},		(int32_t)(seed+7331+ 5), {0, 0}, 200);
 
 	STopologyDetail											* cellsHeight										= &terrainTopology	.Cells[0][0];
 	for(uint32_t i=0, count = terrainDepth*terrainWidth; i<count; i++) 
@@ -271,10 +181,9 @@ void												populateProps
 				terrainEntities.Props.Cells[z][x].Definition		= (int8_t)defCheck;
 				terrainEntities.Props.Cells[z][x].Modifier			= bReinforced ? 1 : 0;
 				terrainEntities.Props.Cells[z][x].Level				= 1;
-				if(definitionsStageProp[defCheck].Name == labelWall)
-				{
-					uint32_t	wallmaxz	= std::min(z+3+uint32_t(noise[1]*10), terrainDepth-1);
-					uint32_t	wallmaxx	= std::min(x+3+uint32_t(noise[2]*10), terrainWidth-1);
+				if(definitionsStageProp[defCheck].Name == labelWall) {
+					uint32_t												wallmaxz											= ::std::min(z+3+uint32_t(noise[1]*10), terrainDepth-1);
+					uint32_t												wallmaxx											= ::std::min(x+3+uint32_t(noise[2]*10), terrainWidth-1);
 					for(uint32_t wallz=z; wallz<=wallmaxz; ++wallz)	{	if(noise[5] > 0.95 || ::nwol::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[wallz]		[x]			.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[wallz]		[x]			.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[wallz]		[x]			.Level = 1; }
 					for(uint32_t wallz=z; wallz<=wallmaxz; ++wallz)	{	if(noise[6] > 0.95 || ::nwol::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Level = 1; }
 					for(uint32_t wallx=x; wallx<=wallmaxx; ++wallx)	{	if(noise[7] > 0.95 || ::nwol::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[z]			[wallx]		.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[z]			[wallx]		.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[z]			[wallx]		.Level = 1; }
@@ -286,7 +195,7 @@ void												populateProps
 				&& terrainEntities.Props.Cells[z][x].Definition == -1 
 				&& noise[2] > 0.95
 			)
-				terrainEntities.Coins.Cells[z][x] = rand()%(1+maxCoins);
+				terrainEntities.Coins.Cells[z][x] = ::rand()%(1+maxCoins);
 		}
 }
 
@@ -332,18 +241,18 @@ void												klib::initTacticalMap								(SGame& instanceGame)														
 		>													& terrainEntities									= tacticalInfo.Board.Tiles.Entities;
 	int64_t													seed												= tacticalInfo.Setup.Seed;
 
-	int32_t													maxCoins											= getEnemyCoinsForTerrainFun(instanceGame);
+	int32_t													maxCoins											= ::getEnemyCoinsForTerrainFun(instanceGame);
 
-	generateTopology(terrainTopology, seed);
-	populateProps	(terrainTopology, terrainEntities, seed, maxCoins);
+	::generateTopology(terrainTopology, seed);
+	::populateProps(terrainTopology, terrainEntities, seed, maxCoins);
 
 	// We need to deploy the agents after we generated the map so all the player initialization is done before calling this function
 	for(uint32_t iTacticalPlayer = 0, tacticalPlayerCount = tacticalInfo.Setup.TotalPlayers; iTacticalPlayer<tacticalPlayerCount; ++iTacticalPlayer) {
 		if(tacticalInfo.Setup.Players[iTacticalPlayer] != -1)
-			deployCampaignAgents(instanceGame.Players[tacticalInfo.Setup.Players[iTacticalPlayer]], iTacticalPlayer, tacticalInfo.Setup, terrainTopology, terrainEntities);
+			::deployCampaignAgents(instanceGame.Players[tacticalInfo.Setup.Players[iTacticalPlayer]], iTacticalPlayer, tacticalInfo.Setup, terrainTopology, terrainEntities);
 
 	}
-	recalculateAgentsInRangeAndSight(instanceGame);
+	::recalculateAgentsInRangeAndSight(instanceGame);
 
 }
 
@@ -377,7 +286,7 @@ uint32_t											getRelevantTeams									(SGame& instanceGame, const STactica
 	uint32_t												teamCount											= 0;
 
 	for(size_t iPlayer = 0; iPlayer < _Size; ++iPlayer) {
-		if(!isRelevantTeam(tacticalInfo.Setup.TeamPerPlayer[iPlayer]))
+		if(!::isRelevantTeam(tacticalInfo.Setup.TeamPerPlayer[iPlayer]))
 			continue;
 
 		bool													bAdded												= false;
@@ -430,7 +339,7 @@ bool												initFromTacticalSetup								(SGame& instanceGame, const STactic
 	STacticalInfo											& tacticalInfo										= instanceGame.TacticalInfo;
 	uint32_t												effectivePlayers									= 0;
 	for(uint32_t iTacticalPlayer = 0, playerCount = tacticalSetup.TotalPlayers; iTacticalPlayer < playerCount; ++iTacticalPlayer)
-		initTacticalPlayer(instanceGame, effectivePlayers++, tacticalSetup);
+		::initTacticalPlayer(instanceGame, effectivePlayers++, tacticalSetup);
 
 	return true;
 }
@@ -529,16 +438,16 @@ bool												initCampaignPlayers									(SGame& instanceGame)											{
 				if(tacticalSetup.TeamPerPlayer[iPlayer] != TEAM_TYPE_ALLY)
 					agentAI												= enemyDefinitions[2+(rand()&1)];
 				if(bHeroSet) {
-					setupAgent(agentAI, agentAI);
+					::setupAgent(agentAI, agentAI);
 					agentAI.Flags.Tech.Gender							= GENDER_FEMALE;
 				}
 				else {
 					if(tacticalSetup.TeamPerPlayer[iPlayer] != TEAM_TYPE_ALLY)
-						setupAgent(agentAI, agentAI);
+						::setupAgent(agentAI, agentAI);
 					else {
 						bHeroSet											= true;
 						agentAI												= enemyDefinitions[::nwol::size(enemyDefinitions)-1];
-						setupAgent(agentAI, agentAI);
+						::setupAgent(agentAI, agentAI);
 						agentAI.CurrentEquip.Weapon		.Definition			= (int16_t)::nwol::size(definitionsWeapon)-1;
 						agentAI.CurrentEquip.Armor		.Definition			= (int16_t)::nwol::size(definitionsArmor)-1;
 						agentAI.CurrentEquip.Profession	.Definition			= (int16_t)::nwol::size(definitionsProfession)-1;
@@ -560,13 +469,11 @@ bool												initCampaignPlayers									(SGame& instanceGame)											{
 				}
 			}
 			else {
-				setupAgent(agentUser, agentAI);
+				::setupAgent(agentUser, agentAI);
 			}
 		}
 	}
-
-	initFromTacticalSetup(instanceGame, tacticalSetup);
-
+	::initFromTacticalSetup(instanceGame, tacticalSetup);
 	return false;
 }
 
@@ -575,16 +482,13 @@ bool												initCampaignGame									(SGame& instanceGame)											{
 	tacticalInfo.Clear();
 
 	STacticalSetup											& tacticalSetup										= tacticalInfo.Setup;
-	getDefaultTacticalSetupForCampaign(tacticalSetup);
+	::getDefaultTacticalSetupForCampaign(tacticalSetup);
 	tacticalSetup.Seed									= instanceGame.Seed + instanceGame.Players[PLAYER_INDEX_USER].Score.BattlesWon;
-
-	initCampaignPlayers(instanceGame);
-
-	klib::initTacticalMap(instanceGame);
-
-	klib::drawTacticalBoard(instanceGame, tacticalInfo, instanceGame.PostEffectDisplay, PLAYER_INDEX_USER, TEAM_TYPE_CIVILIAN, instanceGame.Players[PLAYER_INDEX_USER].Selection, true);
+	::initCampaignPlayers(instanceGame);
+	::klib::initTacticalMap(instanceGame);
+	::klib::drawTacticalBoard(instanceGame, tacticalInfo, instanceGame.PostEffectDisplay, PLAYER_INDEX_USER, TEAM_TYPE_CIVILIAN, instanceGame.Players[PLAYER_INDEX_USER].Selection, true);
 
 	::nwol::bit_set(instanceGame.Flags, klib::GAME_FLAGS_TACTICAL);
-	tacticalInfo.CurrentPlayer							= resolveNextPlayer(instanceGame);
+	tacticalInfo.CurrentPlayer							= ::resolveNextPlayer(instanceGame);
 	return true;
 }

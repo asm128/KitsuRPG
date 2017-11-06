@@ -81,20 +81,20 @@ namespace klib
 							SCharacterEquip						CurrentEquip			= {};
 							SCharacterGoods						Goods					= {};
 
-																SCharacter				()						= default;
+																SCharacter				()													= default;
 																SCharacter				(int maxHP, int hitChance, int attack, int coins, SFitnessPoints speed, SEntityEffect characterEffect, SEntityStatus characterStatus ) 
 			:Points				({{maxHP}, {maxHP}, {hitChance, attack, {}, 0, 0}, speed, coins, coins, coins/10})
 			,Flags				({characterEffect, characterStatus})
 			,Gauges				({{maxHP, maxHP}, {0, 0}, {0, 0}})
 		{}
 
-							void								RecalculateFinalPoints	()			noexcept	;
-							void								RecalculateFinalFlags	()			noexcept	;
-							void								Recalculate				()			noexcept	{ RecalculateFinalPoints(); RecalculateFinalFlags();	}
+							void								RecalculateFinalPoints	()										noexcept	;
+							void								RecalculateFinalFlags	()										noexcept	;
+							void								Recalculate				()										noexcept	{ RecalculateFinalPoints(); RecalculateFinalFlags();	}
 
-		inline constexpr	bool								CanMove					()	const	noexcept	{ return IsAlive() && !DidLoseTurn();					}
-		inline constexpr	bool								IsAlive					()	const	noexcept	{ return Points.LifeCurrent.Health > 0;					}
-		inline constexpr	bool								DidLoseTurn				()	const	noexcept	{
+		inline				bool								CanMove					()								const	noexcept	{ return IsAlive() && !DidLoseTurn();					}
+		inline				bool								IsAlive					()								const	noexcept	{ return Points.LifeCurrent.Health > 0;					}
+							bool								DidLoseTurn				()								const	noexcept	{
 			return ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_SLEEP		) 
 				|| ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_STUN		) 
 				|| ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_SHOCK		) 

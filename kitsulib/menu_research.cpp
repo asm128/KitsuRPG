@@ -157,8 +157,17 @@ SGameState drawResearchMenu(SGame& instanceGame, const SGameState& returnState)
 	ADD_RESEARCH_MODIFIERS(researchableItems.Facility	, ENTITY_TYPE_FACILITY		, modifiersFacility		, "Construction"		);
 	ADD_RESEARCH_MODIFIERS(researchableItems.StageProp	, ENTITY_TYPE_STAGE_PROP	, modifiersStageProp	, "Enhacement"			);
 
-	SEntityResearch selectedChoice;
-	selectedChoice = drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], (size_t)researchableCount, "Available Research", menuItems, instanceGame.FrameInput, {(int32_t)researchableCount}, {-1}, 55U);
+	SEntityResearch											selectedChoice							=	drawMenu
+		( instanceGame.GlobalDisplay.Screen
+		, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0]
+		, (size_t)researchableCount
+		, "Available Research"
+		, menuItems
+		, instanceGame.FrameInput
+		, {"Exit research menu", (int32_t)researchableCount}
+		, {"No action selected", -1}
+		, 55U
+		);
 	if(selectedChoice.ResearchIndex == researchableCount)
 		return {GAME_STATE_WELCOME_COMMANDER};
 
@@ -166,8 +175,7 @@ SGameState drawResearchMenu(SGame& instanceGame, const SGameState& returnState)
 		return returnState;
 
 	instanceGame.ClearMessages();
-	switch(selectedChoice.Type)
-	{
+	switch(selectedChoice.Type) {
 	case ENTITY_TYPE_ACCESSORY	: acknowledgeResearch(selectedChoice, player.Projects, instanceGame.UserSuccess); instanceGame.LogSuccess(); break; 
 	case ENTITY_TYPE_STAGE_PROP	: acknowledgeResearch(selectedChoice, player.Projects, instanceGame.UserSuccess); instanceGame.LogSuccess(); break; 
 	case ENTITY_TYPE_FACILITY	: acknowledgeResearch(selectedChoice, player.Projects, instanceGame.UserSuccess); instanceGame.LogSuccess(); break; 
@@ -183,8 +191,7 @@ SGameState drawResearchMenu(SGame& instanceGame, const SGameState& returnState)
 }
 
 
-SGameState drawResearch(SGame& instanceGame, const SGameState& returnState)
-{
+SGameState drawResearch(SGame& instanceGame, const SGameState& returnState) {
 	const std::string textToPrint = "Research center.";
 
 	bool bDonePrinting = ::nwol::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);

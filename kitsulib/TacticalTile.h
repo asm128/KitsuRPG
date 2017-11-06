@@ -1,4 +1,4 @@
-#include "grid.h"
+#include "nwol_grid.h"
 
 #ifndef __TACTICALTILE_H__9238402734628937234__
 #define __TACTICALTILE_H__9238402734628937234__

@@ -11,14 +11,14 @@ using namespace klib;
 
 void																					recalculateAgentsInRangeAndSight										(SGame& instanceGame)																	{
 	STacticalInfo																				& tacticalInfo															= instanceGame.TacticalInfo;
-	memset(&tacticalInfo.AgentsInTeamSight[0], 0, sizeof(tacticalInfo.AgentsInTeamSight));
+	::memset(&tacticalInfo.AgentsInTeamSight[0], 0, sizeof(tacticalInfo.AgentsInTeamSight));
 	for(uint32_t iPlayer=0; iPlayer < tacticalInfo.Setup.TotalPlayers; ++iPlayer) 	{
 		if(tacticalInfo.Setup.Players[iPlayer] == PLAYER_INDEX_INVALID)
 			continue;
 
 		SPlayer																						& player																= instanceGame.Players[tacticalInfo.Setup.Players[iPlayer]];
 		uint8_t																						squadSize																= tacticalInfo.Setup.SquadSize[iPlayer];
-		for(uint32_t iAgent=0, agentCount = squadSize > nwol::size(tacticalInfo.Setup.SquadSize) ? (uint32_t)nwol::size(tacticalInfo.Setup.SquadSize) : squadSize; iAgent < agentCount; ++iAgent) {
+		for(uint32_t iAgent=0, agentCount = squadSize > ::nwol::size(tacticalInfo.Setup.SquadSize) ? (uint32_t)::nwol::size(tacticalInfo.Setup.SquadSize) : squadSize; iAgent < agentCount; ++iAgent) {
 			if(player.Squad.Agents[iAgent] == -1)
 				continue;
 
@@ -28,11 +28,11 @@ void																					recalculateAgentsInRangeAndSight										(SGame& insta
 
 			double																						finalRange																= getFinalRange(agent, agent.FinalPoints);
 			double																						finalSight																= getFinalSight(agent, agent.FinalPoints);
-			getAgentsInRange(instanceGame, agent.Position, finalRange, player.Squad.AgentsInRange[iAgent]);
-			getAgentsInSight(instanceGame, agent.Position, finalSight, player.Squad.AgentsInSight[iAgent]);
+			::getAgentsInRange(instanceGame, agent.Position, finalRange, player.Squad.AgentsInRange[iAgent]);
+			::getAgentsInSight(instanceGame, agent.Position, finalSight, player.Squad.AgentsInSight[iAgent]);
 			player.Squad.AgentsInSquadSight.Count													= 0;
-			getAgentsInTeamSight(player.Squad.AgentsInSquadSight, player.Squad.AgentsInSight[iAgent]);
-			getAgentsInTeamSight(tacticalInfo.AgentsInTeamSight[tacticalInfo.Setup.TeamPerPlayer[iPlayer]], player.Squad.AgentsInSquadSight);
+			::getAgentsInTeamSight(player.Squad.AgentsInSquadSight, player.Squad.AgentsInSight[iAgent]);
+			::getAgentsInTeamSight(tacticalInfo.AgentsInTeamSight[tacticalInfo.Setup.TeamPerPlayer[iPlayer]], player.Squad.AgentsInSquadSight);
 		}
 	}
 }
@@ -57,32 +57,30 @@ bool																					klib::moveStep															(SGame& instanceGame, SPla
 				&&	board.Tiles.IsTileAvailable(finalPosition.x, finalPosition.z + 1)
 				)
 			{
-				finalPosition.z++;
-				movesLeft--;
+				++finalPosition.z;
+				--movesLeft;
 			}
 			else if (player.Squad.TargetPositions[agentIndex].z < finalPosition.z
 				&&	board.Tiles.IsTileAvailable(finalPosition.x, finalPosition.z - 1)
 				)
 			{
-				finalPosition.z--;
-				movesLeft--;
+				--finalPosition.z;
+				--movesLeft;
 			}
 		}
 
 		if (movesLeft > 0) {
 			if (player.Squad.TargetPositions[agentIndex].x > finalPosition.x
 				&&	board.Tiles.IsTileAvailable(finalPosition.x + 1, finalPosition.z)
-				)
-			{
-				finalPosition.x++;
-				movesLeft--;
+				) {
+				++finalPosition.x;
+				--movesLeft;
 			}
 			else if (player.Squad.TargetPositions[agentIndex].x < finalPosition.x
 				&&	board.Tiles.IsTileAvailable(finalPosition.x - 1, finalPosition.z)
-				)
-			{
-				finalPosition.x--;
-				movesLeft--;
+				) {
+				--finalPosition.x;
+				--movesLeft;
 			}
 		}
 	}
@@ -90,34 +88,30 @@ bool																					klib::moveStep															(SGame& instanceGame, SPla
 		if (movesLeft > 0) {
 			if( player.Squad.TargetPositions[agentIndex].x > finalPosition.x 
 				&&	board.Tiles.IsTileAvailable( finalPosition.x+1, finalPosition.z )
-			)
-			{
-				finalPosition.x++;
-				movesLeft--;
+			) {
+				++finalPosition.x;
+				--movesLeft;
 			}
 			else if( player.Squad.TargetPositions[agentIndex].x < finalPosition.x 
 				&&	board.Tiles.IsTileAvailable( finalPosition.x-1, finalPosition.z )
-			)
-			{
-				finalPosition.x--;
-				movesLeft--;
+			) {
+				--finalPosition.x;
+				--movesLeft;
 			}
 		}
 
 		if (movesLeft > 0) {
 			if( player.Squad.TargetPositions[agentIndex].z > finalPosition.z 
 				&&	board.Tiles.IsTileAvailable( finalPosition.x, finalPosition.z+1 )
-			)
-			{
-				finalPosition.z++;
-				movesLeft--;
+			) {
+				++finalPosition.z;
+				--movesLeft;
 			}
 			else if( player.Squad.TargetPositions[agentIndex].z < finalPosition.z 
 				&&	board.Tiles.IsTileAvailable( finalPosition.x, finalPosition.z-1 )
-			)
-			{
-				finalPosition.z--;
-				movesLeft--;
+			) {
+				--finalPosition.z;
+				--movesLeft;
 			}
 		}
 	}
@@ -129,13 +123,12 @@ bool																					klib::moveStep															(SGame& instanceGame, SPla
 	bool																						bArrived																= true;
 	if( initialPosition == finalPosition ) {	// If we didn't move yet is because we're stuck.
 		bArrived																				= false;
-
 		// The following noise gives epilepsy to the agents when they get stuck against a wall.
 		int32_t																						tryCount																= 0
 			,																						maxTry																	= 9
 			;
 		do {
-			if(rand()%2)
+			if(::rand()%2)
 				finalPosition.x																			+= rand()%3 - 1;
 			else
 				finalPosition.z																			+= rand()%3 - 1;
@@ -160,7 +153,7 @@ bool																					klib::moveStep															(SGame& instanceGame, SPla
 			aoePos.z																				+= aoeInstance.Position.Offset.z;
 			::nwol::SCoord3<float>																		currentTilePos															= playerAgent.Position.Cast<float>();
 			if((aoePos-currentTilePos).Length() <= aoeInstance.RadiusOrHalfSize && aoeInstance.StatusInflict)
-				applyAttackStatus(playerAgent, aoeInstance.StatusInflict, aoeInstance.Level, "Area of effect");
+				::applyAttackStatus(playerAgent, aoeInstance.StatusInflict, aoeInstance.Level, "Area of effect");
 		}
 	}
 
@@ -175,7 +168,7 @@ bool																					klib::moveStep															(SGame& instanceGame, SPla
 	if(finalPosition != initialPosition) {
 		agentPosition_																			= finalPosition;
 		CCharacter																					& agent																	= *player.Army[player.Squad.Agents[agentIndex]];
-		recalculateAgentsInRangeAndSight(instanceGame);
+		::recalculateAgentsInRangeAndSight(instanceGame);
 	}
 
 	return (bArrived && finalPosition == player.Squad.TargetPositions[agentIndex]);
@@ -204,8 +197,7 @@ bool																					klib::isTacticalValid													(SGame& instanceGame)
 
 			const SPlayer& playerOther = instanceGame.Players[tacticalInfo.Setup.Players[iPlayerOther]];
 
-			// Only team AI is considered for the victory
-			if(playerOther.Control.Type == PLAYER_CONTROL_AI && playerOther.Control.AIMode != PLAYER_AI_TEAMERS)
+			if(playerOther.Control.Type == PLAYER_CONTROL_AI && playerOther.Control.AIMode != PLAYER_AI_TEAMERS)	// Only team AI is considered for the victory
 				continue;
 
 			if(tacticalInfo.Setup.TeamPerPlayer[iPlayer] == tacticalInfo.Setup.TeamPerPlayer[iPlayerOther])
@@ -268,9 +260,9 @@ uint32_t																				resolveNextPlayer														(SGame& instanceGame)
 					CCharacter																						& agent																	= *player.Army[player.Squad.Agents[iAgent]];
 					if(!agent.IsAlive())	
 						continue;
-					klib::applyRoundStatusAndBonusesAndSkipRound(agent);
+					::klib::applyRoundStatusAndBonusesAndSkipRound(agent);
 					if(!agent.IsAlive())	
-						handleAgentDeath(instanceGame, agent, tacticalInfo.Setup.TeamPerPlayer[currentPlayerSlot]);
+						::handleAgentDeath(instanceGame, agent, tacticalInfo.Setup.TeamPerPlayer[currentPlayerSlot]);
 				}
 			}
 
@@ -284,15 +276,11 @@ uint32_t																				resolveNextPlayer														(SGame& instanceGame)
 			info_printf("Why skip? - bCantMove ? %s\n", bCantMove ? "true" : "false");
 		}
 	}
-	while( isTacticalValid(instanceGame) && bNeedSkipCurrentPlayer && (playerCountToCheck) < (tacticalSetup.TotalPlayers) );
+	while(::isTacticalValid(instanceGame) && bNeedSkipCurrentPlayer && (playerCountToCheck) < (tacticalSetup.TotalPlayers));
 
-
-	if(bNeedSkipCurrentPlayer) {
+	if(bNeedSkipCurrentPlayer) 
 		info_printf("Why skip? - bCantMove ? %s\n", bCantMove ? "true" : "false");
-	}
-
 	return currentPlayerSlot;
-
 }
 
 // Ending the turn resets action and movement counters and executes minimal AI for selecting another unit. 
@@ -320,7 +308,6 @@ void																					klib::endTurn															(SGame& instanceGame)						
 				continue;
 			
 			//character.Recalculate();
-
 			const SEntityPoints																		& agentFinalPoints														= character.FinalPoints;
 			playerToClear.Squad.ActionsLeft[iAgent].Moves										= agentFinalPoints.Fitness.Movement;
 			playerToClear.Squad.ActionsLeft[iAgent].Actions										= 1;
@@ -328,30 +315,29 @@ void																					klib::endTurn															(SGame& instanceGame)						
 
 			nwol::bit_clear(playerToClear.Squad.AgentStates[iAgent], AGENT_STATE_MOVE);
 
-			klib::applyTurnStatusAndBonusesAndSkipTurn(character);
+			::klib::applyTurnStatusAndBonusesAndSkipTurn(character);
 			++character.Score.TurnsPlayed;
 
 			if(!character.IsAlive())	
-				handleAgentDeath(instanceGame, character, tacticalInfo.Setup.TeamPerPlayer[iPlayer]);
+				::handleAgentDeath(instanceGame, character, tacticalInfo.Setup.TeamPerPlayer[iPlayer]);
 			else if(iPlayer == tacticalInfo.CurrentPlayer) {
-				klib::applyRoundStatusAndBonusesAndSkipRound(character);
+				::klib::applyRoundStatusAndBonusesAndSkipRound(character);
 				if(!character.IsAlive())	
-					handleAgentDeath(instanceGame, character, tacticalInfo.Setup.TeamPerPlayer[iPlayer]);
+					::handleAgentDeath(instanceGame, character, tacticalInfo.Setup.TeamPerPlayer[iPlayer]);
 			}
 			else if(tacticalInfo.Setup.TeamPerPlayer[iPlayer] != tacticalInfo.Setup.TeamPerPlayer[tacticalInfo.CurrentPlayer] ) {
-				klib::applyEnemyTurnStatusAndBonusesAndSkipTurn(character);
+				::klib::applyEnemyTurnStatusAndBonusesAndSkipTurn(character);
 				if(!character.IsAlive())	
-					handleAgentDeath(instanceGame, character, tacticalInfo.Setup.TeamPerPlayer[iPlayer]);
+					::handleAgentDeath(instanceGame, character, tacticalInfo.Setup.TeamPerPlayer[iPlayer]);
 			}
 		}
 
 		// Change character selections at the end of the turn because selected agents may have died in between turns.
 		if(playerToClear.Control.Type == PLAYER_CONTROL_AI) {
-			while(rand() % tacticalInfo.Setup.SquadSize[iPlayer])
+			while(::rand() % tacticalInfo.Setup.SquadSize[iPlayer])
 				playerToClear.SelectNextAgent();
 		}
-
-		fixAgentSelection(playerToClear);	// Make sure a valid agent is selected.
+		::fixAgentSelection(playerToClear);	// Make sure a valid agent is selected.
 		playerToClear.Squad.LockedAgent															= -1;
 	}
 
@@ -370,7 +356,7 @@ void																					klib::endTurn															(SGame& instanceGame)						
 
 	static const HANDLE																			hConsoleOut																= GetStdHandle( STD_OUTPUT_HANDLE );
 	COORD																						cursorPos																= {0, ((SHORT)instanceGame.GlobalDisplay.Depth>>1)+10};
-	SetConsoleCursorPosition( hConsoleOut, cursorPos );
+	::SetConsoleCursorPosition( hConsoleOut, cursorPos );
 }
 
 void																					selectAIDestination														(SGame& instanceGame);
@@ -378,7 +364,7 @@ bool																					klib::updateCurrentPlayer												(SGame& instanceGa
 	STacticalInfo																				& tacticalInfo															= instanceGame.TacticalInfo;
 	SPlayer																						& currentPlayer															= instanceGame.Players[tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer]];	// the current player is only valid in this scope. After this code the current player can change 
 
-	if( !fixAgentSelection(currentPlayer) )
+	if( !::fixAgentSelection(currentPlayer) )
 		return false;
 
 	if( currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]]->Points.LifeCurrent.Health <= 0 )
@@ -388,7 +374,7 @@ bool																					klib::updateCurrentPlayer												(SGame& instanceGa
 
 	bool																						bHasArrived																= true;
 	if( currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit] != currentAgentPosition && (0 < currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves) ) {
-		bHasArrived																				= moveStep(instanceGame, currentPlayer, tacticalInfo.CurrentPlayer, currentPlayer.Selection.PlayerUnit, tacticalInfo.Setup.TeamPerPlayer[tacticalInfo.CurrentPlayer], tacticalInfo.Board, currentAgentPosition);
+		bHasArrived																				= ::moveStep(instanceGame, currentPlayer, tacticalInfo.CurrentPlayer, currentPlayer.Selection.PlayerUnit, tacticalInfo.Setup.TeamPerPlayer[tacticalInfo.CurrentPlayer], tacticalInfo.Board, currentAgentPosition);
 		if(bHasArrived) 
 			nwol::bit_clear(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
 	}
@@ -397,7 +383,7 @@ bool																					klib::updateCurrentPlayer												(SGame& instanceGa
 		return true;
 
 	if( bHasArrived && (0 < currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves) ) {
-		selectAIDestination(instanceGame);
+		::selectAIDestination(instanceGame);
 		nwol::bit_set(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
 	}
 	return true;
@@ -423,7 +409,7 @@ void																					distributeDropsForVictoriousTeam										(SGame& insta
 	STacticalInfo																				& tacticalInfo															= instanceGame.TacticalInfo;
 	uint32_t																					totalWinners															= 0;
 	int32_t																						indexWinners[MAX_TACTICAL_PLAYERS]										= {};
-	memset(&indexWinners[0], -1, sizeof(PLAYER_INDEX)*nwol::size(indexWinners));
+	::memset(&indexWinners[0], -1, sizeof(PLAYER_INDEX) * ::nwol::size(indexWinners));
 
 	for(uint32_t iPlayer = 0, playerCount = tacticalInfo.Setup.TotalPlayers; iPlayer < playerCount; ++iPlayer) {
 		if(tacticalInfo.Setup.Players[iPlayer] == -1 || tacticalInfo.Setup.TeamPerPlayer[iPlayer] != teamVictorious)
@@ -498,14 +484,14 @@ void																					distributeDropsForVictoriousTeam										(SGame& insta
 			}
 		}
 		// Give the remaining drops to random winners
-		if(	tacticalInfo.Drops.Profession	.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Goods.Inventory.Profession	, tacticalInfo.Drops.Profession	);
-		if(	tacticalInfo.Drops.Accessory	.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Goods.Inventory.Accessory	, tacticalInfo.Drops.Accessory	);
-		if(	tacticalInfo.Drops.Armor		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Goods.Inventory.Armor		, tacticalInfo.Drops.Armor		);
-		if(	tacticalInfo.Drops.Weapon		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Goods.Inventory.Weapon		, tacticalInfo.Drops.Weapon		);
-		if(	tacticalInfo.Drops.Vehicle		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Goods.Inventory.Vehicle		, tacticalInfo.Drops.Vehicle	);
-		if(	tacticalInfo.Drops.Facility		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Goods.Inventory.Facility		, tacticalInfo.Drops.Facility	);
-		if(	tacticalInfo.Drops.StageProp	.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Goods.Inventory.StageProp	, tacticalInfo.Drops.StageProp	);
-		if(	tacticalInfo.Drops.Items		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Goods.Inventory.Items		, tacticalInfo.Drops.Items		);
+		if(	tacticalInfo.Drops.Profession	.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Goods.Inventory.Profession	, tacticalInfo.Drops.Profession	);
+		if(	tacticalInfo.Drops.Accessory	.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Goods.Inventory.Accessory	, tacticalInfo.Drops.Accessory	);
+		if(	tacticalInfo.Drops.Armor		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Goods.Inventory.Armor		, tacticalInfo.Drops.Armor		);
+		if(	tacticalInfo.Drops.Weapon		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Goods.Inventory.Weapon		, tacticalInfo.Drops.Weapon		);
+		if(	tacticalInfo.Drops.Vehicle		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Goods.Inventory.Vehicle	, tacticalInfo.Drops.Vehicle	);
+		if(	tacticalInfo.Drops.Facility		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Goods.Inventory.Facility	, tacticalInfo.Drops.Facility	);
+		if(	tacticalInfo.Drops.StageProp	.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Goods.Inventory.StageProp	, tacticalInfo.Drops.StageProp	);
+		if(	tacticalInfo.Drops.Items		.Count) pickupEntities(instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Goods.Inventory.Items		, tacticalInfo.Drops.Items		);
 
 		uint32_t																				reward																	= totalMapMoney / totalWinners;
 		for(uint32_t iWinner=0; iWinner<totalWinners; ++iWinner) {
@@ -515,7 +501,7 @@ void																					distributeDropsForVictoriousTeam										(SGame& insta
 			winnerPlayer.Score.MoneyEarned														+= reward;
 		}
 		if(totalMapMoney)
-			instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[rand()%totalWinners]]].Money	+= totalMapMoney;
+			instanceGame.Players[tacticalInfo.Setup.Players[indexWinners[::rand()%totalWinners]]].Money	+= totalMapMoney;
 	}
 
 	for(uint32_t iPlayer = 0, playerCount = tacticalInfo.Setup.TotalPlayers; iPlayer < playerCount; ++iPlayer) {
@@ -587,7 +573,7 @@ void																					klib::determineOutcome													(SGame& instanceGame
 	}
 
 	char																						message[96]																= {};
-	sprintf_s(message, "Team %s won the match", ::nwol::get_value_label(teamVictorious).c_str());
+	::sprintf_s(message, "Team %s won the match", ::nwol::get_value_label(teamVictorious).c_str());
 
 	instanceGame.ClearMessages();
 	if(teamVictorious == TEAM_TYPE_ALLY) {
@@ -605,7 +591,7 @@ void																					klib::determineOutcome													(SGame& instanceGame
 	}
 	
 	if(teamVictorious != TEAM_TYPE_SPECTATOR) // only give rewards if somebody won.
-		distributeDropsForVictoriousTeam(instanceGame, teamVictorious);
+		::distributeDropsForVictoriousTeam(instanceGame, teamVictorious);
 	
 	instanceGame.TacticalInfo.Clear();
 }
@@ -663,12 +649,10 @@ void																					klib::handleAgentDeath													(SGame& instanceGame
 		instanceGame.UserSuccess																= ripText; 
 		instanceGame.LogSuccess();
 	}
-
-	recalculateAgentsInRangeAndSight(instanceGame);
+	::recalculateAgentsInRangeAndSight(instanceGame);
 }
 
 void																					klib::handleAgentDeath													(SGame& instanceGame, CCharacter& deadTarget, CCharacter& attacker, TEAM_TYPE teamId)	{
-	handleAgentDeath(instanceGame, deadTarget, teamId);
-
+	::handleAgentDeath(instanceGame, deadTarget, teamId);
 	++attacker.Score.EnemiesKilled;
 }

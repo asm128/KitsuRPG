@@ -16,19 +16,16 @@
 
 using namespace klib;
 
-SGameState drawFactoryMenu(SGame& instanceGame, const SGameState& returnState)
-{
-	SPlayer&					player				= instanceGame.Players[PLAYER_INDEX_USER];
-	SCharacterGoods&			playerCompany		= player.Goods;
-	SCharacterInventory&		playerInventory		= playerCompany.Inventory;
-	klib::SCharacterResearch&	researchCompleted	= playerCompany.CompletedResearch;
-	
-	klib::SCharacterResearch	researchedItems	= {};
+SGameState													drawFactoryMenu										(SGame& instanceGame, const SGameState& returnState)										{
+	SPlayer															& player											= instanceGame.Players[PLAYER_INDEX_USER];
+	SCharacterGoods													& playerCompany										= player.Goods;
+	SCharacterInventory												& playerInventory									= playerCompany.Inventory;
+	::klib::SCharacterResearch										& researchCompleted									= playerCompany.CompletedResearch;
+	::klib::SCharacterResearch										researchedItems										= {};
 
 #define GET_AVAILABLE_RESEARCH_FOR_ENTITY(EntityToken_, ProgressiveDefinitions_, ProgressiveModifiers_)						\
 		generateResearchedList(researchedItems.EntityToken_, playerInventory.EntityToken_, researchCompleted.EntityToken_);	\
-		for(iAgent=0; iAgent<armySize; ++iAgent)																			\
-		{																													\
+		for(iAgent=0; iAgent<armySize; ++iAgent) {																			\
 			if( 0 == player.Army[iAgent] )																					\
 				continue;																									\
 																															\
@@ -39,14 +36,12 @@ SGameState drawFactoryMenu(SGame& instanceGame, const SGameState& returnState)
 				, researchCompleted.EntityToken_																			\
 			);																												\
 		}																													\
-																															\
 		researchedDefinitions	+= researchedItems.EntityToken_.Definitions.Count;											\
 		researchedModifiers		+= researchedItems.EntityToken_.Modifiers.Count;
 
 #define GET_AVAILABLE_RESEARCH_FOR_ENTITY_NO_EQUIP(EntityToken_, ProgressiveDefinitions_, ProgressiveModifiers_)			\
 		generateResearchedList(researchedItems.EntityToken_, playerInventory.EntityToken_, researchCompleted.EntityToken_);	\
-		for(iAgent=0; iAgent<armySize; ++iAgent)																			\
-		{																													\
+		for(iAgent=0; iAgent<armySize; ++iAgent) {																			\
 			if( 0 == player.Army[iAgent] )																					\
 				continue;																									\
 																															\
@@ -56,13 +51,14 @@ SGameState drawFactoryMenu(SGame& instanceGame, const SGameState& returnState)
 				, researchCompleted.EntityToken_																			\
 			);																												\
 		}																													\
-																															\
 		researchedDefinitions	+= researchedItems.EntityToken_.Definitions.Count;											\
 		researchedModifiers		+= researchedItems.EntityToken_.Modifiers.Count;
 
-	int32_t iAgent;
-	const int32_t armySize	= (int32_t)player.Army.size();
-	uint32_t researchedDefinitions=0, researchedModifiers=0;
+	int32_t															iAgent												= 0;
+	const int32_t													armySize											= (int32_t)player.Army.size();
+	uint32_t														researchedDefinitions								= 0
+		,															researchedModifiers									= 0
+		;
 	GET_AVAILABLE_RESEARCH_FOR_ENTITY			(Accessory	, false, false);
 	GET_AVAILABLE_RESEARCH_FOR_ENTITY_NO_EQUIP	(StageProp	, true , false);
 	GET_AVAILABLE_RESEARCH_FOR_ENTITY_NO_EQUIP	(Facility	, false, false);
@@ -87,48 +83,45 @@ SGameState drawFactoryMenu(SGame& instanceGame, const SGameState& returnState)
 		//+nwol::size(modifiersFacility)		\\
 		//+nwol::size(modifiersStageProp)
 
-	static klib::SMenuItem<SEntityResearch> menuItems[MAX_RESEARCH_ITEMS] = {};
+	static	klib::SMenuItem<SEntityResearch>						menuItems			[MAX_RESEARCH_ITEMS]			= {};
+	uint32_t														researchedCount										= 0;
+	char															composite			[256]							= {};
+	char															precompose			[256]							= {};
+	const char														* labelEntityType									= 0;
 
-	uint32_t researchedCount=0;
-	char composite[256] ={};
-	char precompose[256] ={};
-	const char* labelEntityType;
-
-#define ADD_RESEARCH_DEFINITIONS(place, type, records)															\
-	labelEntityType = ::nwol::get_value_label(type).c_str();													\
-	for(uint32_t i=0, count=place.Definitions.Count; i<count; ++i) 												\
-	{																											\
-		menuItems[researchedCount].ReturnValue.ResearchIndex	= i;											\
-		menuItems[researchedCount].ReturnValue.IsModifier		= false;										\
-		int32_t priceUnit = records[place.Definitions[i].Entity].Points.PriceBuy/2;								\
-		menuItems[researchedCount].ReturnValue.PriceUnit		= priceUnit;									\
-		menuItems[researchedCount].ReturnValue.PricePaid		= 0;											\
-		menuItems[researchedCount].ReturnValue.Entity			= {place.Definitions[i].Entity, 0, 1, -1};		\
-		sprintf_s(composite, "%s: %s", labelEntityType, records[place.Definitions[i].Entity].Name.c_str());		\
-		menuItems[researchedCount].ReturnValue.Name			= composite;										\
-		sprintf_s(composite, "%-40.40s $%i", menuItems[researchedCount].ReturnValue.Name.c_str(), priceUnit);	\
-		menuItems[researchedCount].Text						= composite;										\
-		menuItems[researchedCount].ReturnValue.Type			= type;												\
-		researchedCount++;																						\
+#define ADD_RESEARCH_DEFINITIONS(place, type, records)																																	\
+	labelEntityType												= ::nwol::get_value_label(type).c_str();																				\
+	for(uint32_t i=0, count=place.Definitions.Count; i<count; ++i) {																													\
+		menuItems[researchedCount].ReturnValue.ResearchIndex		= i;																												\
+		menuItems[researchedCount].ReturnValue.IsModifier			= false;																											\
+		int32_t															priceUnit											= records[place.Definitions[i].Entity].Points.PriceBuy / 2;	\
+		menuItems[researchedCount].ReturnValue.PriceUnit			= priceUnit;																										\
+		menuItems[researchedCount].ReturnValue.PricePaid			= 0;																												\
+		menuItems[researchedCount].ReturnValue.Entity				= {place.Definitions[i].Entity, 0, 1, -1};																			\
+		sprintf_s(composite, "%s: %s", labelEntityType, records[place.Definitions[i].Entity].Name.c_str());																				\
+		menuItems[researchedCount].ReturnValue.Name					= composite;																										\
+		sprintf_s(composite, "%-40.40s $%i", menuItems[researchedCount].ReturnValue.Name.c_str(), priceUnit);																			\
+		menuItems[researchedCount].Text								= composite;																										\
+		menuItems[researchedCount].ReturnValue.Type					= type;																												\
+		++researchedCount;																																								\
 	}
 
-#define ADD_RESEARCH_MODIFIERS(place, type, records, text)														\
-	labelEntityType = ::nwol::get_value_label(type).c_str();													\
-	for(uint32_t i=0, count=place.Modifiers.Count; i<count; ++i) 												\
-	{																											\
-		menuItems[researchedCount].ReturnValue.ResearchIndex	= i;											\
-		menuItems[researchedCount].ReturnValue.IsModifier		= true;											\
-		int32_t priceUnit = records[place.Modifiers[i].Entity].Points.PriceBuy/2;								\
-		menuItems[researchedCount].ReturnValue.PriceUnit		= priceUnit;									\
-		menuItems[researchedCount].ReturnValue.PricePaid		= 0;											\
-		menuItems[researchedCount].ReturnValue.Entity			= {0, place.Modifiers[i].Entity, 1, -1};		\
-		sprintf_s(precompose, records[place.Modifiers[i].Entity].Name.c_str(), text);							\
-		sprintf_s(composite, "%s: %s", labelEntityType, precompose);											\
-		menuItems[researchedCount].ReturnValue.Name			= composite;										\
-		sprintf_s(composite, "%-40.40s $%i", menuItems[researchedCount].ReturnValue.Name.c_str(), priceUnit);	\
-		menuItems[researchedCount].Text						= composite;										\
-		menuItems[researchedCount].ReturnValue.Type			= type;												\
-		researchedCount++;																						\
+#define ADD_RESEARCH_MODIFIERS(place, type, records, text)																																\
+	labelEntityType												= ::nwol::get_value_label(type).c_str();																				\
+	for(uint32_t i=0, count=place.Modifiers.Count; i<count; ++i) {																														\
+		menuItems[researchedCount].ReturnValue.ResearchIndex		= i;																												\
+		menuItems[researchedCount].ReturnValue.IsModifier			= true;																												\
+		int32_t															priceUnit											= records[place.Modifiers[i].Entity].Points.PriceBuy / 2;	\
+		menuItems[researchedCount].ReturnValue.PriceUnit			= priceUnit;																										\
+		menuItems[researchedCount].ReturnValue.PricePaid			= 0;																												\
+		menuItems[researchedCount].ReturnValue.Entity				= {0, place.Modifiers[i].Entity, 1, -1};																			\
+		sprintf_s(precompose, records[place.Modifiers[i].Entity].Name.c_str(), text);																									\
+		sprintf_s(composite, "%s: %s", labelEntityType, precompose);																													\
+		menuItems[researchedCount].ReturnValue.Name					= composite;																										\
+		sprintf_s(composite, "%-40.40s $%i", menuItems[researchedCount].ReturnValue.Name.c_str(), priceUnit);																			\
+		menuItems[researchedCount].Text								= composite;																										\
+		menuItems[researchedCount].ReturnValue.Type					= type;																												\
+		++researchedCount;																																								\
 	}
 
 
@@ -148,7 +141,17 @@ SGameState drawFactoryMenu(SGame& instanceGame, const SGameState& returnState)
 //	ADD_RESEARCH_MODIFIERS(researchedItems.Facility		, ENTITY_TYPE_FACILITY		, modifiersFacility		, "Construction"		);
 //	ADD_RESEARCH_MODIFIERS(researchedItems.StageProp	, ENTITY_TYPE_STAGE_PROP	, modifiersStageProp	, "Enhacement"			);
 
-	SEntityResearch selectedChoice = drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], (size_t)researchedCount, "Available Production", menuItems, instanceGame.FrameInput, {(int32_t)researchedCount}, {-1}, 50U);
+	SEntityResearch											selectedChoice								= drawMenu
+		( instanceGame.GlobalDisplay.Screen
+		, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0]
+		, (size_t)researchedCount
+		, "Available Production"
+		, menuItems
+		, instanceGame.FrameInput
+		, {"Exit production menu"	, (int32_t)researchedCount}
+		, {"No action selected"		, -1}
+		, 50U
+		);
 	if(selectedChoice.ResearchIndex == researchedCount)
 		return {GAME_STATE_WELCOME_COMMANDER};
 
@@ -156,8 +159,7 @@ SGameState drawFactoryMenu(SGame& instanceGame, const SGameState& returnState)
 		return returnState;
 
 	instanceGame.ClearMessages();
-	switch(selectedChoice.Type)
-	{
+	switch(selectedChoice.Type) {
 	case ENTITY_TYPE_ACCESSORY	: acknowledgeProduction(selectedChoice, player.Projects, instanceGame.UserSuccess);	instanceGame.LogSuccess(); break;
 	case ENTITY_TYPE_STAGE_PROP	: acknowledgeProduction(selectedChoice, player.Projects, instanceGame.UserSuccess);	instanceGame.LogSuccess(); break;
 	case ENTITY_TYPE_FACILITY	: acknowledgeProduction(selectedChoice, player.Projects, instanceGame.UserSuccess);	instanceGame.LogSuccess(); break;
@@ -172,12 +174,10 @@ SGameState drawFactoryMenu(SGame& instanceGame, const SGameState& returnState)
 	return returnState;
 }
 
-SGameState drawFactory(SGame& instanceGame, const SGameState& returnState)
-{
-	const std::string textToPrint = "Factory.";
-
-	bool bDonePrinting = ::nwol::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
-	memcpy(&instanceGame.PostEffectDisplay.Screen.Cells[instanceGame.PostEffectDisplay.Depth>>1][instanceGame.PostEffectDisplay.Width/2-(strlen(instanceGame.SlowMessage)+1)/2], instanceGame.SlowMessage, strlen(instanceGame.SlowMessage));
+SGameState																		drawFactory							(SGame& instanceGame, const SGameState& returnState)																						{
+	const ::std::string																	textToPrint							= "Factory.";
+	bool																				bDonePrinting						= ::nwol::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
+	memcpy(&instanceGame.PostEffectDisplay.Screen.Cells[instanceGame.PostEffectDisplay.Depth >> 1][instanceGame.PostEffectDisplay.Width / 2 - (strlen(instanceGame.SlowMessage) + 1) / 2], instanceGame.SlowMessage, strlen(instanceGame.SlowMessage));
 	if ( !bDonePrinting ) 
 		return returnState;
 

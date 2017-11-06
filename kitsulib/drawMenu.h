@@ -8,7 +8,6 @@
 #ifndef __DRAWMENU_H__98237409236409872364987236498__
 #define __DRAWMENU_H__98237409236409872364987236498__
 
-
 struct SDrawMenuGlobals {
 							nwol::STimer				Timer;
 							nwol::SAccumulator<double>	Accumulator;
@@ -63,8 +62,7 @@ namespace klib
 			(bResetMenuStuff = true) && ++localPersistentState.CurrentPage;
 		else if(localPersistentState.CurrentPage > 0 && (frameInput.Keys[VK_PRIOR] || frameInput.Keys[VK_LEFT])) 
 			(bResetMenuStuff = true) && --localPersistentState.CurrentPage;
-			// Test down and up keys.
-		else if(frameInput.Keys[VK_DOWN])  {
+		else if(frameInput.Keys[VK_DOWN])  {		// Test down and up keys.
 			++localPersistentState.CurrentOption;
 			bResetMenuStuff											= true;
 			if( localPersistentState.CurrentOption == (int32_t)actualOptionCount ) {
@@ -84,8 +82,7 @@ namespace klib
 					localPersistentState.CurrentOption						= 0;
 			}
 		}
-		// Test exit request keys.
-		else if(frameInput.Keys['0'] || frameInput.Keys[VK_NUMPAD0] || ((frameInput.Mouse.Buttons[4] || frameInput.Keys[VK_ESCAPE]) && !disableEscKeyClose) 
+		else if(frameInput.Keys['0'] || frameInput.Keys[VK_NUMPAD0] || ((frameInput.Mouse.Buttons[4] || frameInput.Keys[VK_ESCAPE]) && !disableEscKeyClose) 	// Test exit request keys.
 			|| (frameInput.Mouse.Buttons[0] && bMouseOverExit)
 			)
 		{
@@ -95,8 +92,7 @@ namespace klib
 			localPersistentState.CurrentOption						= 0;
 			resultVal												= exitValue;
 		}
-		// Test execute keys.
-		else if(frameInput.Keys[VK_RETURN] && localPersistentState.CurrentOption != -1) {
+		else if(frameInput.Keys[VK_RETURN] && localPersistentState.CurrentOption != -1) {	// Test execute keys.
 			bResetMenuStuff											= true;
 			resultVal												= menuItems[localPersistentState.CurrentOption+itemOffset].ReturnValue;
 		}
@@ -219,14 +215,14 @@ namespace klib
 		return resultVal;
 	}
 
-	template <typename _tCell, size_t _Width, size_t _Depth, size_t _ItemCount, typename _ReturnType>
-	inline _ReturnType										drawMenu			(::nwol::SGrid<_tCell, _Width, _Depth>& display, uint16_t* targetAttributes, uint32_t optionCount, const std::string& title, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType exitValue, _ReturnType noActionValue = -1, uint32_t rowWidth=20, bool disableEscapeKey=false, const std::string& exitText="Exit this menu") {
-		return drawMenu(&display.Cells[0][0], targetAttributes, (uint32_t)_Width, (uint32_t)_Depth, optionCount, title, menuItems, frameInput, exitValue, noActionValue, rowWidth, disableEscapeKey, exitText);
+	template <typename _tCell, size_t _ItemCount, typename _ReturnType>
+	inline _ReturnType										drawMenu			(::nwol::grid_view<_tCell>& display, uint16_t* targetAttributes, uint32_t optionCount, const std::string& title, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType exitValue, _ReturnType noActionValue = -1, uint32_t rowWidth=20, bool disableEscapeKey=false, const std::string& exitText="Exit this menu") {
+		return drawMenu(display.begin(), targetAttributes, display.width(), display.height(), optionCount, title, menuItems, frameInput, exitValue, noActionValue, rowWidth, disableEscapeKey, exitText);
 	}
 	
-	template <typename _tCell, size_t _Width, size_t _Depth, size_t _ItemCount, typename _ReturnType>
-	inline _ReturnType										drawMenu			(::nwol::SGrid<_tCell, _Width, _Depth>& display, uint16_t* targetAttributes, const std::string& title, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType exitValue, _ReturnType noActionValue = -1, uint32_t rowWidth=20, bool disableEscapeKey=false, const std::string& exitText="Exit this menu") {
-		return drawMenu(&display.Cells[0][0], targetAttributes, (uint32_t)_Width, (uint32_t)_Depth, _ItemCount, title, menuItems, frameInput, exitValue, noActionValue, rowWidth, disableEscapeKey, exitText);
+	template <typename _tCell, size_t _ItemCount, typename _ReturnType>
+	inline _ReturnType										drawMenu			(::nwol::grid_view<_tCell>& display, uint16_t* targetAttributes, const std::string& title, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType exitValue, _ReturnType noActionValue = -1, uint32_t rowWidth=20, bool disableEscapeKey=false, const std::string& exitText="Exit this menu") {
+		return drawMenu(display.begin(), targetAttributes, display.width(), display.height(), _ItemCount, title, menuItems, frameInput, exitValue, noActionValue, rowWidth, disableEscapeKey, exitText);
 	}
 
 	template <typename _ReturnType>
@@ -248,14 +244,14 @@ namespace klib
 		{};
 	};
 
-	template <typename _tCell, size_t _Width, size_t _Depth, size_t _ItemCount, typename _ReturnType>
-	_ReturnType drawMenu(::nwol::SGrid<_tCell, _Width, _Depth>& display, uint16_t* targetAttributes, const SMenu<_ReturnType>& menuInstance, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType noActionValue = -1) {
-		return drawMenu(&display.Cells[0][0], targetAttributes, _Width, _Depth, (uint32_t)_ItemCount, menuInstance.Title, menuItems, frameInput, menuInstance.ValueExit, noActionValue, menuInstance.RowWidth, menuInstance.bDisableEscapeKey, menuInstance.TextExit);
+	template <typename _tCell, size_t _ItemCount, typename _ReturnType>
+	_ReturnType drawMenu(::nwol::grid_view<_tCell>& display, uint16_t* targetAttributes, const SMenu<_ReturnType>& menuInstance, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType noActionValue = -1) {
+		return drawMenu(display.begin(), targetAttributes, display.width(), display.height(), (uint32_t)_ItemCount, menuInstance.Title, menuItems, frameInput, menuInstance.ValueExit, noActionValue, menuInstance.RowWidth, menuInstance.bDisableEscapeKey, menuInstance.TextExit);
 	}
 
-	template <typename _tCell, size_t _Width, size_t _Depth, size_t _ItemCount, typename _ReturnType>
-	_ReturnType drawMenu(::nwol::SGrid<_tCell, _Width, _Depth>& display, uint16_t* targetAttributes, const SMenu<_ReturnType>& menuInstance, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], uint32_t optionCount, const nwol::SInput& frameInput, _ReturnType noActionValue = -1) {
-		return drawMenu(&display.Cells[0][0], targetAttributes, _Width, _Depth, optionCount, menuInstance.Title, menuItems, frameInput, menuInstance.ValueExit, noActionValue, menuInstance.RowWidth, menuInstance.bDisableEscapeKey, menuInstance.TextExit);
+	template <typename _tCell, size_t _ItemCount, typename _ReturnType>
+	_ReturnType drawMenu(::nwol::grid_view<_tCell>& display, uint16_t* targetAttributes, const SMenu<_ReturnType>& menuInstance, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], uint32_t optionCount, const nwol::SInput& frameInput, _ReturnType noActionValue = -1) {
+		return drawMenu(display.begin(), targetAttributes, display.width(), display.height(), optionCount, menuInstance.Title, menuItems, frameInput, menuInstance.ValueExit, noActionValue, menuInstance.RowWidth, menuInstance.bDisableEscapeKey, menuInstance.TextExit);
 	}
 } // namespace
 
