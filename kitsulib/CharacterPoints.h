@@ -8,8 +8,7 @@ namespace klib
 {
 #pragma pack(push, 1)
 	// This struct holds a counter for every action that we want to record mostly for score purposes.
-	struct SCharacterScore 
-	{
+	struct SCharacterScore {
 		uint64_t					MoneyEarned				= 0;
 		uint64_t					MoneySpent				= 0;
 
@@ -60,9 +59,9 @@ namespace klib
 
 		void						Print					()								const				{
 			char							formatted[64]			= {};
-			sprintf_s(formatted, "%i/%i", Health	.Current, Health	.Max); printf("Health .....: %s.\n", formatted);
-			sprintf_s(formatted, "%i/%i", Mana		.Current, Mana		.Max); printf("Mana -------: %s.\n", formatted);
-			sprintf_s(formatted, "%i/%i", Shield	.Current, Shield	.Max); printf("Shield .....: %s.\n", formatted);
+			::sprintf_s(formatted, "%i/%i", Health	.Current, Health	.Max); ::printf("Health .....: %s.\n", formatted);
+			::sprintf_s(formatted, "%i/%i", Mana	.Current, Mana		.Max); ::printf("Mana -------: %s.\n", formatted);
+			::sprintf_s(formatted, "%i/%i", Shield	.Current, Shield	.Max); ::printf("Shield .....: %s.\n", formatted);
 		}
 	};
 

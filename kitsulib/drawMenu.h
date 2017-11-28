@@ -41,7 +41,7 @@ namespace klib
 			 if(currentPage == 0)				selectedText		= textToShow[0];	
 		else if(currentPage == (pageCount-1))	selectedText		= textToShow[1];	
 		else									selectedText		= textToShow[2];	
-		lineToRect(targetASCII, targetWidth, targetHeight, (int32_t)targetHeight-MENU_ROFFSET+1, posXOffset, nwol::SCREEN_CENTER, selectedText.c_str());
+		::nwol::lineToRect(targetASCII, targetWidth, targetHeight, (int32_t)targetHeight-MENU_ROFFSET+1, posXOffset, nwol::SCREEN_CENTER, selectedText.c_str());
 	}
 
 	template <size_t _FormatLen>
@@ -50,7 +50,7 @@ namespace klib
 		int32_t														actualOffsetX										= printfToRect(targetASCII, targetWidth, targetHeight, offsetY, posXOffset, align, formatString, "0", exitText.c_str());	
 
 		uint16_t													colorBkg											= bSelected ? COLOR_GREEN << 4 : COLOR_GREEN;  
-		return valueToRect(targetAttributes, targetWidth, targetHeight,  offsetY, actualOffsetX, nwol::SCREEN_LEFT, &colorBkg, 1, (int32_t)exitText.size()+3);
+		return ::nwol::valueToRect(targetAttributes, targetWidth, targetHeight,  offsetY, actualOffsetX, nwol::SCREEN_LEFT, &colorBkg, 1, (int32_t)exitText.size()+3);
 	}
 
 	template <size_t _ArraySize, typename _ReturnType>
@@ -99,7 +99,7 @@ namespace klib
 		else { // look if any of the options was chose from the possible inputs
 			for(uint32_t i=0, count = (uint32_t)actualOptionCount; i < count; i++) {
 				int32_t														actualOffsetX										= (int32_t)(targetWidth-targetWidth/2-numberCharsAvailable/2);
-				bool														bMouseOver											= mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2);
+				bool														bMouseOver											= ::klib::mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2);
 				if(frameInput.Keys['1'+i] || frameInput.Keys[VK_NUMPAD1+i] || (frameInput.Mouse.Buttons[0] && bMouseOver)) {
 					bResetMenuStuff									= true;
 					resultVal										= menuItems[i+itemOffset].ReturnValue;
@@ -121,7 +121,7 @@ namespace klib
 		const int32_t												clearOffset											= (int32_t)(targetHeight-MENU_ROFFSET-4-9);
 		const int32_t												optionsOffset										= lineOffset;
 
-		std::string													clearString											(std::max(rowWidth, 128U), ' ');
+		std::string													clearString											(::std::max(rowWidth, 128U), ' ');
 		for(int32_t i=-2, count = (int32_t)targetHeight-clearOffset; i<count; ++i)
 			::nwol::printfToRectColored(targetASCII, targetWidth, targetHeight, targetAttributes, (COLOR_BLACK<<4) | COLOR_YELLOW, clearOffset+i, 0, nwol::SCREEN_CENTER, "%s", clearString.c_str()); // clear all lines where we're going to draw
 
@@ -137,7 +137,7 @@ namespace klib
 		char														titleFormatted	[128]								= {}; 
 		int32_t														titleLength											= (int32_t)sprintf_s(titleFormatted, titleFormat, title.c_str());
 
-		rowWidth												= std::max((uint32_t)titleLength, std::max((uint32_t)exitText.size()+3, rowWidth));
+		rowWidth												= ::std::max((uint32_t)titleLength, std::max((uint32_t)exitText.size()+3, rowWidth));
 		const bool													bDonePrinting										= ::nwol::getMessageSlow(localPersistentState.SlowTitle, titleFormatted, titleLength, drawMenu_globals.Timer.LastTimeSeconds*4);
 		int32_t														actualOffsetX										= ::nwol::lineToRect(targetASCII, targetWidth, targetHeight, lineOffset, 0, nwol::SCREEN_CENTER, localPersistentState.SlowTitle);		//"-- %s --", title.c_str() );	// Print menu title
 		for(uint32_t i=0; i<rowWidth+1; i++)
@@ -162,7 +162,7 @@ namespace klib
 
 		for(uint32_t i=0, count = (uint32_t)actualOptionCount; i < count; ++i) {
 			actualOffsetX											= (int32_t)(targetWidth-targetWidth/2-numberCharsAvailable/2);
-			if(mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2)) {
+			if(::klib::mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2)) {
 				localPersistentState.CurrentOption						= i;
 				break;
 			}
@@ -173,7 +173,7 @@ namespace klib
 		
 		const uint32_t												posXOffset											= 0;
 		for(size_t i=0, count = (localPersistentState.MenuItemAccum < actualOptionCount) ? localPersistentState.MenuItemAccum : actualOptionCount; i<count; i++) {
-			sprintf_s(numberKey, "%u", (uint32_t)(i+1));
+			::sprintf_s(numberKey, "%u", (uint32_t)(i+1));
 			actualOffsetX											= ::nwol::printfToRect(targetASCII, targetWidth, targetHeight, lineOffset, posXOffset, nwol::SCREEN_CENTER, formatString, numberKey, menuItems[itemOffset+i].Text.c_str());
 			if(localPersistentState.CurrentOption == i)
 				for(uint32_t i=0; i<rowWidth+1; i++)

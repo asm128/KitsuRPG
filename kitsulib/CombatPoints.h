@@ -15,9 +15,9 @@ namespace klib
 
 		inline constexpr	SLifePointsMultiplier		operator *				(const int32_t level)									const	noexcept	{ return { Health*level , Mana*level , Shield*level }; }
 							void						Print					()														const	noexcept	{
-			printf("Health .....: %f.\n",	Health	);
-			printf("Mana -------: %f.\n",	Mana	);
-			printf("Shield .....: %f.\n",	Shield	);
+			::printf("Health .....: %f.\n",	Health	);
+			::printf("Mana -------: %f.\n",	Mana	);
+			::printf("Shield .....: %f.\n",	Shield	);
 		}
 	};
 
@@ -52,9 +52,9 @@ namespace klib
 		}
 			
 							void						Print					()														const				{
-			printf("Health .....: %i.\n",	Health	);
-			printf("Mana -------: %i.\n",	Mana	);
-			printf("Shield .....: %i.\n",	Shield	);
+			::printf("Health .....: %i.\n",	Health	);
+			::printf("Mana -------: %i.\n",	Mana	);
+			::printf("Shield .....: %i.\n",	Shield	);
 		}
 	};
 
@@ -67,9 +67,9 @@ namespace klib
 		constexpr			SFitnessPointsMultiplier	operator *				(const int32_t level)									const	noexcept	{ return { Attack*level, Movement*level, Reflexes*level, Sight*level }; }
 
 		void											Print					()														const				{
-			printf("Attack .....: %f.\n",	Attack		);
-			printf("Movement ---: %f.\n",	Movement	);
-			printf("Reflexes ...: %f.\n",	Reflexes	);
+			::printf("Attack .....: %f.\n",	Attack		);
+			::printf("Movement ---: %f.\n",	Movement	);
+			::printf("Reflexes ...: %f.\n",	Reflexes	);
 		}
 	};
 
@@ -101,10 +101,10 @@ namespace klib
 		}
 
 							void						Print					()														const				{
-			printf("Attack .....: %i.\n",	Attack		);
-			printf("Movement ---: %i.\n",	Movement	);
-			printf("Reflexes ...: %i.\n",	Reflexes	);
-			printf("Sight ------: %i.\n",	Sight		);
+			::printf("Attack .....: %i.\n",	Attack		);
+			::printf("Movement ---: %i.\n",	Movement	);
+			::printf("Reflexes ...: %i.\n",	Reflexes	);
+			::printf("Sight ------: %i.\n",	Sight		);
 		}
 	};
 
@@ -118,12 +118,12 @@ namespace klib
 		constexpr			SAttackPointsMultiplier		operator *				(const int32_t level)									const	noexcept	{ return { Hit*level, Damage*level, DirectDamage*level, Absorption*level, Range*level }; }
 
 							void						Print					()														const				{
-			printf("Hit ........: %f.\n",	Hit			);
-			printf("Damage .....: %f.\n",	Damage		);
-			printf("- Extra Point Damage:\n");
+			::printf("Hit ........: %f.\n",	Hit			);
+			::printf("Damage .....: %f.\n",	Damage		);
+			::printf("- Extra Point Damage:\n");
 			DirectDamage.Print();
-			printf("Absorption -: %f.\n",	Absorption	);
-			printf("Range ......: %f.\n",	Range		);
+			::printf("Absorption -: %f.\n",	Absorption	);
+			::printf("Range ......: %f.\n",	Range		);
 		}
 	};
 
@@ -165,12 +165,12 @@ namespace klib
 		}
 
 							void						Print					()														const				{
-			printf("Hit ........: %i.\n",	Hit			);
-			printf("Damage .....: %i.\n",	Damage		);
-			printf("- Extra Point Damage:\n");
+			::printf("Hit ........: %i.\n",	Hit			);
+			::printf("Damage .....: %i.\n",	Damage		);
+			::printf("- Extra Point Damage:\n");
 			DirectDamage.Print();
-			printf("Absorption -: %%%i.\n",	Absorption	);
-			printf("Range ......: %%%i.\n",	Range		);
+			::printf("Absorption -: %%%i.\n",	Absorption	);
+			::printf("Range ......: %%%i.\n",	Range		);
 		}
 	};
 

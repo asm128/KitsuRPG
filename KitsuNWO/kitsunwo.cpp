@@ -69,9 +69,9 @@ int32_t														update									(::SApplication& instanceApp, bool exitReque
 	::nwol::SGUI													& guiSystem								= instanceApp.GUI;
 	error_if(errored(::nwol::updateGUI(guiSystem, inputSystem)), "Why would we fail to update the GUI?");
 
-	::nwol::array_pod<::nwol::CONTROL_FLAG>							& controlFlags							= guiSystem.Controls.ControlFlags;
+	::nwol::array_pod<::nwol::CONTROL_STATE>						& controlFlags							= guiSystem.Controls.ControlFlags;
 	for(uint32_t iControl = 0, controlCount = controlFlags.size(); iControl < controlCount; ++iControl)
-		if(::nwol::bit_true(controlFlags[iControl], ::nwol::CONTROL_FLAG_EXECUTE)) {
+		if(::nwol::bit_true(controlFlags[iControl], ::nwol::CONTROL_STATE_EXECUTE)) {
 			info_printf("Execute control %u.", iControl);
 			switch(iControl) {
 			case 0:		

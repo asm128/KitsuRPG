@@ -17,23 +17,23 @@
 
 GDEFINE_OBJ(klib, CCharacter);
 
+// Set up a nice prompt 
 void prompt(std::string& userInput, const std::string& displayText) {
-	::nwol::clearASCIIBackBuffer(' ', COLOR_GREEN);
-
-	// Set up a nice prompt 
 	::nwol::SASCIITarget					asciiTarget;
-	::nwol::getASCIIBackBuffer(asciiTarget);
-	uint32_t screenWidth  =	asciiTarget.Width(),
-			 screenHeight =	asciiTarget.Height();
+	::nwol::getASCIIBackBuffer	(asciiTarget);
+	::nwol::asciiTargetClear	(asciiTarget, ' ', COLOR_GREEN);
+	uint32_t								screenWidth				=	asciiTarget.Width()
+		,									screenHeight			=	asciiTarget.Height()
+		;
 	::nwol::lineToRect((char_t*)asciiTarget.Characters.begin(), screenWidth, screenHeight, (screenHeight>>1)-1, 0, ::nwol::SCREEN_CENTER, displayText.c_str());
 	::nwol::presentASCIIBackBuffer();
 
-	static const HANDLE			hConsoleOut				= ::GetStdHandle( STD_OUTPUT_HANDLE );
-	COORD						cursorPos				= {((SHORT)screenWidth>>1)-5, (SHORT)screenHeight>>1};
+	static const HANDLE						hConsoleOut				= ::GetStdHandle( STD_OUTPUT_HANDLE );
+	COORD									cursorPos				= {((SHORT)screenWidth>>1)-5, (SHORT)screenHeight>>1};
 	::SetConsoleCursorPosition(hConsoleOut, cursorPos);
 	::SetConsoleTextAttribute	(hConsoleOut, COLOR_GREEN);
 	::SetConsoleDisplayMode	(hConsoleOut, CONSOLE_FULLSCREEN_MODE, 0);
-	static const HANDLE			hConsoleIn				= ::GetStdHandle( STD_INPUT_HANDLE );
+	static const HANDLE						hConsoleIn				= ::GetStdHandle( STD_INPUT_HANDLE );
 	::FlushConsoleInputBuffer	(hConsoleIn);
 	::std::getline(::std::cin, userInput);
 }
@@ -57,10 +57,10 @@ void klib::resetGame(SGame& instanceGame) {
 }
 
 struct SWearables {
-	::klib::SProfession	Profession	= {0, 0, 1, -1};
-	::klib::SWeapon		Weapon		= {0, 0, 1, -1};
-	::klib::SArmor		Armor		= {0, 0, 1, -1};
-	::klib::SAccessory	Accessory	= {0, 0, 1, -1};
+	::klib::SProfession				Profession				= {0, 0, 1, -1};
+	::klib::SWeapon					Weapon					= {0, 0, 1, -1};
+	::klib::SArmor					Armor					= {0, 0, 1, -1};
+	::klib::SAccessory				Accessory				= {0, 0, 1, -1};
 };
 
 // Sets up initial equipment and items for the player to carry or wear.
@@ -74,20 +74,20 @@ void klib::initGame(SGame& instanceGame) {
 	info_printf("sizeof(SCharacterScore): %u"						, (uint32_t) sizeof(::klib::SCharacterScore)									);
 	info_printf("sizeof(SCharacterGoods): %u"						, (uint32_t) sizeof(::klib::SCharacterGoods)									);
 	info_printf("sizeof(SCharacter): %u"							, (uint32_t) sizeof(::klib::SCharacter)											);
-	info_printf("sizeof(SCharacter)-sizeof(SCharacterGoods): %u"	, (uint32_t)(sizeof(::klib::SCharacter)		- sizeof(klib::SCharacterGoods))	);
+	info_printf("sizeof(SCharacter)-sizeof(SCharacterGoods): %u"	, (uint32_t)(sizeof(::klib::SCharacter)		- sizeof(::klib::SCharacterGoods))	);
 	info_printf("sizeof(SPlayer): %u"								, (uint32_t) sizeof(::klib::SPlayer)											);
-	info_printf("sizeof(SPlayer)-sizeof(SCharacterGoods): %u"		, (uint32_t)(sizeof(::klib::SPlayer)		- sizeof(klib::SCharacterGoods))	);
+	info_printf("sizeof(SPlayer)-sizeof(SCharacterGoods): %u"		, (uint32_t)(sizeof(::klib::SPlayer)		- sizeof(::klib::SCharacterGoods))	);
 	info_printf("sizeof(STacticalInfo): %u"							, (uint32_t) sizeof(::klib::STacticalInfo)										);
 	info_printf("sizeof(STacticalBoard): %u"						, (uint32_t) sizeof(::klib::STacticalBoard)										);
 	info_printf("sizeof(SMapInventory): %u"							, (uint32_t) sizeof(::klib::SMapInventory)										);
-	info_printf("sizeof(STacticalInfo)-sizeof(SMapInventory): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(klib::SMapInventory))		);
-	info_printf("sizeof(STacticalInfo)-sizeof(STacticalBoard): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(klib::STacticalBoard))		);
+	info_printf("sizeof(STacticalInfo)-sizeof(SMapInventory): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(::klib::SMapInventory))		);
+	info_printf("sizeof(STacticalInfo)-sizeof(STacticalBoard): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(::klib::STacticalBoard))		);
 	info_printf("sizeof(SGame): %u"									, (uint32_t) sizeof(::klib::SGame)												);
 
 	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_STARTED			);
 	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL			);
 	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE	);
-	instanceGame.Seed = 12;
+	instanceGame.Seed		= 12;
 	::srand((unsigned int)instanceGame.Seed);
 	::nwol::resetCursorString(instanceGame.SlowMessage);
 	instanceGame.ClearDisplays();
@@ -110,80 +110,80 @@ void klib::initGame(SGame& instanceGame) {
 	::SWearables				wearablesHeavy					= {};
 	::SWearables				wearablesSniper					= {};
 
-	wearablesDeath		.Weapon		= {45, 0/*17*/				, 10 + (int16_t)(rand() % 5), - 1};	// Gauss Death Scythe
-	wearablesDeath		.Accessory	= { 1, 0/*16*/				, 10 + (int16_t)(rand() % 5), - 1};	// Hairband of Anguish
-	wearablesDeath		.Armor		= { 1, 9					, 10 + (int16_t)(rand() % 5), - 1};	// Polarized Robe
-	wearablesDeath		.Profession	= {26, 22					, 10 + (int16_t)(rand() % 5), - 1};	// Spy God 
+	wearablesDeath		.Weapon		= {45, 0/*17*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Gauss Death Scythe
+	wearablesDeath		.Accessory	= { 1, 0/*16*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Hairband of Anguish
+	wearablesDeath		.Armor		= { 1, 9					, 10 + (int16_t)(::rand() % 5), - 1};	// Polarized Robe
+	wearablesDeath		.Profession	= {26, 22					, 10 + (int16_t)(::rand() % 5), - 1};	// Spy God 
 
-	wearablesTiamat		.Weapon		= {44, 0/*17*/				, 10 + (int16_t)(rand() % 5), - 1};	// Gauss Tiamat's Roar
-	wearablesTiamat		.Accessory	= { 3, 0/*16*/				, 10 + (int16_t)(rand() % 5), - 1};	// Ring of Anguish
-	wearablesTiamat		.Armor		= { 9, 0/* 9*/				, 10 + (int16_t)(rand() % 5), - 1};	// Polarized Stardust Armor
-	wearablesTiamat		.Profession	= {18, 22					, 10 + (int16_t)(rand() % 5), - 1};	// Sorcerer God 
+	wearablesTiamat		.Weapon		= {44, 0/*17*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Gauss Tiamat's Roar
+	wearablesTiamat		.Accessory	= { 3, 0/*16*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Ring of Anguish
+	wearablesTiamat		.Armor		= { 9, 0/* 9*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Polarized Stardust Armor
+	wearablesTiamat		.Profession	= {18, 22					, 10 + (int16_t)(::rand() % 5), - 1};	// Sorcerer God 
 
-	wearablesAnhur		.Weapon		= {43, 0/*25*/				, 10 + (int16_t)(rand() % 5), - 1};	// Neutron Anhur's Spear
-	wearablesAnhur		.Accessory	= { 8, 0/*11*/				, 10 + (int16_t)(rand() % 5), - 1};	// Watch of Ambition
-	wearablesAnhur		.Armor		= { 2, 0/* 8*/				, 10 + (int16_t)(rand() % 5), - 1};	// Reflective Leather Armor
-	wearablesAnhur		.Profession	= {20, 22					, 10 + (int16_t)(rand() % 5), - 1};	// Hunter God 
+	wearablesAnhur		.Weapon		= {43, 0/*25*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Neutron Anhur's Spear
+	wearablesAnhur		.Accessory	= { 8, 0/*11*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Watch of Ambition
+	wearablesAnhur		.Armor		= { 2, 0/* 8*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Reflective Leather Armor
+	wearablesAnhur		.Profession	= {20, 22					, 10 + (int16_t)(::rand() % 5), - 1};	// Hunter God 
 
-	wearablesThor		.Weapon		= {41, 0/*16*/				, 10 + (int16_t)(rand() % 5), - 1};	// Acid Thor's Mace
-	wearablesThor		.Accessory	= { 4, 0/* 6*/				, 10 + (int16_t)(rand() % 5), - 1};	// Titanium Gauntlet
-	wearablesThor		.Armor		= { 5, 0/* 5*/				, 10 + (int16_t)(rand() % 5), - 1};	// Biohazard Plate Armor
-	wearablesThor		.Profession	= {28, 22					, 10 + (int16_t)(rand() % 5), - 1};	// Commando God 
+	wearablesThor		.Weapon		= {41, 0/*16*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Acid Thor's Mace
+	wearablesThor		.Accessory	= { 4, 0/* 6*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Titanium Gauntlet
+	wearablesThor		.Armor		= { 5, 0/* 5*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Biohazard Plate Armor
+	wearablesThor		.Profession	= {28, 22					, 10 + (int16_t)(::rand() % 5), - 1};	// Commando God 
 
-	wearablesZeus		.Weapon		= {42, 0/*21*/				, 10 + (int16_t)(rand() % 5), - 1};	// Executioner's Zeus' Staff
-	wearablesZeus		.Accessory	= { 5, 0/* 8*/				, 10 + (int16_t)(rand() % 5), - 1};	// Magic Monocle
-	wearablesZeus		.Armor		= { 8, 0/* 4*/				, 10 + (int16_t)(rand() % 5), - 1};	// Insulating Dragon Scale Armor
-	wearablesZeus		.Profession	= { 5, 22					, 10 + (int16_t)(rand() % 5), - 1};	// Lightning Mage God 
+	wearablesZeus		.Weapon		= {42, 0/*21*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Executioner's Zeus' Staff
+	wearablesZeus		.Accessory	= { 5, 0/* 8*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Magic Monocle
+	wearablesZeus		.Armor		= { 8, 0/* 4*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Insulating Dragon Scale Armor
+	wearablesZeus		.Profession	= { 5, 22					, 10 + (int16_t)(::rand() % 5), - 1};	// Lightning Mage God 
 
-	wearablesCthulhu	.Weapon		= {40, 0/*21*/				, 10 + (int16_t)(rand() % 5), - 1};	// Executioner's Cthulhu's Voice
-	wearablesCthulhu	.Accessory	= { 2, 8					, 10 + (int16_t)(rand() % 5), - 1};	// Magic Hat
-	wearablesCthulhu	.Armor		= { 7, 0/* 4*/				, 10 + (int16_t)(rand() % 5), - 1};	// Insulating Diamond Armor
-	wearablesCthulhu	.Profession	= {12, 22					, 10 + (int16_t)(rand() % 5), - 1};	// Illusion Mage God 
+	wearablesCthulhu	.Weapon		= {40, 0/*21*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Executioner's Cthulhu's Voice
+	wearablesCthulhu	.Accessory	= { 2, 8					, 10 + (int16_t)(::rand() % 5), - 1};	// Magic Hat
+	wearablesCthulhu	.Armor		= { 7, 0/* 4*/				, 10 + (int16_t)(::rand() % 5), - 1};	// Insulating Diamond Armor
+	wearablesCthulhu	.Profession	= {12, 22					, 10 + (int16_t)(::rand() % 5), - 1};	// Illusion Mage God 
 
-	wearablesPerseus	.Weapon		= {39,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Perseus' Sword
-	wearablesPerseus	.Accessory	= { 1,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Hairband
-	wearablesPerseus	.Armor		= { 2,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Leather Armor
-	wearablesPerseus	.Profession	= { 1,  20					, 10 + (int16_t)(rand() % 5), - 1};	// Swordman Demigod
+	wearablesPerseus	.Weapon		= {39,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Perseus' Sword
+	wearablesPerseus	.Accessory	= { 1,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Hairband
+	wearablesPerseus	.Armor		= { 2,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Leather Armor
+	wearablesPerseus	.Profession	= { 1,  20					, 10 + (int16_t)(::rand() % 5), - 1};	// Swordman Demigod
 
-	wearablesFenrir		.Weapon		= {38,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Fenrir's Claw
-	wearablesFenrir		.Accessory	= { 9,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Leash
-	wearablesFenrir		.Armor		= { 0,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Underwear
-	wearablesFenrir		.Profession	= {19,  17					, 10 + (int16_t)(rand() % 5), - 1};	// Demon Assassin 
+	wearablesFenrir		.Weapon		= {38,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Fenrir's Claw
+	wearablesFenrir		.Accessory	= { 9,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Leash
+	wearablesFenrir		.Armor		= { 0,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Underwear
+	wearablesFenrir		.Profession	= {19,  17					, 10 + (int16_t)(::rand() % 5), - 1};	// Demon Assassin 
 
-	wearablesGilgamesh	.Weapon		= {37,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Gilgamesh Whip
-	wearablesGilgamesh	.Accessory	= { 0,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Bracelet
-	wearablesGilgamesh	.Armor		= { 2,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Leather Armor
-	wearablesGilgamesh	.Profession	= {27,  20					, 10 + (int16_t)(rand() % 5), - 1};	// Engineer Demigod
+	wearablesGilgamesh	.Weapon		= {37,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Gilgamesh Whip
+	wearablesGilgamesh	.Accessory	= { 0,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Bracelet
+	wearablesGilgamesh	.Armor		= { 2,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Leather Armor
+	wearablesGilgamesh	.Profession	= {27,  20					, 10 + (int16_t)(::rand() % 5), - 1};	// Engineer Demigod
 
-	wearablesDragon		.Weapon		= {36,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Dragon's Nail
-	wearablesDragon		.Accessory	= { 3,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Ring
-	wearablesDragon		.Armor		= { 8,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Dragon Scale Armor
-	wearablesDragon		.Profession	= { 9,  20					, 10 + (int16_t)(rand() % 5), - 1};	// Fire Mage Demigod
+	wearablesDragon		.Weapon		= {36,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Dragon's Nail
+	wearablesDragon		.Accessory	= { 3,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Ring
+	wearablesDragon		.Armor		= { 8,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Dragon Scale Armor
+	wearablesDragon		.Profession	= { 9,  20					, 10 + (int16_t)(::rand() % 5), - 1};	// Fire Mage Demigod
 
-	wearablesJesus		.Weapon		= {35,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Jesus' Staff
-	wearablesJesus		.Accessory	= { 1,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Hairband
-	wearablesJesus		.Armor		= { 1,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Robe
-	wearablesJesus		.Profession	= { 0,  20					, 10 + (int16_t)(rand() % 5), - 1};	// John Doe Demigod
+	wearablesJesus		.Weapon		= {35,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Jesus' Staff
+	wearablesJesus		.Accessory	= { 1,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Hairband
+	wearablesJesus		.Armor		= { 1,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Robe
+	wearablesJesus		.Profession	= { 0,  20					, 10 + (int16_t)(::rand() % 5), - 1};	// John Doe Demigod
 
-	wearablesBehemoth	.Weapon		= {34,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Behemoth Tooth
-	wearablesBehemoth	.Accessory	= { 0,   0					, 10 + (int16_t)(rand() % 5), - 1};	// 
-	wearablesBehemoth	.Armor		= { 0,   0					, 10 + (int16_t)(rand() % 5), - 1};	// Underwear
-	wearablesBehemoth	.Profession	= {21,  17					, 10 + (int16_t)(rand() % 5), - 1};	// Demon Heavy
+	wearablesBehemoth	.Weapon		= {34,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Behemoth Tooth
+	wearablesBehemoth	.Accessory	= { 0,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// 
+	wearablesBehemoth	.Armor		= { 0,   0					, 10 + (int16_t)(::rand() % 5), - 1};	// Underwear
+	wearablesBehemoth	.Profession	= {21,  17					, 10 + (int16_t)(::rand() % 5), - 1};	// Demon Heavy
 
-	wearablesAssault	.Weapon		= {27,	1					,  3 + (int16_t)(rand() % 5), - 1};
-	wearablesAssault	.Accessory	= { 8,	3					,  3 + (int16_t)(rand() % 5), - 1};
-	wearablesAssault	.Armor		= { 6,	2					,  3 + (int16_t)(rand() % 5), - 1};
-	wearablesAssault	.Profession	= {22,	1 + (rand() & 3)	,  3 + (int16_t)(rand() % 5), - 1};
+	wearablesAssault	.Weapon		= {27,	1					,  3 + (int16_t)(::rand() % 5), - 1};
+	wearablesAssault	.Accessory	= { 8,	3					,  3 + (int16_t)(::rand() % 5), - 1};
+	wearablesAssault	.Armor		= { 6,	2					,  3 + (int16_t)(::rand() % 5), - 1};
+	wearablesAssault	.Profession	= {22,	1 + (rand() & 3)	,  3 + (int16_t)(::rand() % 5), - 1};
 
-	wearablesHeavy		.Weapon		= {30,	8					,  3 + (int16_t)(rand() % 5), - 1};
-	wearablesHeavy		.Accessory	= { 4,	4					,  3 + (int16_t)(rand() % 5), - 1};
-	wearablesHeavy		.Armor		= {10,	1					,  3 + (int16_t)(rand() % 5), - 1};
-	wearablesHeavy		.Profession	= {21,	1 + (rand() & 3)	,  3 + (int16_t)(rand() % 5), - 1};
+	wearablesHeavy		.Weapon		= {30,	8					,  3 + (int16_t)(::rand() % 5), - 1};
+	wearablesHeavy		.Accessory	= { 4,	4					,  3 + (int16_t)(::rand() % 5), - 1};
+	wearablesHeavy		.Armor		= {10,	1					,  3 + (int16_t)(::rand() % 5), - 1};
+	wearablesHeavy		.Profession	= {21,	1 + (rand() & 3)	,  3 + (int16_t)(::rand() % 5), - 1};
 
-	wearablesSniper		.Weapon		= {29, 5					,  5 + (int16_t)(rand() % 5), - 1};
-	wearablesSniper		.Accessory	= { 6, 9					,  5 + (int16_t)(rand() % 5), - 1};
-	wearablesSniper		.Armor		= {12, 4					,  5 + (int16_t)(rand() % 5), - 1};
-	wearablesSniper		.Profession	= {24, 1 + (rand() & 3)		,  5 + (int16_t)(rand() % 5), - 1};
+	wearablesSniper		.Weapon		= {29, 5					,  5 + (int16_t)(::rand() % 5), - 1};
+	wearablesSniper		.Accessory	= { 6, 9					,  5 + (int16_t)(::rand() % 5), - 1};
+	wearablesSniper		.Armor		= {12, 4					,  5 + (int16_t)(::rand() % 5), - 1};
+	wearablesSniper		.Profession	= {24, 1 + (rand() & 3)		,  5 + (int16_t)(::rand() % 5), - 1};
 
 
 	for(uint32_t iPlayer=0, count=1/*MAX_PLAYER_TYPES*/; iPlayer < count; ++iPlayer) {
@@ -279,15 +279,13 @@ void klib::initGame(SGame& instanceGame) {
 		}
 
 		player.Squad.Clear(-1);
-		player.Squad.Agents[0] = 3;
+		player.Squad.Agents[0]			= 3;
 		for(uint32_t i=0; i<2; i++) 
-			player.Squad.Agents[1+i] = CAMPAIGN_AGENT_COUNT+i;
+			player.Squad.Agents[1+i]		= CAMPAIGN_AGENT_COUNT+i;
 
-		player.Selection = {0, 0, -1, -1, -1};
-
-		player.Name = ::std::string(player.Name) + " #" + std::to_string(iPlayer);
+		player.Selection				= {0, 0, -1, -1, -1};
+		player.Name						= ::std::string(player.Name) + " #" + ::std::to_string(iPlayer);
 		//player.Name = ::nwol::get_value_label((PLAYER_INDEX)iPlayer);
-
 	}
 	::klib::initTacticalMap(instanceGame);
 	nwol::bit_set(instanceGame.Flags, GAME_FLAGS_RUNNING	);
