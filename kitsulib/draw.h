@@ -380,7 +380,7 @@ namespace klib
 		return returnValue;
 	}
 
-	void drawAndPresentGame( SGame& instanceGame );
+	void drawAndPresentGame( SGame& instanceGame, ::nwol::SASCIITarget& target );
 
 } // namespace
 

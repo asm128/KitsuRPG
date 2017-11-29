@@ -8,7 +8,7 @@ void drawIntro(SGame& instanceGame);
 // Currently what this function is lacking is the ability to receive negative offsets.
 template<typename _TCell, size_t _Width, size_t _Depth>
 void										blitGrid						(::nwol::SGrid<_TCell, _Width, _Depth>& source, int32_t offsetY, uint32_t offsetX, _TCell* target, size_t targetWidth, size_t targetHeight, int32_t rowPitch=-1)	{
-	size_t											actualWidth						= std::min(_Width, std::max((size_t)0, targetWidth-offsetX));
+	size_t											actualWidth						= ::std::min(_Width, ::std::max((size_t)0, targetWidth-offsetX));
 	if(rowPitch < 0)
 		rowPitch									= (int32_t)targetWidth;
 
@@ -21,13 +21,7 @@ void										blitGrid						(::nwol::SGrid<_TCell, _Width, _Depth>& source, int3
 }
 
 template<typename _TCell, size_t _Width, size_t _Depth>
-void										drawDisplay						(::nwol::SGrid<_TCell, _Width, _Depth>& source, uint32_t offsetY, uint32_t offsetX )																				{
-	::nwol::SASCIITarget					asciiTarget;
-	::nwol::getASCIIBackBuffer(asciiTarget);
-
-	blitGrid(source, offsetY, offsetX, (_TCell*)asciiTarget.Characters.begin(), asciiTarget.Characters.width(), asciiTarget.Characters.height());
-}
-
+void										drawDisplay						(::nwol::SGrid<_TCell, _Width, _Depth>& source, uint32_t offsetY, uint32_t offsetX, ::nwol::SASCIITarget& asciiTarget)												{ blitGrid(source, offsetY, offsetX, (_TCell*)asciiTarget.Characters.begin(), asciiTarget.Characters.width(), asciiTarget.Characters.height()); }
 void										drawStateBackground				( SGame& instanceGame )																																				{
 	switch(instanceGame.State.State) {
 	case	GAME_STATE_MENU_MAIN		:	drawIntro(instanceGame);																	; break;
@@ -39,7 +33,7 @@ void										drawStateBackground				( SGame& instanceGame )																				
 }
 
 SGameState									drawMemorial					(SGame& instanceGame, const SGameState& returnState)																												{ return returnState; }
-void										klib::drawAndPresentGame		(SGame& instanceGame)																																				{
+void										klib::drawAndPresentGame		(SGame& instanceGame, ::nwol::SASCIITarget& target)																													{
 	static ::nwol::STimer							frameMeasure;
 	static ::nwol::STimer							animTimer;
 	static ::nwol::SAccumulator<double>				animTimerAccum					= {0.0, 1.00};
@@ -49,12 +43,10 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	if(animTimerAccum.Accumulate(animTimer.LastTimeSeconds))
 		animTimerAccum.Value						= 0;
 
-	drawStateBackground	(instanceGame);
-	showMenu			(instanceGame);
+	::drawStateBackground	(instanceGame);
+	::showMenu				(instanceGame);
 
-	drawDisplay(instanceGame.GlobalDisplay.Screen, 0, 0);
-	::nwol::SASCIITarget							target;
-	::nwol::getASCIIBackBuffer						(target);
+	drawDisplay(instanceGame.GlobalDisplay.Screen, 0, 0, target);
 
 	uint32_t										bbWidth							= target.Width		();
 	uint32_t										bbHeight						= target.Height		();
@@ -66,17 +58,17 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	//case GAME_STATE_MENU_ACTION:
 	case GAME_STATE_MENU_LAN_MISSION	:
 	case GAME_STATE_TACTICAL_CONTROL	:
-	case GAME_STATE_START_MISSION		: drawDisplay(instanceGame.TacticalDisplay.Screen, TACTICAL_DISPLAY_POSY, (instanceGame.GlobalDisplay.Screen.Width>>1)-(instanceGame.TacticalDisplay.Width>>1));									break;
+	case GAME_STATE_START_MISSION		: drawDisplay(instanceGame.TacticalDisplay.Screen, TACTICAL_DISPLAY_POSY, (instanceGame.GlobalDisplay.Screen.Width>>1)-(instanceGame.TacticalDisplay.Width>>1), target);									break;
 	case GAME_STATE_CREDITS				: drawCredits((char_t*)bbChar, bbWidth, bbHeight, instanceGame.FrameTimer.LastTimeSeconds, namesSpecialThanks, instanceGame.State);																			break;
 	case GAME_STATE_MEMORIAL			: drawMemorial((char_t*)bbChar, bbWidth, bbHeight, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], instanceGame.FrameTimer.LastTimeSeconds, instanceGame.Players[0].Memorial, instanceGame.State);	break;
 	case GAME_STATE_WELCOME_COMMANDER	:
 	case GAME_STATE_MENU_SQUAD_SETUP	:
 	case GAME_STATE_MENU_EQUIPMENT		: break;
 	default:
-		drawDisplay(instanceGame.PostEffectDisplay.Screen, TACTICAL_DISPLAY_POSY, (instanceGame.GlobalDisplay.Screen.Width>>1)-(instanceGame.PostEffectDisplay.Width>>1));
+		drawDisplay(instanceGame.PostEffectDisplay.Screen, TACTICAL_DISPLAY_POSY, (instanceGame.GlobalDisplay.Screen.Width >> 1) - (instanceGame.PostEffectDisplay.Width >> 1), target);
 	}
 
-	memcpy(bbColor, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], instanceGame.GlobalDisplay.TextAttributes.Width*instanceGame.GlobalDisplay.TextAttributes.Depth*sizeof(uint16_t));
+	memcpy(bbColor, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], instanceGame.GlobalDisplay.TextAttributes.Width * instanceGame.GlobalDisplay.TextAttributes.Depth * sizeof(uint16_t));
 
 	switch(instanceGame.State.State) { 
 	//case GAME_STATE_MENU_ACTION:
@@ -84,7 +76,7 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	case GAME_STATE_TACTICAL_CONTROL	:
 	case GAME_STATE_START_MISSION		:
 		for(uint32_t y = 0; y<instanceGame.PostEffectDisplay.TextAttributes.Depth; ++y)
-			memcpy(&bbColor[(TACTICAL_DISPLAY_POSY+y)*bbWidth+((bbWidth>>1)-(instanceGame.TacticalDisplay.TextAttributes.Width>>1))], &instanceGame.TacticalDisplay.TextAttributes.Cells[y][0], instanceGame.TacticalDisplay.TextAttributes.Width*sizeof(uint16_t));
+			memcpy(&bbColor[(TACTICAL_DISPLAY_POSY + y) * bbWidth + ((bbWidth >> 1) - (instanceGame.TacticalDisplay.TextAttributes.Width >> 1))], &instanceGame.TacticalDisplay.TextAttributes.Cells[y][0], instanceGame.TacticalDisplay.TextAttributes.Width * sizeof(uint16_t));
 		break;
 	case GAME_STATE_CREDITS				:
 	case GAME_STATE_MEMORIAL			:
@@ -107,7 +99,7 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 	const int32_t									MAX_LOG_LINES					= iif(instanceGame.State.State == GAME_STATE_WELCOME_COMMANDER || nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL)) 30 : 4;
 	int32_t											logSize							= (int32_t)instanceGame.UserLog.size();
 	for(uint32_t iLogLine=0, logLineCount = std::min(MAX_LOG_LINES, logSize); iLogLine< logLineCount; ++iLogLine)
-		actualOffsetX								= nwol::lineToRectColored(target, instanceGame.UserLog[logSize-1-iLogLine].Color, bbHeight-9-iLogLine, 1, nwol::SCREEN_LEFT, instanceGame.UserLog[logSize-1-iLogLine].Message.c_str());	
+		actualOffsetX								= ::nwol::lineToRectColored(target, instanceGame.UserLog[logSize-1-iLogLine].Color, bbHeight-9-iLogLine, 1, nwol::SCREEN_LEFT, instanceGame.UserLog[logSize-1-iLogLine].Message.c_str());	
 
 	// Print some debugging information 
 	if(nwol::bit_true(instanceGame.Flags,GAME_FLAGS_HELPON)) {
@@ -198,8 +190,7 @@ void										klib::drawAndPresentGame		(SGame& instanceGame)																			
 			::nwol::bit_set(instanceGame.Flags, GAME_FLAGS_HELPON);
 		keyTimerAccum.Value								= 0;
 	}
-
-}; 	// 
+}
 
 void										drawIntro						( SGame& instanceGame ) {
 	drawFireBackground(instanceGame.PostEffectDisplay, instanceGame.FrameTimer.LastTimeSeconds);
@@ -212,4 +203,4 @@ void										drawIntro						( SGame& instanceGame ) {
 		uint32_t										offsetY							= (uint32_t)((displayDepth >> 1)-(::nwol::size(words) >> 1) + i * 2);
 		uint32_t										offsetX							= printfToGridColored(instanceGame.PostEffectDisplay.Screen, instanceGame.PostEffectDisplay.TextAttributes, COLOR_ORANGE, offsetY, 0, ::nwol::SCREEN_CENTER, "%s", words[i].c_str());
 	}
-};
+}

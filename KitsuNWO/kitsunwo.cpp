@@ -38,13 +38,13 @@ int32_t														setup									(::SApplication& instanceApp)										{
 
 	errmsg(::networkEnable(instanceApp), "Failed to enable network.");
 
-	::nwol::SASCIITarget											asciiTarget;
+	::nwol::SASCIITarget											asciiTarget								= {};
 	::nwol::getASCIIBackBuffer(asciiTarget);
 	guiSystem.TargetSizeASCII.x									= asciiTarget.Width		();
 	guiSystem.TargetSizeASCII.y									= asciiTarget.Height	();
 
-	static const ::nwol::glabel										newControlLabel				= "Exit";
-	::nwol::SGUIControl												newControl;
+	static const ::nwol::glabel										newControlLabel							= "Exit";
+	::nwol::SGUIControl												newControl								= {};
 
 	newControl.AreaASCII										= {1, 1, (int32_t)newControlLabel.size(), 1}	;
 	newControl.Text												= newControlLabel								;
@@ -55,7 +55,6 @@ int32_t														setup									(::SApplication& instanceApp)										{
 #ifndef VK_ESCAPE
 #define VK_ESCAPE 0x1B
 #endif
-
 
 int32_t														update									(::SApplication& instanceApp, bool exitRequested)					{
 	if(exitRequested)
@@ -74,9 +73,8 @@ int32_t														update									(::SApplication& instanceApp, bool exitReque
 		if(::nwol::bit_true(controlFlags[iControl], ::nwol::CONTROL_STATE_EXECUTE)) {
 			info_printf("Execute control %u.", iControl);
 			switch(iControl) {
-			case 0:		
-				return ::nwol::APPLICATION_STATE_EXIT; 
-			default:
+			case 0	: return ::nwol::APPLICATION_STATE_EXIT; 
+			default	:
 				break;
 			}
 		}
@@ -93,9 +91,9 @@ int32_t														render									(::SApplication& instanceApp)										{
 		instanceGame.ServerTime										= appNetwork.ServerTime;
 	}
 	instanceGame.FrameInput										= instanceApp.Input;
-	::klib::drawAndPresentGame(instanceGame);
-	::nwol::SASCIITarget											target;
-	::nwol::error_t													errMy									= ::nwol::getASCIIBackBuffer(target);
+	::nwol::SASCIITarget							target;
+	::nwol::getASCIIBackBuffer						(target);
+	::klib::drawAndPresentGame(instanceGame, target);
 	::nwol::renderGUIASCII(target, instanceApp.GUI);
 	::nwol::presentASCIIBackBuffer();
 	return 0; 

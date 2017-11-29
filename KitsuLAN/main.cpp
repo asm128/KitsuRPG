@@ -12,7 +12,9 @@
 void draw( klib::SGame& instanceGame ) // 
 {
 	::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
- 	drawAndPresentGame(instanceGame);
+	::nwol::SASCIITarget							target;
+	::nwol::getASCIIBackBuffer						(target);
+ 	drawAndPresentGame(instanceGame, target);
 	::nwol::presentASCIIBackBuffer();
 };
 

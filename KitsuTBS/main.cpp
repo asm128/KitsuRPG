@@ -1,13 +1,5 @@
 #include "draw.h"
 
-// Use this function to draw our game data
-void draw( klib::SGame& instanceGame ) // 
-{
-	::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
- 	drawAndPresentGame(instanceGame);
-	::nwol::presentASCIIBackBuffer();
-};
-
 int main(int argc, char **argv)
 {
 #if defined(NWOL_DEBUG_ENABLED)
@@ -20,14 +12,17 @@ int main(int argc, char **argv)
 
 	::nwol::initASCIIScreen(klib::SGlobalDisplay::Width, klib::SGlobalDisplay::Depth);
 	
-	klib::SGame* pInstancedGame	= new klib::SGame;
-	klib::SGame& instanceGame	= *pInstancedGame;
+	::klib::SGame* pInstancedGame	= new klib::SGame;
+	::klib::SGame& instanceGame		= *pInstancedGame;
 
-	klib::initGame(instanceGame);
-
+	::klib::initGame(instanceGame);
 	while(instanceGame.Flags & klib::GAME_FLAGS_RUNNING) {
 		::nwol::pollInput(instanceGame.FrameInput);
-		draw(instanceGame);
+		::nwol::SASCIITarget							target;
+		::nwol::getASCIIBackBuffer						(target);
+		::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
+ 		::klib::drawAndPresentGame(instanceGame, target);
+		::nwol::presentASCIIBackBuffer();
 	}
 
 	if(pInstancedGame)
@@ -46,7 +41,7 @@ int WINAPI WinMain
 ,    _In_		int			nShowCmd
 )
 {
-	if(0 > main(__argc, __argv))
+	if(0 > ::main(__argc, __argv))
 		return EXIT_FAILURE;
 
 	return EXIT_SUCCESS;
