@@ -18,9 +18,7 @@
 GDEFINE_OBJ(klib, CCharacter);
 
 // Set up a nice prompt 
-void prompt(std::string& userInput, const std::string& displayText) {
-	::nwol::SASCIITarget					asciiTarget;
-	::nwol::getASCIIBackBuffer	(asciiTarget);
+void prompt(std::string& userInput, const std::string& displayText, ::nwol::SASCIITarget& asciiTarget) {
 	::nwol::asciiTargetClear	(asciiTarget, ' ', COLOR_GREEN);
 	uint32_t								screenWidth				=	asciiTarget.Width()
 		,									screenHeight			=	asciiTarget.Height()
@@ -30,9 +28,9 @@ void prompt(std::string& userInput, const std::string& displayText) {
 
 	static const HANDLE						hConsoleOut				= ::GetStdHandle( STD_OUTPUT_HANDLE );
 	COORD									cursorPos				= {((SHORT)screenWidth>>1)-5, (SHORT)screenHeight>>1};
-	::SetConsoleCursorPosition(hConsoleOut, cursorPos);
+	::SetConsoleCursorPosition	(hConsoleOut, cursorPos);
 	::SetConsoleTextAttribute	(hConsoleOut, COLOR_GREEN);
-	::SetConsoleDisplayMode	(hConsoleOut, CONSOLE_FULLSCREEN_MODE, 0);
+	::SetConsoleDisplayMode		(hConsoleOut, CONSOLE_FULLSCREEN_MODE, 0);
 	static const HANDLE						hConsoleIn				= ::GetStdHandle( STD_INPUT_HANDLE );
 	::FlushConsoleInputBuffer	(hConsoleIn);
 	::std::getline(::std::cin, userInput);
@@ -46,9 +44,11 @@ void klib::resetGame(SGame& instanceGame) {
 
 	// Set up a nice prompt 
 	::std::string playerName;
-	::prompt(playerName, "Enter your name:");
+	::nwol::SASCIITarget					asciiTarget;
+	::nwol::getASCIIBackBuffer	(asciiTarget);
+	::prompt(playerName, "Enter your name:", asciiTarget);
 	::std::string password;
-	//prompt(password, "Enter password:");
+	//::prompt(password, "Enter password:");
 
 	instanceGame.Players[PLAYER_INDEX_USER].Name = playerName;
 	::nwol::bit_set(instanceGame.Flags, GAME_FLAGS_STARTED);
@@ -80,8 +80,8 @@ void klib::initGame(SGame& instanceGame) {
 	info_printf("sizeof(STacticalInfo): %u"							, (uint32_t) sizeof(::klib::STacticalInfo)										);
 	info_printf("sizeof(STacticalBoard): %u"						, (uint32_t) sizeof(::klib::STacticalBoard)										);
 	info_printf("sizeof(SMapInventory): %u"							, (uint32_t) sizeof(::klib::SMapInventory)										);
-	info_printf("sizeof(STacticalInfo)-sizeof(SMapInventory): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(::klib::SMapInventory))		);
-	info_printf("sizeof(STacticalInfo)-sizeof(STacticalBoard): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(::klib::STacticalBoard))		);
+	info_printf("sizeof(STacticalInfo)-sizeof(SMapInventory): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(::klib::SMapInventory))	);
+	info_printf("sizeof(STacticalInfo)-sizeof(STacticalBoard): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(::klib::STacticalBoard))	);
 	info_printf("sizeof(SGame): %u"									, (uint32_t) sizeof(::klib::SGame)												);
 
 	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_STARTED			);
@@ -249,12 +249,11 @@ void klib::initGame(SGame& instanceGame) {
 				//wearablesSelected.Armor			.Level	= 5;
 				//wearablesSelected.Profession	.Level	= 5;
 				switch(iAgent) {
-				default:
-					break;
+				default: break;
 				case 12:
 				case 13:
 				case 14:
-					adventurer.Flags.Tech.Gender = ::klib::GENDER_FEMALE;
+					adventurer.Flags.Tech.Gender		= ::klib::GENDER_FEMALE;
 				}
 
 				adventurer.CurrentEquip.Weapon		= wearablesSelected.Weapon		;	// Gauss Death Scythe
@@ -262,16 +261,16 @@ void klib::initGame(SGame& instanceGame) {
 				adventurer.CurrentEquip.Armor		= wearablesSelected.Armor		;	// Polarized Robe
 				adventurer.CurrentEquip.Profession	= wearablesSelected.Profession	;	// Spy God 
 
-				adventurer.Goods.CompletedResearch = SCharacterResearch();
+				adventurer.Goods.CompletedResearch	= SCharacterResearch();
 				::klib::completeAgentResearch(adventurer);
 				adventurer.Recalculate();
-				adventurer.Points.LifeCurrent = adventurer.FinalPoints.LifeMax;
+				adventurer.Points.LifeCurrent		= adventurer.FinalPoints.LifeMax;
 			}
 
 			player.Army.push_back(newAgentNext);
 		}
 
-		for(uint32_t i=0; i<2; ++i) {
+		for(uint32_t i=0; i < 2; ++i) {
 			player.Goods.Inventory.Weapon		.AddElement({2 + ::rand() % 2, 1 + ::rand() % 2, 1, -1});
 			player.Goods.Inventory.Accessory	.AddElement({2 + ::rand() % 2, 1 + ::rand() % 2, 1, -1});
 			player.Goods.Inventory.Armor		.AddElement({2 + ::rand() % 2, 1 + ::rand() % 2, 1, -1});
@@ -280,8 +279,8 @@ void klib::initGame(SGame& instanceGame) {
 
 		player.Squad.Clear(-1);
 		player.Squad.Agents[0]			= 3;
-		for(uint32_t i=0; i<2; i++) 
-			player.Squad.Agents[1+i]		= CAMPAIGN_AGENT_COUNT+i;
+		for(uint32_t i=0; i < 2; ++i) 
+			player.Squad.Agents[1 + i]		= CAMPAIGN_AGENT_COUNT + i;
 
 		player.Selection				= {0, 0, -1, -1, -1};
 		player.Name						= ::std::string(player.Name) + " #" + ::std::to_string(iPlayer);
