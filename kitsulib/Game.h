@@ -188,27 +188,7 @@ namespace klib
 						void									showMenu						(SGame& instanceGame);
 						void									initTacticalMap					(SGame& instanceGame);
 	static inline		PLAYER_INDEX							getCurrentPlayerIndex			(const STacticalInfo& tacticalInfo)														{ return ( tacticalInfo.CurrentPlayer == -1) ? PLAYER_INDEX_INVALID : tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer]; }
-	static				uint32_t								missionCost						(SPlayer& player, const SSquad& squadSetup, uint32_t maxAgents=MAX_AGENT_SQUAD_SLOTS)	{
-		int32_t															totalCost						= 0;
-		for(size_t iAgent=0, agentCount= maxAgents < nwol::size(squadSetup.Agents) ? maxAgents : nwol::size(squadSetup.Agents); iAgent<agentCount; ++iAgent) {
-			if(squadSetup.Agents[iAgent] == -1)
-				continue;
-
-			CCharacter														& agent							= *player.Army[squadSetup.Agents[iAgent]];
-			const SEntityPoints												& finalPoints					= agent.FinalPoints;
-			if(agent.Points.LifeCurrent.Health <= 0) {
-				agent.Points.LifeCurrent.Health								= 0;
-				continue;
-			}
-
-			double														penaltyFromHealth				= agent.Points.LifeCurrent.Health/(double)finalPoints.LifeMax.Health;//agent.Points.LifeCurrent.Health/(double)finalPoints.LifeMax.Health;
-			totalCost												+= finalPoints.CostMaintenance+(int32_t)((1.0-penaltyFromHealth)*agent.Points.CostMaintenance);
-			//totalCost += agent.Points.CostMaintenance+(int32_t)((penaltyFromHealth-1.0)*agent.Points.CostMaintenance);
-		}
-		return totalCost;
-	}
-
-
+						uint32_t								missionCost						(SPlayer& player, const SSquad& squadSetup, uint32_t maxAgents=MAX_AGENT_SQUAD_SLOTS);
 } // namespace 
 
 #endif // __GAME_H__91827309126391263192312312354__

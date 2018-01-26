@@ -136,7 +136,7 @@ void drawBalance(SGlobalDisplay& display, const nwol::SInput& frameInput, SPlaye
 
 	// Funds/Costs
 	int32_t funds			= player.Money;
-	int32_t cost			= missionCost(player, player.Squad, player.Squad.Size);
+	int32_t cost			= ::klib::missionCost(player, player.Squad, player.Squad.Size);
 	int32_t fundsAfterCost	= funds - cost;
 
 	int32_t productionCost	= (int32_t)(fundsAfterCost* (player.Projects.BudgetProduction	.Money/100.0));

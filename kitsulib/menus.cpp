@@ -136,7 +136,7 @@ void handleStateChange(SGame& instanceGame, const SGameState& newState, const SG
 
 	case GAME_STATE_TACTICAL_CONTROL	: instanceGame.StateMessage = "Tactical control"	; break;
 	case GAME_STATE_START_MISSION		: 
-		playCost			= missionCost(playerUser, playerUser.Squad, playerUser.Squad.Size);
+		playCost			= ::klib::missionCost(playerUser, playerUser.Squad, playerUser.Squad.Size);
 		playerUser.Money	-= (int32_t)playCost;
 		instanceGame.StateMessage = "Start mission"		; 
 		break;
@@ -163,7 +163,7 @@ void updateState(SGame& instanceGame, const SGameState& newState)
 	if(newState.State == GAME_STATE_START_MISSION && newState.State != instanceGame.State.State)
 	{
 		SPlayer& player = instanceGame.Players[PLAYER_INDEX_USER];
-		int64_t playCost = missionCost(player, player.Squad, player.Squad.Size);
+		int64_t playCost = ::klib::missionCost(player, player.Squad, player.Squad.Size);
 		
 		if( player.Money < playCost )
 		{

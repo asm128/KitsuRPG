@@ -857,7 +857,7 @@ SGameState																drawTacticalScreen								(SGame& instanceGame, const 
 			nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);
 			return {GAME_STATE_WELCOME_COMMANDER};
 		}
-		//int32_t finalCost = missionCost(instanceGame.Players[PLAYER_INDEX_USER], instanceGame.Players[PLAYER_INDEX_USER].Squad, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
+		//int32_t finalCost = ::klib::missionCost(instanceGame.Players[PLAYER_INDEX_USER], instanceGame.Players[PLAYER_INDEX_USER].Squad, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
 		PlaySound("sounds\\Intro_Wind-Mark_DiAngelo-844491759.wav", 0, SND_ASYNC | SND_FILENAME);
 		//instanceGame.Players[PLAYER_INDEX_USER].Money -= finalCost;
 	}

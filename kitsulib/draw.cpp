@@ -149,7 +149,7 @@ void										klib::drawAndPresentGame		(SGame& instanceGame, ::nwol::SASCIITarg
 
 	// Print user error messages and draw cursor.
 	if(instanceGame.State.State != GAME_STATE_CREDITS) {
-		int32_t											finalMissionCost				= missionCost(instanceGame.Players[PLAYER_INDEX_USER], instanceGame.Players[PLAYER_INDEX_USER].Squad, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
+		int32_t											finalMissionCost				= ::klib::missionCost(instanceGame.Players[PLAYER_INDEX_USER], instanceGame.Players[PLAYER_INDEX_USER].Squad, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
 		int32_t											playerFunds						= instanceGame.Players[PLAYER_INDEX_USER].Money;
 		::nwol::printfToRectColored(target, (finalMissionCost > playerFunds) ? COLOR_ORANGE : COLOR_CYAN	, bbHeight-5, 1, ::nwol::SCREEN_RIGHT, "Squad size: %i."	, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
 		::nwol::printfToRectColored(target, (finalMissionCost > playerFunds) ? COLOR_RED : COLOR_ORANGE		, bbHeight-4, 1, ::nwol::SCREEN_RIGHT, "Mission cost: %i"	, finalMissionCost);

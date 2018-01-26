@@ -31,7 +31,7 @@ namespace klib
 	};
 #pragma pack(pop)
 
-	static void												printMultipageHelp									(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t currentPage, uint32_t pageCount, uint32_t posXOffset)					{
+	static inline				void						printMultipageHelp									(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t currentPage, uint32_t pageCount, uint32_t posXOffset)					{
 		static const ::nwol::glabel									textToShow[3]										= 
 			{	"Page down: Next page."						
 			,	"Page up: Previous page."						
@@ -45,7 +45,7 @@ namespace klib
 	}
 
 	template <size_t _FormatLen>
-	static int32_t											drawExitOption										(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t posXOffset, nwol::ALIGN_SCREEN align, uint32_t rowWidth, const char (&formatString)[_FormatLen], const std::string& exitText, bool bSelected )		{
+	static						int32_t						drawExitOption										(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t posXOffset, nwol::ALIGN_SCREEN align, uint32_t rowWidth, const char (&formatString)[_FormatLen], const std::string& exitText, bool bSelected )		{
 		int32_t														offsetY												= (int32_t)targetHeight-MENU_ROFFSET-1;
 		int32_t														actualOffsetX										= printfToRect(targetASCII, targetWidth, targetHeight, offsetY, posXOffset, align, formatString, "0", exitText.c_str());	
 
@@ -54,7 +54,7 @@ namespace klib
 	}
 
 	template <size_t _ArraySize, typename _ReturnType>
-	_ReturnType												processInput										(const nwol::SInput& frameInput, uint32_t targetWidth, uint32_t targetHeight, SDrawMenuState& localPersistentState, bool& bResetMenuStuff, bool& bResetTitle, int32_t lineOffset, const klib::SMenuItem<_ReturnType>(&menuItems)[_ArraySize], uint32_t actualOptionCount, uint32_t pageCount, size_t itemOffset, int32_t exitOffset, int32_t numberCharsAvailable, const _ReturnType& noActionValue, const _ReturnType& exitValue, bool disableEscKeyClose, const ::nwol::glabel& exitText)	{
+								_ReturnType					processInput										(const nwol::SInput& frameInput, uint32_t targetWidth, uint32_t targetHeight, SDrawMenuState& localPersistentState, bool& bResetMenuStuff, bool& bResetTitle, int32_t lineOffset, const klib::SMenuItem<_ReturnType>(&menuItems)[_ArraySize], uint32_t actualOptionCount, uint32_t pageCount, size_t itemOffset, int32_t exitOffset, int32_t numberCharsAvailable, const _ReturnType& noActionValue, const _ReturnType& exitValue, bool disableEscKeyClose, const ::nwol::glabel& exitText)	{
 		bool														bMouseOverExit										= mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, exitOffset-4, (int32_t)targetHeight-MENU_ROFFSET-1, (int32_t)exitText.size()+4);
 
 		_ReturnType													resultVal											= noActionValue;
