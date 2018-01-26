@@ -58,10 +58,10 @@ namespace klib
 	//------------------------------------------------------------ Researchable
 	template<typename _EntityType>
 	void																							addIfResearchable
-		(	klib::SResearchGroup<_EntityType>						& researchableItems
+		(	klib::SResearchGroup		<_EntityType>				& researchableItems
 		,	const _EntityType										& entity
-		,	const klib::SResearchGroup<_EntityType>					& researchCompleted
-		,	const std::vector				<SEntityResearch>		& queuedResearch
+		,	const klib::SResearchGroup	<_EntityType>				& researchCompleted
+		,	const ::nwol::array_obj		<SEntityResearch>			& queuedResearch
 		,	bool													bIsParallelDefinition		
 		,	bool													bIsParallelModifier		
 		,	const _EntityType										& maxResearch	
@@ -102,7 +102,7 @@ namespace klib
 		(	klib::SResearchGroup			<_EntityType>			& researchableItems
 		,	const klib::SEntityContainer	<_EntityType, _Size>	& playerInventory
 		,	const klib::SResearchGroup		<_EntityType>			& researchCompleted
-		,	const std::vector				<SEntityResearch>		& queuedResearch
+		,	const ::nwol::array_obj				<SEntityResearch>		& queuedResearch
 		,	bool													bIsParallelDefinition		
 		,	bool													bIsParallelModifier		
 		,	const _EntityType										& maxResearch	
@@ -120,7 +120,7 @@ namespace klib
 		,	const _EntityType										& equippedEntity
 		,	const klib::SEntityContainer	<_EntityType, _Size>	& agentInventory
 		,	const klib::SResearchGroup		<_EntityType>			& researchCompleted
-		,	const std::vector				<SEntityResearch>		& queuedResearch
+		,	const ::nwol::array_obj				<SEntityResearch>		& queuedResearch
 		,	bool													bIsParallelDefinition		
 		,	bool													bIsParallelModifier		
 		,	const _EntityType										& maxResearch	
@@ -136,7 +136,7 @@ namespace klib
 		(	klib::SResearchGroup			<_EntityType>			& researchableItems
 		,	const klib::SEntityContainer	<_EntityType, _Size>	& agentInventory
 		,	const klib::SResearchGroup		<_EntityType>			& researchCompleted
-		,	const std::vector				<SEntityResearch>		& queuedResearch
+		,	const ::nwol::array_obj				<SEntityResearch>		& queuedResearch
 		,	bool													bIsParallelDefinition		
 		,	bool													bIsParallelModifier		
 		,	const _EntityType										& maxResearch	

@@ -40,7 +40,7 @@ void handleProductionStep(SGame& instanceGame) {
 
 	int32_t budgetProduction		= playerProjects.BudgetProduction.bIsRatio ? int32_t(player.Money*(playerProjects.BudgetProduction.Money/100.0)) : nwol::min(playerProjects.BudgetProduction.Money, player.Money);
 	int32_t actualCostProduction	= 0;
-	for(size_t iProduct=0, productCount=playerProjects.QueuedProduction.size(); iProduct < productCount; ++iProduct) {
+	for(uint32_t iProduct=0, productCount=playerProjects.QueuedProduction.size(); iProduct < productCount; ++iProduct) {
 		if(actualCostProduction >= budgetProduction)
 			break;
 
@@ -52,8 +52,8 @@ void handleProductionStep(SGame& instanceGame) {
 		actualCostProduction	+= assignedFunds;
 	}
 
-	std::vector<SEntityResearch> remainingProduction;
-	for(size_t iProduct = 0, productCount = playerProjects.QueuedProduction.size(); iProduct < productCount; ++iProduct) {
+	::nwol::array_obj<SEntityResearch> remainingProduction;
+	for(uint32_t iProduct = 0, productCount = playerProjects.QueuedProduction.size(); iProduct < productCount; ++iProduct) {
 		const SEntityResearch	& product = playerProjects.QueuedProduction[iProduct];
 		if((product.PriceUnit-product.PricePaid) > 0) {
 			remainingProduction.push_back(product);
@@ -91,7 +91,7 @@ void handleResearchStep(SGame& instanceGame) {
 
 	int32_t budgetResearch		= playerProjects.BudgetResearch.bIsRatio ? int32_t(playerUser.Money*(playerProjects.BudgetResearch.Money/100.0)) : nwol::min(playerProjects.BudgetResearch.Money, playerUser.Money);
 	int32_t actualCostResearch	= 0;
-	for(size_t iProduct = 0, productCount = playerProjects.QueuedResearch.size(); iProduct < productCount; ++iProduct) {
+	for(uint32_t iProduct = 0, productCount = playerProjects.QueuedResearch.size(); iProduct < productCount; ++iProduct) {
 		if(actualCostResearch >= budgetResearch)
 			break;
 
@@ -102,8 +102,8 @@ void handleResearchStep(SGame& instanceGame) {
 		actualCostResearch		+= assignedFunds;
 	}
 
-	::std::vector<SEntityResearch> remainingResearch;
-	for(size_t iProduct = 0, productCount = playerProjects.QueuedResearch.size(); iProduct < productCount; ++iProduct) {
+	::nwol::array_obj<SEntityResearch> remainingResearch;
+	for(uint32_t iProduct = 0, productCount = playerProjects.QueuedResearch.size(); iProduct < productCount; ++iProduct) {
 		const SEntityResearch& product = playerProjects.QueuedResearch[iProduct];
 		if((product.PriceUnit-product.PricePaid) > 0) {
 			remainingResearch.push_back(product);

@@ -20,9 +20,9 @@ namespace klib
 		SProjectBudget									BudgetResearch				= {true, 10};
 		SProjectBudget									BudgetUpgrade				= {true, 10};
 
-		::std::vector<SEntityResearch>					QueuedProduction			= {};
-		::std::vector<SEntityResearch>					QueuedResearch				= {};
-		::std::vector<SEntityResearch>					QueuedUpgrade				= {};
+		::nwol::array_obj<SEntityResearch>				QueuedProduction			= {};
+		::nwol::array_obj<SEntityResearch>				QueuedResearch				= {};
+		::nwol::array_obj<SEntityResearch>				QueuedUpgrade				= {};
 
 		int32_t											CostProduction				= 0;
 		int32_t											CostResearch				= 0;
@@ -32,9 +32,9 @@ namespace klib
 		void											EnqueueResearch				( const SEntityResearch&	research	)			{ QueuedResearch	.push_back(	research	); CostResearch		 +=	research	.PriceUnit -	research	.PricePaid; };
 		void											EnqueueUpgrade				( const SEntityResearch&	upgrade		)			{ QueuedUpgrade		.push_back(	upgrade		); CostUpgrade		 +=	upgrade		.PriceUnit -	upgrade		.PricePaid; };
 
-		void											DequeueProduction			( int32_t index	)									{ const SEntityResearch & production	= QueuedProduction	[index]; CostProduction	 -=	production	.PriceUnit -	production	.PricePaid; QueuedProduction	.erase(QueuedProduction	.begin()+index); }
-		void											DequeueResearch				( int32_t index	)									{ const SEntityResearch & research		= QueuedResearch	[index]; CostResearch	 -=	research	.PriceUnit -	research	.PricePaid; QueuedResearch		.erase(QueuedResearch	.begin()+index); }
-		void											DequeueUpgrade				( int32_t index	)									{ const SEntityResearch & upgrade		= QueuedUpgrade		[index]; CostUpgrade	 -=	upgrade		.PriceUnit -	upgrade		.PricePaid; QueuedUpgrade		.erase(QueuedUpgrade	.begin()+index); }
+		void											DequeueProduction			( int32_t index	)									{ const SEntityResearch & production	= QueuedProduction	[index]; CostProduction	 -=	production	.PriceUnit -	production	.PricePaid; QueuedProduction	.erase(index); }
+		void											DequeueResearch				( int32_t index	)									{ const SEntityResearch & research		= QueuedResearch	[index]; CostResearch	 -=	research	.PriceUnit -	research	.PricePaid; QueuedResearch		.erase(index); }
+		void											DequeueUpgrade				( int32_t index	)									{ const SEntityResearch & upgrade		= QueuedUpgrade		[index]; CostUpgrade	 -=	upgrade		.PriceUnit -	upgrade		.PricePaid; QueuedUpgrade		.erase(index); }
 	};
 
 #define DECLARE_EQUIP_TYPE(name)			\
@@ -76,7 +76,7 @@ namespace klib
 		SPlayerProjects									Projects					= {};
 		SPlayerInventory								Inventory					= {};
 		GLstObj(::klib, CCharacter)						Army						= {};
-		::std::vector<CDeadCharacter>					Memorial					= {};
+		::nwol::array_obj<CDeadCharacter>				Memorial					= {};
 		::nwol::glabel									Name						= "Kasparov";
 
 		bool											IsAlive						()											const	{

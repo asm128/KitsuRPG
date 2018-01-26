@@ -18,11 +18,11 @@ using namespace klib;
 
 SGameState drawResearchMenu(SGame& instanceGame, const SGameState& returnState)
 {
-	SPlayer&						player				= instanceGame.Players[PLAYER_INDEX_USER];
-	SCharacterGoods&				playerCompany		= player.Goods;
-	SCharacterInventory&			playerInventory		= playerCompany.Inventory;
-	klib::SCharacterResearch&		researchCompleted	= playerCompany.CompletedResearch;
-	std::vector<SEntityResearch>&	queuedResearch		= player.Projects.QueuedResearch;
+	SPlayer&							player				= instanceGame.Players[PLAYER_INDEX_USER];
+	SCharacterGoods&					playerCompany		= player.Goods;
+	SCharacterInventory&				playerInventory		= playerCompany.Inventory;
+	klib::SCharacterResearch&			researchCompleted	= playerCompany.CompletedResearch;
+	::nwol::array_obj<SEntityResearch>&	queuedResearch		= player.Projects.QueuedResearch;
 	
 	klib::SCharacterResearch		researchableItems	= {};
 

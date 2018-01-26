@@ -271,14 +271,14 @@ namespace klib
 	}
 
 	template<typename _TCell>
-	SGameState drawMemorial(_TCell* display, uint32_t width, uint32_t depth, uint16_t* textAttributes, double lastFrameTime, const std::vector<CDeadCharacter>& namesMemorial, const SGameState& returnValue) {
+	SGameState drawMemorial(_TCell* display, uint32_t width, uint32_t depth, uint16_t* textAttributes, double lastFrameTime, const ::nwol::array_obj<CDeadCharacter>& namesMemorial, const SGameState& returnValue) {
 		static double	offset			= (double)depth;
 		int32_t			curLine			= (int32_t)offset;
 		static int32_t	maxDifference	= curLine;
 		const int32_t	curDifference	= curLine;
 		const double	bbHeight		= (double)depth;
 
-		for(size_t i=0, memorialLines = namesMemorial.size(); i < memorialLines && curLine < bbHeight; ++i) {
+		for(uint32_t i=0, memorialLines = namesMemorial.size(); i < memorialLines && curLine < bbHeight; ++i) {
 			static const char format1[]		= 
 				"Damage Dealt        : %-8.8s - "
 				"Damage Taken        : %-8.8s - "
@@ -320,7 +320,7 @@ namespace klib
 			char bufferPotionsUsed		[32]	= {};
 			char bufferGrenadesUsed		[32]	= {};
 
-			const CDeadCharacter& deadCharacter = namesMemorial[i];
+			const CDeadCharacter					& deadCharacter									= namesMemorial[i];
 			sprintf_s(bufferMoneyEarned			, "%lli", (int64_t)deadCharacter.Score.MoneyEarned		);
 			sprintf_s(bufferMoneySpent			, "%lli", (int64_t)deadCharacter.Score.MoneySpent		);
 			sprintf_s(bufferDamageDealt			, "%lli", (int64_t)deadCharacter.Score.DamageDealt		);

@@ -41,10 +41,10 @@ int												main											(int argc, char **argv)											{
 	std::string											adventurerName;
 	getline(std::cin, adventurerName);
 
-	klib::CCharacter									* pAdventurer									= new klib::CCharacter(4, 50, 1, 100, {1,4}, {}, {klib::COMBAT_STATUS_NONE, klib::COMBAT_STATUS_STUN}, adventurerName);
-	klib::CCharacter									& adventurer									= *pAdventurer;
+	::klib::CCharacter									* pAdventurer									= new klib::CCharacter(4, 50, 1, 100, {1,4}, {}, {klib::COMBAT_STATUS_NONE, klib::COMBAT_STATUS_STUN}, adventurerName);
+	::klib::CCharacter									& adventurer									= *pAdventurer;
 
-	static const klib::SMenuItem<int32_t>				playAgainMenu[]									=
+	static const ::klib::SMenuItem<int32_t>				playAgainMenu[]									=
 		{	{ 1,	"Yes"	}
 		,	{ 0,	"No"	}
 		};

@@ -48,7 +48,7 @@ int32_t drawList(SWeightedDisplay<_Width, _Height>& display, const SListItem<_TR
 }
 
 template <typename _TReturn>
-int32_t drawList(SGlobalDisplay& display, const std::vector<SListItem<_TReturn>>& listItems, uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width) {
+int32_t drawList(SGlobalDisplay& display, const ::nwol::array_obj<SListItem<_TReturn>>& listItems, uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width) {
 	char formatRow[128] = {};
 	sprintf_s(formatRow, "%%-%i.%is", width, width);
 	for(uint32_t iRow = 0; iRow < rowCount; ++iRow) {

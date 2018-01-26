@@ -152,7 +152,7 @@ namespace klib
 							::std::string							UserSuccess						= "";
 							::std::string							UserMiss						= "";
 							::std::string							UserError						= "";
-							::std::vector<SLogLine>					UserLog							= {};
+							::nwol::array_obj<SLogLine>					UserLog							= {};
 
 							// For the special effect
 							char									SlowMessage[256]				= {'_',};

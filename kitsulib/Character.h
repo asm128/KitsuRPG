@@ -134,6 +134,7 @@ namespace klib
 						SCharacterScore							Score					= {};	
 						::nwol::glabel							Name					= "Unnamed";
 
+		inline													CDeadCharacter			()									= default;
 		inline													CDeadCharacter			(const CCharacter& deadCharacter)
 			:	Score	(deadCharacter.Score)
 			,	Name	(deadCharacter.Name.c_str(), (uint32_t)deadCharacter.Name.size())

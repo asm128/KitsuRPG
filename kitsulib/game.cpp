@@ -40,7 +40,7 @@ void klib::resetGame(SGame& instanceGame) {
 	instanceGame.UserLog.clear();
 	::klib::initGame(instanceGame);
 
-	::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
+	//::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
 
 	// Set up a nice prompt 
 	::std::string playerName;
