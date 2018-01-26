@@ -32,9 +32,9 @@ namespace klib
 		void											EnqueueResearch				( const SEntityResearch&	research	)			{ QueuedResearch	.push_back(	research	); CostResearch		 +=	research	.PriceUnit -	research	.PricePaid; };
 		void											EnqueueUpgrade				( const SEntityResearch&	upgrade		)			{ QueuedUpgrade		.push_back(	upgrade		); CostUpgrade		 +=	upgrade		.PriceUnit -	upgrade		.PricePaid; };
 
-		void											DequeueProduction			( int32_t index	)									{ const SEntityResearch & production	= QueuedProduction	[index]; CostProduction	 -=	production	.PriceUnit -	production	.PricePaid; QueuedProduction	.erase(index); }
-		void											DequeueResearch				( int32_t index	)									{ const SEntityResearch & research		= QueuedResearch	[index]; CostResearch	 -=	research	.PriceUnit -	research	.PricePaid; QueuedResearch		.erase(index); }
-		void											DequeueUpgrade				( int32_t index	)									{ const SEntityResearch & upgrade		= QueuedUpgrade		[index]; CostUpgrade	 -=	upgrade		.PriceUnit -	upgrade		.PricePaid; QueuedUpgrade		.erase(index); }
+		void											DequeueProduction			( int32_t index	)									{ const SEntityResearch & production	= QueuedProduction	[index]; CostProduction	 -=	production	.PriceUnit -	production	.PricePaid; QueuedProduction	.remove(index); }
+		void											DequeueResearch				( int32_t index	)									{ const SEntityResearch & research		= QueuedResearch	[index]; CostResearch	 -=	research	.PriceUnit -	research	.PricePaid; QueuedResearch		.remove(index); }
+		void											DequeueUpgrade				( int32_t index	)									{ const SEntityResearch & upgrade		= QueuedUpgrade		[index]; CostUpgrade	 -=	upgrade		.PriceUnit -	upgrade		.PricePaid; QueuedUpgrade		.remove(index); }
 	};
 
 #define DECLARE_EQUIP_TYPE(name)			\

@@ -3,8 +3,6 @@
 
 #include "CharacterPoints.h"
 
-#include <vector>
-
 #ifndef __GAMEBASE_H__98236498027346892734689273__
 #define __GAMEBASE_H__98236498027346892734689273__
 

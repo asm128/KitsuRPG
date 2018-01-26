@@ -6,7 +6,6 @@
 #include "nwol_mutex.h"
 
 #include <time.h>
-#include <vector>
 
 #ifndef __GAME_H__91827309126391263192312312354__
 #define __GAME_H__91827309126391263192312312354__
