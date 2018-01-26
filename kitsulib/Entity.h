@@ -98,7 +98,7 @@ namespace klib
 		inline				uint32_t						DecreaseEntity		(uint32_t index)										{ 
 			if(index < 0 || index >= Count) {	
 				error_printf("Invalid index! Index: %i.", (int32_t)index); 
-				return -1;
+				return (uint32_t)-1;
 			}	
 			if( --Slots[index].Count )
 				return Slots[index].Count;

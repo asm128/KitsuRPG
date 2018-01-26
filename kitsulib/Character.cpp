@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "CharacterTile.h"
 
 #include "Weapon.h"
 #include "Item.h"
@@ -53,3 +54,16 @@ void									klib::addStatus								(SCombatStatus& characterStatus, COMBAT_STAT
 		characterStatus.Status					= (COMBAT_STATUS)(characterStatus.Status | bitStatus);
 	}
 }
+
+bool									klib::isRelevantTeam						(::klib::TEAM_TYPE teamId)																			{
+		static constexpr	const ::klib::TEAM_TYPE			irrelevantTeams[]			= {::klib::TEAM_TYPE_CIVILIAN, ::klib::TEAM_TYPE_SPECTATOR, ::klib::TEAM_TYPE_INVALID};
+		bool										bRelevant					= true;
+		for(uint32_t i=0; i < ::nwol::size(irrelevantTeams); ++i)
+			if(irrelevantTeams[i] == teamId) {
+				bRelevant								= false;
+				break;
+			}
+
+		return bRelevant;
+	}
+

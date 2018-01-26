@@ -34,7 +34,7 @@ namespace klib
 	}
 
 	template <size_t _Width, size_t _Depth>
-	static int32_t							displayEntityStatus				(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, int32_t agentIndex, const SEntityStatus& entityStatus)										{
+	static int32_t							displayEntityStatus				(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, const SEntityStatus& entityStatus)										{
 		int32_t										iLine							= 0;
 		if(entityStatus.Inflict		)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityStatus.Inflict	, MAX_COMBAT_STATUS_COUNT, COLOR_YELLOW, COLOR_RED	, "- Inflicts: %-14.14s");
 		if(entityStatus.Immunity	)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityStatus.Immunity	, MAX_COMBAT_STATUS_COUNT, COLOR_YELLOW, COLOR_CYAN	, "- Immunity: %-14.14s");
@@ -43,7 +43,7 @@ namespace klib
 	}
 
 	template <size_t _Width, size_t _Depth>
-	static int32_t							displayEntityEffect				(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, int32_t agentIndex, const SEntityEffect& entityEffect)										{
+	static int32_t							displayEntityEffect				(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, const SEntityEffect& entityEffect)										{
 		int32_t										iLine							= 0;
 		if(entityEffect.Attack	)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityEffect.Attack	, MAX_ATTACK_EFFECT_COUNT, COLOR_YELLOW, COLOR_RED	, "- Attack effect: %-14.14s"	);
 		if(entityEffect.Defend	)	iLine += displayFlag(display, {offsetX, offsetY+iLine}, entityEffect.Defend	, MAX_DEFEND_EFFECT_COUNT, COLOR_YELLOW, COLOR_CYAN	, "- Defend effect: %-14.14s"	);
@@ -53,7 +53,7 @@ namespace klib
 	}
 
 	template <size_t _Width, size_t _Depth>
-	static int32_t							displayEntityTechnology			(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, int32_t agentIndex, const SEntityGrade& entityTech)											{
+	static int32_t							displayEntityTechnology			(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, const SEntityGrade& entityTech)											{
 		int32_t										iLine							= 0;
 		if(entityTech.Tech				) iLine	+= displayFlag(display, {offsetX, offsetY+iLine}, entityTech.Tech				, MAX_ENTITY_TECHNOLOGY_COUNT, COLOR_YELLOW, COLOR_GREEN	, "- Technology: %-14.14s"	);
 		if(entityTech.Grade				) iLine	+= displayFlag(display, {offsetX, offsetY+iLine}, entityTech.Grade				, 3, COLOR_YELLOW, COLOR_GREEN	, "- Grade: %-14.14s"		);
@@ -65,13 +65,13 @@ namespace klib
 	}
 
 	template <size_t _Width, size_t _Depth>
-	static void								displayStatusEffectsAndTechs	(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, int32_t agentIndex, CCharacter& character)													{
+	static void								displayStatusEffectsAndTechs	(SWeightedDisplay<_Width, _Depth>& display, int32_t offsetY, int32_t offsetX, CCharacter& character)													{
 		int32_t										iLine							= 0;
 		if(character.Flags.Tech.Gender)	
 			iLine									+= displayFlag(display, {offsetX, offsetY+iLine}, character.Flags.Tech.Gender, 2	, COLOR_YELLOW, COLOR_GREEN	, "- Gender: %-13.13s");
-		iLine									+= displayEntityTechnology	(display, offsetY+iLine, offsetX, agentIndex, character.FinalFlags.Tech		);
-		iLine									+= displayEntityStatus		(display, offsetY+iLine, offsetX, agentIndex, character.FinalFlags.Status	);
-		iLine									+= displayEntityEffect		(display, offsetY+iLine, offsetX, agentIndex, character.FinalFlags.Effect	);
+		iLine									+= displayEntityTechnology	(display, offsetY+iLine, offsetX, character.FinalFlags.Tech		);
+		iLine									+= displayEntityStatus		(display, offsetY+iLine, offsetX, character.FinalFlags.Status	);
+		iLine									+= displayEntityEffect		(display, offsetY+iLine, offsetX, character.FinalFlags.Effect	);
 	}
 
 

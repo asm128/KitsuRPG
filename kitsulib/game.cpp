@@ -17,6 +17,14 @@
 
 GDEFINE_OBJ(klib, CCharacter);
 
+::std::string						klib::getItemName					(const SItem& item)									{
+	char									formattedName[128]					= {};
+	sprintf_s(formattedName, itemGrades[item.Level].Name.c_str(), itemDescriptions[item.Definition].Name.c_str());
+	return formattedName;
+}
+
+
+
 // Set up a nice prompt 
 void prompt(std::string& userInput, const std::string& displayText, ::nwol::SASCIITarget& asciiTarget) {
 	::nwol::asciiTargetClear	(asciiTarget, ' ', COLOR_GREEN);
@@ -197,7 +205,7 @@ void klib::initGame(SGame& instanceGame) {
 			::klib::setupAgent(adventurer, adventurer);
 			if(iPlayer == 0) {
 				::SWearables wearablesSelected = {};
-				::klib::GENDER genderSelected = GENDER_FEMALE;
+				//::klib::GENDER genderSelected = GENDER_FEMALE;
 				switch(iAgent) {
 				case  0:	wearablesSelected	= wearablesDeath		;	adventurer.Flags.Tech.Gender	= ::klib::GENDER_FEMALE	;										break;
 				case  1:	wearablesSelected	= wearablesTiamat		;	adventurer.Flags.Tech.Gender	= ::klib::GENDER_FEMALE	;										break;
@@ -280,7 +288,7 @@ void klib::initGame(SGame& instanceGame) {
 		player.Squad.Clear(-1);
 		player.Squad.Agents[0]			= 3;
 		for(uint32_t i=0; i < 2; ++i) 
-			player.Squad.Agents[1 + i]		= CAMPAIGN_AGENT_COUNT + i;
+			player.Squad.Agents[1 + i]		= (int16_t)(CAMPAIGN_AGENT_COUNT + i);
 
 		player.Selection				= {0, 0, -1, -1, -1};
 		player.Name						= ::std::string(player.Name) + " #" + ::std::to_string(iPlayer);
@@ -309,4 +317,5 @@ uint32_t								klib::missionCost						(SPlayer& player, const SSquad& squadSetu
 		}
 		return totalCost;
 	}
+
 

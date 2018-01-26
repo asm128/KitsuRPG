@@ -90,7 +90,6 @@ SGameState drawUpgradeMenu(SGame& instanceGame, const SGameState& returnState)
 
 	uint32_t									researchedCount					= 0;
 	char										composite	[256]				= {};
-	char										precompose	[256]				= {};
 	const char									* labelEntityType				= nullptr;
 
 #define ADD_RESEARCH_DEFINITIONS(place, type, records)																		\
@@ -160,7 +159,7 @@ SGameState drawUpgradeMenu(SGame& instanceGame, const SGameState& returnState)
 		,	SEntityResearch{"No action selected", -1}
 		,	50U
 		);
-	if(selectedChoice.ResearchIndex == researchedCount)
+	if(selectedChoice.ResearchIndex == (int32_t)researchedCount)
 		return {GAME_STATE_WELCOME_COMMANDER};
 
 	if(selectedChoice.ResearchIndex == -1)

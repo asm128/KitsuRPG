@@ -322,7 +322,7 @@ void																	arsenal										(klib::CCharacter& adventurer)						{
 void																	sell										(klib::CCharacter& adventurer)						{
 	while (true) {	// break the loop to leave the shop
 		int32_t indexInventory = displayInventoryMenu(adventurer, "Select an item to sell", "Back to tavern");
-		if(indexInventory == adventurer.Goods.Inventory.Items.Count) {	// exit option
+		if(indexInventory == (int32_t)adventurer.Goods.Inventory.Items.Count) {	// exit option
 			indexInventory														= adventurer.Goods.Inventory.Items.Count;	// Exit menu
 			break;
 		}

@@ -143,13 +143,9 @@ static const CItem itemDescriptions[] =
 ,	{ITEM_TYPE_GRENADE	,	PROPERTY_TYPE_EMP											,	10	,	"EMP Grenade"					}
 };
 
-	static inline constexpr	int32_t		getFinalItemCount			()													{ return (int32_t)((nwol::size(itemDescriptions)-1)*nwol::size(itemGrades)); }
-	static inline			int32_t		getItemPrice				(const SItem& item, bool bSellPrice=false)			{ return (int32_t)( bSellPrice ? (itemDescriptions[item.Definition].Price*item.Level)*.5 : itemDescriptions[item.Definition].Price*item.Level ); }
-	static std::string					getItemName					(const SItem& item)									{
-		char									formattedName[128]			= {};
-		sprintf_s(formattedName, itemGrades[item.Level].Name.c_str(), itemDescriptions[item.Definition].Name.c_str());
-		return formattedName;
-	}
+	static inline constexpr	int32_t				getFinalItemCount					()													{ return (int32_t)((nwol::size(itemDescriptions)-1)*nwol::size(itemGrades)); }
+	static inline			int32_t				getItemPrice						(const SItem& item, bool bSellPrice=false)			{ return (int32_t)( bSellPrice ? (itemDescriptions[item.Definition].Price*item.Level)*.5 : itemDescriptions[item.Definition].Price*item.Level ); }
+							::std::string		getItemName							(const SItem& item);
 
 #pragma pack(pop)
 } // namespace

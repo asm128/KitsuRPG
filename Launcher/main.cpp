@@ -52,7 +52,7 @@ int32_t									listRemote				(netbuf* netConnection, ::nwol::array_obj<std::str
 
 	FILE										* fp					= 0;
 	int32_t										error					= fopen_s(&fp, tempFileName, "rb");
-	if(0 == fp)
+	if(0 == fp || 0 != error)
 		return -1;
 	fseek(fp, 0, SEEK_END);
 	int32_t										fileSize				= ftell(fp);
@@ -296,6 +296,9 @@ int32_t downloadPatchContents(netbuf* netConnection, SLauncherSettings& launcher
 		if(false == bFound)
 		{
 			int32_t success = FtpGet(currentFileName.c_str(), remotePathFixed, FTPLIB_BINARY, netConnection);
+			if(0 == success) {
+				log_printf("Error downloading patch for file: %s.\n", currentFileName.c_str());
+			}
 			fopen_s(&fp, currentFileName.c_str(), "rb");
 			if(0 == fp) {
 				log_printf("Error downloading patch for file: %s.\n", currentFileName.c_str());
@@ -596,12 +599,12 @@ APPLICATION_STATE executeStep(APPLICATION_STATE applicationState, HINSTANCE hIns
 	return (APPLICATION_STATE)(applicationState+1);
 }
 
-int CALLBACK WinMain(
-  _In_ HINSTANCE hInstance,
-  _In_ HINSTANCE hPrevInstance,
-  _In_ LPSTR     lpCmdLine,
-  _In_ int       nCmdShow
-)
+int CALLBACK WinMain
+	( _In_ HINSTANCE hInstance
+	, _In_ HINSTANCE /* hPrevInstance	*/
+	, _In_ LPSTR     /* lpCmdLine		*/
+	, _In_ int       /* nCmdShow		*/
+	)
 {
 #if defined(NWOL_DEBUG_ENABLED)
 	int tmp = _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF|_CRTDBG_DELAY_FREE_MEM_DF);

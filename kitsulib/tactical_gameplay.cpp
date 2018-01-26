@@ -167,7 +167,7 @@ bool																					klib::moveStep															(SGame& instanceGame, SPla
 
 	if(finalPosition != initialPosition) {
 		agentPosition_																			= finalPosition;
-		CCharacter																					& agent																	= *player.Army[player.Squad.Agents[agentIndex]];
+		//CCharacter																					& agent																	= *player.Army[player.Squad.Agents[agentIndex]];
 		::recalculateAgentsInRangeAndSight(instanceGame);
 	}
 
@@ -309,7 +309,7 @@ void																					klib::endTurn															(SGame& instanceGame)						
 			
 			//character.Recalculate();
 			const SEntityPoints																		& agentFinalPoints														= character.FinalPoints;
-			playerToClear.Squad.ActionsLeft[iAgent].Moves										= agentFinalPoints.Fitness.Movement;
+			playerToClear.Squad.ActionsLeft[iAgent].Moves										= (int8_t)agentFinalPoints.Fitness.Movement;
 			playerToClear.Squad.ActionsLeft[iAgent].Actions										= 1;
 			playerToClear.Squad.TargetPositions[iAgent]											= character.Position;
 
@@ -320,7 +320,7 @@ void																					klib::endTurn															(SGame& instanceGame)						
 
 			if(!character.IsAlive())	
 				::handleAgentDeath(instanceGame, character, tacticalInfo.Setup.TeamPerPlayer[iPlayer]);
-			else if(iPlayer == tacticalInfo.CurrentPlayer) {
+			else if(((int8_t)iPlayer) == tacticalInfo.CurrentPlayer) {
 				::klib::applyRoundStatusAndBonusesAndSkipRound(character);
 				if(!character.IsAlive())	
 					::handleAgentDeath(instanceGame, character, tacticalInfo.Setup.TeamPerPlayer[iPlayer]);
@@ -352,7 +352,7 @@ void																					klib::endTurn															(SGame& instanceGame)						
 			++iAOE;
 	}
 
-	tacticalInfo.CurrentPlayer																= resolveNextPlayer(instanceGame);	// Change current player.
+	tacticalInfo.CurrentPlayer																= (int8_t)resolveNextPlayer(instanceGame);	// Change current player.
 
 	static const HANDLE																			hConsoleOut																= GetStdHandle( STD_OUTPUT_HANDLE );
 	COORD																						cursorPos																= {0, ((SHORT)instanceGame.GlobalDisplay.Depth>>1)+10};

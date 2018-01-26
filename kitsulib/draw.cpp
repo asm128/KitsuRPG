@@ -5,6 +5,21 @@ using namespace klib;
 
 void drawIntro(SGame& instanceGame);
 
+void										klib::printMultipageHelp										(char* targetASCII, uint32_t targetWidth, uint32_t targetHeight, uint32_t currentPage, uint32_t pageCount, uint32_t posXOffset)					{
+	static const ::nwol::glabel									textToShow[3]										= 
+		{	"Page down: Next page."						
+		,	"Page up: Previous page."						
+		,	"Page up: Previous page. Page down: Next page"	
+		};
+	::nwol::glabel												selectedText;
+			if(currentPage == 0)				selectedText		= textToShow[0];	
+	else if(currentPage == (pageCount-1))	selectedText		= textToShow[1];	
+	else									selectedText		= textToShow[2];	
+	::nwol::lineToRect(targetASCII, targetWidth, targetHeight, (int32_t)targetHeight-MENU_ROFFSET+1, posXOffset, nwol::SCREEN_CENTER, selectedText.c_str());
+}
+
+
+
 // Currently what this function is lacking is the ability to receive negative offsets.
 template<typename _TCell, size_t _Width, size_t _Depth>
 void										blitGrid						(::nwol::SGrid<_TCell, _Width, _Depth>& source, int32_t offsetY, uint32_t offsetX, _TCell* target, size_t targetWidth, size_t targetHeight, int32_t rowPitch=-1)	{
@@ -204,3 +219,4 @@ void										drawIntro						( SGame& instanceGame ) {
 		uint32_t										offsetX							= printfToGridColored(instanceGame.PostEffectDisplay.Screen, instanceGame.PostEffectDisplay.TextAttributes, COLOR_ORANGE, offsetY, 0, ::nwol::SCREEN_CENTER, "%s", words[i].c_str());
 	}
 }
+

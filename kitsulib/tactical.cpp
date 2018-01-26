@@ -13,7 +13,7 @@
 
 using namespace klib;
 
-bool																	handleUserInput									(SGame& instanceGame, const SGameState& returnState)								{
+bool																	handleUserInput									(SGame& instanceGame, const SGameState& /*returnState*/)								{
 	static nwol::SAccumulator<double>											keyAccum										= {0.0, 0.6};
 
 	STacticalInfo																& tacticalInfo									= instanceGame.TacticalInfo;
@@ -22,10 +22,10 @@ bool																	handleUserInput									(SGame& instanceGame, const SGameSt
 	SPlayerSelection															& playerSelection								= currentPlayer.Selection;
 	const bool																	bDoneWaiting									= keyAccum.Accumulate(instanceGame.FrameTimer.LastTimeSeconds) > 0.0;
 	if(instanceGame.FrameInput.Keys[VK_TAB] && bDoneWaiting) {
-		if(playerSelection.PlayerUnit != -1 && currentPlayer.Squad.Agents[playerSelection.PlayerUnit] != -1) {
-			CCharacter																	& currentAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[playerSelection.PlayerUnit]];
-			::nwol::SCoord3<int32_t>													& currentAgentPosition							= currentAgent.Position;
-		}
+		//if(playerSelection.PlayerUnit != -1 && currentPlayer.Squad.Agents[playerSelection.PlayerUnit] != -1) {
+		//	CCharacter																	& currentAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[playerSelection.PlayerUnit]];
+		//	::nwol::SCoord3<int32_t>													& currentAgentPosition							= currentAgent.Position;
+		//}
 		if(instanceGame.FrameInput.Keys[VK_SHIFT]) {
 			if(!currentPlayer.SelectPreviousAgent()) {
 				keyAccum.Value															= 0.0;
@@ -52,7 +52,7 @@ bool																	handleUserInput									(SGame& instanceGame, const SGameSt
 		::klib::SGlobalDisplay														& globalDisplay									= instanceGame.GlobalDisplay;
 		::klib::STacticalDisplay													& tacticalDisplay								= instanceGame.TacticalDisplay;
 		int32_t																		tacticalDisplayX								= (globalDisplay.Width>>1)	- (tacticalDisplay.Width>>1);
-		int32_t																		tacticalDisplayStop								= TACTICAL_DISPLAY_POSY		+ (tacticalDisplay.Depth);
+		//int32_t																		tacticalDisplayStop								= TACTICAL_DISPLAY_POSY		+ (tacticalDisplay.Depth);
 		int32_t																		tacticalMouseX									= mouseX-tacticalDisplayX;
 		int32_t																		tacticalMouseY									= mouseY-TACTICAL_DISPLAY_POSY;
 
@@ -76,7 +76,7 @@ bool																	handleUserInput									(SGame& instanceGame, const SGameSt
 				currentPlayer.Squad.TargetPositions[playerSelection.PlayerUnit]			= {tacticalMouseX, currentAgentPosition.y, tacticalMouseY};
 				if(	targetPlayerIndex != -1 && agentIndex != -1 ) {
 					if(targetPlayerIndex == tacticalInfo.CurrentPlayer && currentPlayer.Army[currentPlayer.Squad.Agents[agentIndex]]->IsAlive() && false == currentPlayer.Army[currentPlayer.Squad.Agents[agentIndex]]->DidLoseTurn() && (0 == instanceGame.FrameInput.Keys[VK_CONTROL] && 0 == instanceGame.FrameInput.Keys[VK_LCONTROL])) {
-						playerSelection.PlayerUnit												= agentIndex;
+						playerSelection.PlayerUnit												= (int16_t)agentIndex;
 						playerSelection.PlayerSquad												= 0;
 						if(playerSelection.TargetPlayer != -1 && playerSelection.TargetUnit != -1) {
 							SPlayer																		& playerTarget										= instanceGame.Players[tacticalInfo.Setup.Players[playerSelection.TargetPlayer]];
@@ -87,9 +87,9 @@ bool																	handleUserInput									(SGame& instanceGame, const SGameSt
 						}
 					}
 					else {
-						playerSelection.TargetPlayer											= targetPlayerIndex;
+						playerSelection.TargetPlayer											= (int16_t)targetPlayerIndex;
 						playerSelection.TargetSquad												= 0;
-						playerSelection.TargetUnit												= agentIndex;
+						playerSelection.TargetUnit												= (int16_t)agentIndex;
 						currentPlayer.Squad.TargetPositions[playerSelection.PlayerUnit]			= {tacticalMouseX, currentAgentPosition.y, tacticalMouseY};
 					}
 				}
@@ -143,7 +143,7 @@ void																	drawTileInfo
 																																		   || (boardPlayer.Control.AIMode == PLAYER_AI_VIOLENT)
 																																			)
 																																		);
-			messageColor															= getPlayerColor(tacticalInfo, boardPlayer, playerIndex, PLAYER_INDEX_USER, bDarken);
+			messageColor															= getPlayerColor(tacticalInfo, boardPlayer, (int8_t)playerIndex, PLAYER_INDEX_USER, bDarken);
 
 			selectedTile															= boardPlayer.Army[boardPlayer.Squad.Agents[agentIndex]]->Name;
 			bDrawText																= true;
@@ -258,7 +258,7 @@ void																	drawPlayerInfo									(SGame& instanceGame)															
 		if(currentPlayer.Selection.PlayerUnit != -1 && currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit] != -1) {
 			CCharacter																	& playerAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 			displayDetailedAgentSlot(globalDisplay, PLAYER_INFO_POSY, 4, playerAgent, messageColor);
-			displayStatusEffectsAndTechs(globalDisplay, PLAYER_INFO_POSY+9, 4+32, currentPlayer.Selection.PlayerUnit+1, playerAgent);
+			displayStatusEffectsAndTechs(globalDisplay, PLAYER_INFO_POSY + 9, 4 + 32, playerAgent);
 		}
 
 		selectionText															= "Player name: "	+ ::std::string(currentPlayer.Name);	
@@ -330,13 +330,13 @@ void																	drawPlayerInfo									(SGame& instanceGame)															
 
 	int32_t																		xOffset											= tacticalDisplayX + tacticalDisplay.Width + 4;
 	displayDetailedAgentSlot(globalDisplay, PLAYER_INFO_POSY, xOffset, targetAgent, messageColor);
-	displayStatusEffectsAndTechs(globalDisplay, PLAYER_INFO_POSY+9, xOffset+32, currentPlayer.Selection.TargetUnit+1, targetAgent);
+	displayStatusEffectsAndTechs(globalDisplay, PLAYER_INFO_POSY+9, xOffset+32, targetAgent);
 	selectionText															= "Target: " + targetAgent.Name;
 	lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 3, tacticalDisplayX+1, nwol::SCREEN_RIGHT, selectionText.c_str());
 }
 
 bool																	shoot											(SGame& instanceGame, int32_t tacticalPlayer, int32_t squadAgent)					{
-	STacticalDisplay															& tacticalDisplay								= instanceGame.TacticalDisplay;
+	//STacticalDisplay															& tacticalDisplay								= instanceGame.TacticalDisplay;
 	STacticalInfo																& tacticalInfo									= instanceGame.TacticalInfo;
 	SPlayer																		& playerShooter									= instanceGame.Players[tacticalInfo.Setup.Players[tacticalPlayer]];
 	CCharacter																	& agentShooter									= *playerShooter.Army[playerShooter.Squad.Agents[squadAgent]];
@@ -349,7 +349,7 @@ bool																	shoot											(SGame& instanceGame, int32_t tacticalPlaye
 	if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_BURST))
 		totalBullets															*= 3;
 	
-	int																			finalChance										= agentShooter.FinalPoints.Attack.Hit;
+	//int																			finalChance										= agentShooter.FinalPoints.Attack.Hit;
 	bool																		bIsBlind										= true_if(agentShooter.ActiveBonus.Status.Status & COMBAT_STATUS_BLIND);
 	if(bIsBlind)
 		printf("Blindness causes %s to have %u hit chance for this turn.\n", agentShooter.Name.c_str(), agentShooter.FinalPoints.Attack.Hit >>= 1);
@@ -374,9 +374,9 @@ bool																	shoot											(SGame& instanceGame, int32_t tacticalPlaye
 		}
 		newBullet.Direction.Normalize();
 		newBullet.Position.Offset												+= newBullet.Direction*float(.5/totalBullets*iBullet);
-		newBullet.Shooter.PlayerIndex											= tacticalPlayer;
+		newBullet.Shooter.PlayerIndex											= (int8_t)tacticalPlayer;
 		newBullet.Shooter.TeamId												= tacticalInfo.Setup.TeamPerPlayer[tacticalPlayer];
-		newBullet.Shooter.AgentIndex											= squadAgent;
+		newBullet.Shooter.AgentIndex											= (int8_t)squadAgent;
 		newBullet.Shooter.SquadIndex											= 0;
 		newBullet.Points.Damage													= agentShooter.FinalPoints.Attack.Damage		/ std::max(1, (totalBullets/2));
 		newBullet.Points.DirectDamage											= agentShooter.FinalPoints.Attack.DirectDamage	;
@@ -395,13 +395,9 @@ bool																	shoot											(SGame& instanceGame, int32_t tacticalPlaye
 	return true;
 }
 
-TURN_ACTION																selectAIAction									(SGame& instanceGame);
-TURN_ACTION																selectRemoteAction								(SGame& instanceGame)																{
-	return selectAIAction(instanceGame);
-	return TURN_ACTION_CONTINUE;
-}
-
-bool																	characterTurn									(SGame& instanceGame, TURN_ACTION combatOption)										{
+		TURN_ACTION														selectAIAction									(SGame& instanceGame);
+inline	TURN_ACTION														selectRemoteAction								(SGame& instanceGame)																{ return selectAIAction(instanceGame); }
+		bool															characterTurn									(SGame& instanceGame, TURN_ACTION combatOption)										{
 	STacticalInfo																& tacticalInfo									= instanceGame.TacticalInfo;
 	SGlobalDisplay																& globalDisplay									= instanceGame.GlobalDisplay;
 	SPlayer																		& currentPlayer									= instanceGame.Players[tacticalInfo.Setup.Players[tacticalInfo.CurrentPlayer]];
@@ -434,7 +430,7 @@ bool																	characterTurn									(SGame& instanceGame, TURN_ACTION com
 			else {
 				SPlayer																		& targetPlayer									= instanceGame.Players[tacticalInfo.Setup.Players[currentPlayer.Selection.TargetPlayer]];
 				CCharacter																	& targetAgent									= *targetPlayer	.Army[targetPlayer.Squad.Agents[currentPlayer.Selection.TargetUnit]];
-				CCharacter																	& playerAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
+				//CCharacter																	& playerAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 
 				::nwol::SCoord3<int32_t>													coordPlayer										= playerAgent.Position; 
 				::nwol::SCoord3<int32_t>													coordTarget										= targetAgent.Position;
@@ -493,7 +489,7 @@ bool																	characterTurn									(SGame& instanceGame, TURN_ACTION com
 	else if(combatOption == TURN_ACTION_MOVE) {
 		char																		buffer[128]										= {};
 		CCharacter																	& playerAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
-		bool																		bSuccess										= false;
+		//bool																		bSuccess										= false;
 		if(tacticalInfo.Board.Tiles.IsTileAvailable(currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].x, currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].z)) {
 			currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit]		= AGENT_STATE_MOVE;
 			sprintf_s(buffer, "Player %s moves %s to {%i, %i, %i}."

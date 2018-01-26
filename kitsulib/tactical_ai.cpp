@@ -35,7 +35,7 @@ void													selectAITarget											(SGame& instanceGame)																{
 		return; 
 	}
 
-	CCharacter													& playerCharacter										= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
+	//CCharacter													& playerCharacter										= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 	PLAYER_INDEX												targetPlayerIndex										= PLAYER_INDEX_INVALID;
 	currentPlayer.Selection.TargetPlayer					= -1;
 	currentPlayer.Selection.TargetUnit						= -1;

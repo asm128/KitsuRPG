@@ -89,11 +89,10 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>NOMINMAX;  _WINDOWS; _DEBUG; WIN32; %(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\kitsulib; </AdditionalIncludeDirectories>
       <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
@@ -109,11 +108,10 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>NOMINMAX;  _WINDOWS; _DEBUG; %(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\kitsulib; </AdditionalIncludeDirectories>
       <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
@@ -127,7 +125,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -135,7 +133,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NOMINMAX; _WINDOWS; NDEBUG; WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\kitsulib; </AdditionalIncludeDirectories>
       <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
@@ -151,7 +148,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -159,7 +156,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NOMINMAX; _WINDOWS; NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\kitsulib; </AdditionalIncludeDirectories>
       <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>

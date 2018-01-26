@@ -40,6 +40,7 @@ void runCommunications(void* pInstanceGame)
 
 int main(int argc, char **argv)
 {
+	argc, argv;
 #if defined(NWOL_DEBUG_ENABLED)
 	int tmp = _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF|_CRTDBG_DELAY_FREE_MEM_DF);
 	// Clear the upper 16 bits and OR in the desired freqency

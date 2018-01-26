@@ -31,18 +31,7 @@ namespace klib
 	};
 #pragma pack(pop)
 
-	static inline				void						printMultipageHelp									(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t currentPage, uint32_t pageCount, uint32_t posXOffset)					{
-		static const ::nwol::glabel									textToShow[3]										= 
-			{	"Page down: Next page."						
-			,	"Page up: Previous page."						
-			,	"Page up: Previous page. Page down: Next page"	
-			};
-		::nwol::glabel												selectedText;
-			 if(currentPage == 0)				selectedText		= textToShow[0];	
-		else if(currentPage == (pageCount-1))	selectedText		= textToShow[1];	
-		else									selectedText		= textToShow[2];	
-		::nwol::lineToRect(targetASCII, targetWidth, targetHeight, (int32_t)targetHeight-MENU_ROFFSET+1, posXOffset, nwol::SCREEN_CENTER, selectedText.c_str());
-	}
+								void						printMultipageHelp									(char* targetASCII, uint32_t targetWidth, uint32_t targetHeight, uint32_t currentPage, uint32_t pageCount, uint32_t posXOffset);
 
 	template <size_t _FormatLen>
 	static						int32_t						drawExitOption										(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t posXOffset, nwol::ALIGN_SCREEN align, uint32_t rowWidth, const char (&formatString)[_FormatLen], const std::string& exitText, bool bSelected )		{
@@ -156,11 +145,11 @@ namespace klib
 
 		// Draw options
 		uint32_t													actualOptionCount									= std::min(9U, (uint32_t)(optionCount-(localPersistentState.CurrentPage*9)));
-		const size_t												itemOffset											= localPersistentState.CurrentPage*9;
+		const uint32_t											itemOffset											= localPersistentState.CurrentPage*9;
 		if(drawMenu_globals.Accumulator.Value < 0.575 && localPersistentState.MenuItemAccum < actualOptionCount)
 			drawMenu_globals.Accumulator.Value						= 0.575;
 
-		for(uint32_t i=0, count = (uint32_t)actualOptionCount; i < count; ++i) {
+		for(uint32_t i = 0, count = (uint32_t)actualOptionCount; i < count; ++i) {
 			actualOffsetX											= (int32_t)(targetWidth-targetWidth/2-numberCharsAvailable/2);
 			if(::klib::mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, actualOffsetX-2, lineOffset+i, numberCharsAvailable + 2)) {
 				localPersistentState.CurrentOption						= i;
@@ -172,15 +161,15 @@ namespace klib
 			localPersistentState.CurrentOption						= actualOptionCount-1;
 		
 		const uint32_t												posXOffset											= 0;
-		for(size_t i=0, count = (localPersistentState.MenuItemAccum < actualOptionCount) ? localPersistentState.MenuItemAccum : actualOptionCount; i<count; i++) {
+		for(uint32_t i = 0, count = (localPersistentState.MenuItemAccum < actualOptionCount) ? localPersistentState.MenuItemAccum : actualOptionCount; i < count; ++i) {
 			::sprintf_s(numberKey, "%u", (uint32_t)(i+1));
 			actualOffsetX											= ::nwol::printfToRect(targetASCII, targetWidth, targetHeight, lineOffset, posXOffset, nwol::SCREEN_CENTER, formatString, numberKey, menuItems[itemOffset+i].Text.c_str());
-			if(localPersistentState.CurrentOption == i)
-				for(uint32_t i=0; i<rowWidth+1; i++)
-					targetAttributes[lineOffset * targetWidth + actualOffsetX+i]	= COLOR_YELLOW << 4;
-			else
-				for(uint32_t i=0; i<rowWidth+1; i++)
-					targetAttributes[lineOffset * targetWidth + actualOffsetX+i]	= COLOR_YELLOW;
+			if(localPersistentState.CurrentOption == (int32_t)i)
+				for(uint32_t j = 0; j < rowWidth + 1; ++j)
+					targetAttributes[lineOffset * targetWidth + actualOffsetX + j]	= COLOR_YELLOW << 4;
+			else															  
+				for(uint32_t i = 0; i < rowWidth + 1; ++i)						  
+					targetAttributes[lineOffset * targetWidth + actualOffsetX + i]	= COLOR_YELLOW;
 
 			++lineOffset;
 		}
@@ -192,7 +181,7 @@ namespace klib
 
 		// Print page control help if multipage.
 		if(multipage) 
-			printMultipageHelp(targetASCII, targetAttributes, targetWidth, targetHeight, localPersistentState.CurrentPage, pageCount, posXOffset);
+			printMultipageHelp(targetASCII, targetWidth, targetHeight, localPersistentState.CurrentPage, pageCount, posXOffset);
 		
 		_ReturnType													resultVal											= noActionValue;
 		bool														bResetMenuStuff										= false;

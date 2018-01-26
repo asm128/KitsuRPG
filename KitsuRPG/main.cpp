@@ -26,6 +26,7 @@ void											initPlayerCharacter								(klib::CCharacter& adventurer, const s
 // If the player leaves the tavern() it means the game was requested to close. 
 // After leaving the tavern() we display the score of the player.
 int												main											(int argc, char **argv)											{	
+	argc, argv;
 #if defined(NWOL_DEBUG_ENABLED)
 	int													tmp												= _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF|_CRTDBG_DELAY_FREE_MEM_DF);
 	tmp												= (tmp & 0x0000FFFF) | _CRTDBG_CHECK_EVERY_16_DF;	// Clear the upper 16 bits and OR in the desired freqency
@@ -132,7 +133,7 @@ void											initPlayerCharacter								(klib::CCharacter& adventurer, const s
 	adventurer.Goods.Inventory.Facility		.AddElement({rand() % (int16_t)nwol::size(klib::definitionsFacility		), rand()%(int16_t)nwol::size(klib::modifiersFacility	), ++i});
 
 	adventurer.Goods.Inventory.Items		.AddElement({1,1,1});
-	for(int32_t i = 1;  i < 3; ++i)
+	for(int32_t j = 1;  j < 3; ++j)
 		adventurer.Goods.Inventory.Items		.AddElement({ 1+int16_t(rand()%(nwol::size(klib::itemDescriptions)-1)), int16_t(1+rand()%nwol::size(klib::itemModifiers)), int16_t(rand()%nwol::size(klib::itemGrades)) });
 
 	researchEquipped(adventurer);
@@ -142,10 +143,10 @@ void											initPlayerCharacter								(klib::CCharacter& adventurer, const s
 
 
 int WINAPI										WinMain 
-	(	_In_		HINSTANCE	hInstance
-	,	_In_opt_	HINSTANCE	hPrevInstance
-	,	_In_		LPSTR		lpCmdLine
-	,	_In_		int			nShowCmd
+	(	_In_		HINSTANCE	/*hInstance		*/
+	,	_In_opt_	HINSTANCE	/*hPrevInstance	*/
+	,	_In_		LPSTR		/*lpCmdLine		*/
+	,	_In_		int			/*nShowCmd		*/
 	)
 {
 	return (0 > main(__argc, __argv)) ? EXIT_FAILURE : EXIT_SUCCESS;

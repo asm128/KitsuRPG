@@ -85,11 +85,10 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>NOMINMAX;   WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  </AdditionalIncludeDirectories>
       <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
@@ -104,11 +103,10 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>NOMINMAX;     _DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  </AdditionalIncludeDirectories>
       <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
@@ -121,7 +119,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -129,7 +127,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NOMINMAX; WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  </AdditionalIncludeDirectories>
       <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
@@ -144,7 +141,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -152,7 +149,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NOMINMAX; NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  </AdditionalIncludeDirectories>
       <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>

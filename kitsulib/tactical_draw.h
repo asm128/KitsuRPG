@@ -156,7 +156,7 @@ namespace klib
 		static SStatusColor							statusColors	[32];
 		static const int32_t						initedColors			= initStatusColors(statusColors);
 
-		uint32_t									bitIndex				= -1;
+		uint32_t									bitIndex				= (uint32_t)-1;
 
 		  	 if(nwol::bit_true(status, COMBAT_STATUS_FROZEN		)) { bitIndex	= getBitIndex(COMBAT_STATUS_FROZEN		, MAX_COMBAT_STATUS_COUNT); }
 		else if(nwol::bit_true(status, COMBAT_STATUS_PANIC		)) { bitIndex	= getBitIndex(COMBAT_STATUS_PANIC		, MAX_COMBAT_STATUS_COUNT); }
@@ -264,7 +264,7 @@ namespace klib
 					uint16_t color = COLOR_BLACK;
 					if(agent.IsAlive()) {
 						double fractionLife		= agent.Points.LifeCurrent.Health / (double)agent.FinalPoints.LifeMax.Health;
-						color = getPlayerColor(tacticalInfo, boardPlayer, cellPlayerIndex, indexBoardPlayer, bSwaps[4] && bIsSelected);
+						color = (int8_t)getPlayerColor(tacticalInfo, boardPlayer, (int8_t)cellPlayerIndex, indexBoardPlayer, bSwaps[4] && bIsSelected);
 						if(agent.ActiveBonus.Status.Status && bSwaps[1])
 							color = getStatusColor(agent.ActiveBonus.Status.Status, bSwaps[3], color);
 
