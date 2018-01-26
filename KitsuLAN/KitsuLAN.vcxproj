@@ -94,6 +94,7 @@
       <PreprocessorDefinitions>NOMINMAX;  _WINDOWS; _DEBUG; WIN32; %(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\..\nwol\gddm;  ..\kitsulib; ..\netlib; </AdditionalIncludeDirectories>
+      <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -112,6 +113,7 @@
       <PreprocessorDefinitions>NOMINMAX;  _WINDOWS; _DEBUG; %(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\..\nwol\gddm;  ..\kitsulib; ..\netlib; </AdditionalIncludeDirectories>
+      <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,6 +134,7 @@
       <PreprocessorDefinitions>NOMINMAX; _WINDOWS; NDEBUG; WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\..\nwol\gddm;  ..\kitsulib; ..\netlib; </AdditionalIncludeDirectories>
+      <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,6 +157,7 @@
       <PreprocessorDefinitions>NOMINMAX; _WINDOWS; NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods;  ..\..\nwol\gddm;  ..\kitsulib; ..\netlib; </AdditionalIncludeDirectories>
+      <AdditionalOptions>/permissive-</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

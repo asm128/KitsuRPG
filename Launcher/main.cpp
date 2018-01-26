@@ -635,9 +635,10 @@ int CALLBACK WinMain(
 	STARTUPINFOA startupInfo = {};
 	startupInfo.cb = sizeof(startupInfo);
 	PROCESS_INFORMATION processInformation = {};
+	char processName[] = "\"system\\L2.exe\"";
 	if( !CreateProcessA
 	( 0							//_In_opt_    LPCTSTR              	lpApplicationName,
-	, "\"system\\L2.exe\""		//_Inout_opt_ LPTSTR               	lpCommandLine,
+	, processName				//_Inout_opt_ LPTSTR               	lpCommandLine,
 	, 0							//_In_opt_    LPSECURITY_ATTRIBUTES	lpProcessAttributes,
 	, 0							//_In_opt_    LPSECURITY_ATTRIBUTES	lpThreadAttributes,
 	, false						//_In_        BOOL                 	bInheritHandles,
