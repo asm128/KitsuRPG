@@ -224,12 +224,12 @@ namespace klib
 		SDrawMenuState				MenuState;
 
 		constexpr					SMenu				(_ReturnType exitValue, const std::string& title, uint32_t rowWidth=24, bool disableEscapeKey=false, const ::nwol::glabel& exitText="Exit this menu")
-			:Title				(title)
-			,RowWidth			(rowWidth)
-			,ValueExit			(exitValue)
-			,bDisableEscapeKey	(disableEscapeKey)
-			,TextExit			(exitText)
-			,MenuState			()
+			: Title				(title)
+			, RowWidth			(rowWidth)
+			, ValueExit			(exitValue)
+			, bDisableEscapeKey	(disableEscapeKey)
+			, TextExit			(exitText)
+			, MenuState			()
 		{};
 	};
 
