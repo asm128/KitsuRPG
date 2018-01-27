@@ -87,7 +87,7 @@ int32_t drawAgentResume(SGlobalDisplay& display, const CCharacter& agent, int32_
 	std::string equipName;
 
 	finalColor = (selectedAgentField == ENTITY_TYPE_CHARACTER) ? (genderColor<<4)|COLOR_DARKGREY : (COLOR_DARKGREY<<4)|genderColor;											
-	columnOffset = printfToGridColored(display.Screen, display.TextAttributes, finalColor, offsetY++, offsetX, nwol::SCREEN_LEFT, " %c - %-38.38s", ascii_gender[agent.Flags.Tech.Gender], agent.Name.c_str());
+	columnOffset = printfToGridColored(display.Screen, display.TextAttributes, finalColor, offsetY++, offsetX, nwol::SCREEN_LEFT, " %c - %-38.38s", ::nwol::ascii_gender[agent.Flags.Tech.Gender], agent.Name.c_str());
 
 	SListItem<int32_t> equipSlots[4];
 	for(uint32_t i=0; i<nwol::size(equipSlots); ++i)
@@ -120,9 +120,9 @@ int32_t drawValueSlider(SGlobalDisplay& display, int32_t offsetY, int32_t offset
 	char preformatted[16] = {};
 	
 	sprintf_s(preformatted, "%%-%i.%is:", labelMaxLen, labelMaxLen);	; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0	, offsetY, offsetX+00				, nwol::SCREEN_LEFT, preformatted	, controlLabel.c_str());
-	preformatted[0] = ascii_arrow[1]; preformatted[1] = 0;				; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<4	, offsetY, offsetX+labelMaxLen+ 1	, nwol::SCREEN_LEFT, " %s "			, preformatted);
+	preformatted[0] = ::nwol::ascii_arrow[1]; preformatted[1] = 0;				; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<4	, offsetY, offsetX+labelMaxLen+ 1	, nwol::SCREEN_LEFT, " %s "			, preformatted);
 	sprintf_s(preformatted, "%i", value);								; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0	, offsetY, offsetX+labelMaxLen+ 4	, nwol::SCREEN_LEFT, " %3.3s%% "	, preformatted);
-	preformatted[0] = ascii_arrow[3]; preformatted[1] = 0;				; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<4	, offsetY, offsetX+labelMaxLen+10	, nwol::SCREEN_LEFT, " %s"			, preformatted);
+	preformatted[0] = ::nwol::ascii_arrow[3]; preformatted[1] = 0;				; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<4	, offsetY, offsetX+labelMaxLen+10	, nwol::SCREEN_LEFT, " %s"			, preformatted);
 	return 0;
 };
 
@@ -247,10 +247,10 @@ int32_t drawAgentList
 		const std::string& entityName = agent.Name; 
 		uint16_t colorRow = (iEntity == selectedRow) ? COLOR_YELLOW : COLOR_YELLOW << 4;
 
-		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, nwol::SCREEN_LEFT, " %c - %-38.38s", ascii_gender[agent.Flags.Tech.Gender], entityName.c_str());
+		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, nwol::SCREEN_LEFT, " %c - %-38.38s", ::nwol::ascii_gender[agent.Flags.Tech.Gender], entityName.c_str());
 		colorRow &= 0xF0;
 		colorRow |= agent.Flags.Tech.Gender == GENDER_FEMALE ? COLOR_MAGENTA : agent.Flags.Tech.Gender == GENDER_MALE ? COLOR_CYAN : COLOR_GREEN;
-		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, nwol::SCREEN_LEFT, " %c", ascii_gender[agent.Flags.Tech.Gender]);
+		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, nwol::SCREEN_LEFT, " %c", ::nwol::ascii_gender[agent.Flags.Tech.Gender]);
 		
 		++actualRowsDisplayed;
 	} 

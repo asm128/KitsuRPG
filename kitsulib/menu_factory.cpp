@@ -152,7 +152,7 @@ SGameState													drawFactoryMenu										(SGame& instanceGame, const SGam
 		, {"No action selected"		, -1}
 		, 50U
 		);
-	if(selectedChoice.ResearchIndex == researchedCount)
+	if(selectedChoice.ResearchIndex == (int32_t)researchedCount)
 		return {GAME_STATE_WELCOME_COMMANDER};
 
 	if(selectedChoice.ResearchIndex == -1)

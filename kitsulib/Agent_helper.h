@@ -202,7 +202,7 @@ namespace klib
 	#define MAX_ENTITY_COLUMNS	4
 	template <size_t _Width, size_t _Depth> 
 	static void								drawScore						(SWeightedDisplay<_Width, _Depth>& display_, int32_t offsetY, int32_t offsetX, const SCharacterScore& score)																{
-		char										buffer[128]						= {};
+		//char										buffer[128]						= {};
 		char										bufferValues[64]				= {};
 		const char									format[]						= "- %-21.21s: %-12.12s";
 	
@@ -230,38 +230,7 @@ namespace klib
 	#define MAX_AGENT_ROWS		2
 	#define MAX_AGENT_COLUMNS	3
 
-	static void								drawSquadSlots					(SGame& instanceGame)																																						{
-		SGlobalDisplay								& display						= instanceGame.GlobalDisplay;
-		static const int32_t						slotWidth						= display.Width / MAX_AGENT_COLUMNS;
-		static const int32_t						slotRowSpace					= 30;// display.Depth / (MAX_AGENT_ROWS);
-
-		static const int32_t						offsetYBase						= 2;
-		static const int32_t						offsetXBase						= 5;
-
-		SPlayer										& player						= instanceGame.Players[PLAYER_INDEX_USER];
-		int32_t										playerOffset					= (player.Selection.PlayerUnit != -1) ? nwol::min(nwol::max(0, player.Selection.PlayerUnit-5), (int16_t)nwol::size(player.Squad.Agents)-6) : 0;
-
-		bool										bStop							= false;
-		for(int32_t y = 0, countY=MAX_AGENT_ROWS; y < countY; ++y) {
-			for(int32_t x = 0, countX=MAX_AGENT_COLUMNS; x < countX; ++x)  {
-				int32_t										linearIndex						= y*countX+x;
-				if(linearIndex >= player.Squad.Size) {					
-					bStop									= true;
-					break;
-				}
-				int32_t										agentIndexOffset				= linearIndex+playerOffset;
-				if(agentIndexOffset < (int32_t)nwol::size(player.Squad.Agents))  {
-					if( player.Squad.Agents[agentIndexOffset] != -1 )
-						displayAgentSlot(display, offsetYBase+slotRowSpace*y, offsetXBase+slotWidth*x, agentIndexOffset+1, *player.Army[player.Squad.Agents[agentIndexOffset]], true);
-					else											 
-						displayEmptySlot(display, offsetYBase+slotRowSpace*y, offsetXBase+slotWidth*x, agentIndexOffset+1);
-				}
-			}
-			if(bStop)
-				break;
-		}
-	}
-
+	void								drawSquadSlots					(SGame& instanceGame);
 }
 
 #endif // __AGENT_HELPER_H__91238648097234698723649872364923874__

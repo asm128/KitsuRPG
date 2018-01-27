@@ -48,7 +48,7 @@ void																		research
 			;
 		if(bIsModifier) {
 			int32_t																			selectedEntityModifier								= equipInventory[i].Entity.Modifier;
-			if( 0 != selectedEntityModifier && (-1) == researchedList.FindElement(selectedEntityModifier) ) { 
+			if( 0 != selectedEntityModifier && (-1) == researchedList.FindElement((int16_t)selectedEntityModifier) ) { 
 				stringLeft																	= definitionsTable[selectedEntityModifier].Name.c_str();
 				stringRight																	= itemFormat.c_str();
 				value																		= selectedEntityModifier;
@@ -67,7 +67,7 @@ void																		research
 		} 
 		else {
 			int32_t																			selectedEntityDefinition							= equipInventory[i].Entity.Definition;
-			if( 0 != selectedEntityDefinition && (-1) == researchedList.FindElement(selectedEntityDefinition) ) {
+			if( 0 != selectedEntityDefinition && (-1) == researchedList.FindElement((int16_t)selectedEntityDefinition) ) {
 				stringRight																	= definitionsTable[selectedEntityDefinition].Name.c_str();
 				stringLeft																	= itemFormat.c_str();
 				value																		= selectedEntityDefinition; 
@@ -86,8 +86,8 @@ void																		research
 		}
 
 		bool																		bRequiresInserting										= true;
-		for(int32_t i=0; i<menuItemCount; ++i)
-			if(menuItems[i].ReturnValue == value) {
+		for(int32_t j = 0; j < menuItemCount; ++j)
+			if(menuItems[j].ReturnValue == value) {
 				printf("You seem to have an additional research point for %s.\n", menuItemText);
 				bRequiresInserting														= false;
 				break;
@@ -119,7 +119,7 @@ void																		research
 	else
 		printf(startResearching.c_str(), definitionsTable[selectedValue].Name.c_str()); 
 
-	researchedList.AddElement((int32_t)selectedValue); 
+	researchedList.AddElement((int16_t)selectedValue); 
 
 	if(bIsModifier) {
 		adventurerMaxEquip.Modifier												= std::max(adventurerMaxEquip.Modifier, (int16_t)(selectedValue+1)); 

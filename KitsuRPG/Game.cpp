@@ -16,18 +16,18 @@
 // Looks into a research container for the requested technology and equips the entity in equippedEntity if the research is complete.
 template<typename _EntityType, size_t _EntityContainerSize, size_t _DefinitionCount, size_t _ModifierCount>
 bool																	equipEntityIfResearched			
-	( uint32_t													slotIndex
-	, klib::SEntityContainer<_EntityType, _EntityContainerSize>	& entityContainer
-	, const klib::SResearchGroup<_EntityType>					& completedResearchPlayer
-	, const klib::SResearchGroup<_EntityType>					& completedResearchAgent
-	, const klib::SEntityRecord<_EntityType>					(&tableDefinitions	)[_DefinitionCount	]
-	, const klib::SEntityRecord<_EntityType>					(&tableModifiers	)[_ModifierCount	]
-	, _EntityType												& equippedEntity
-	, const std::string											& cantAccessDefinitionError
-	, const std::string											& cantAccessModifierError
-	, const std::string											& storeOldWeaponMessage
-	, const std::string											& equipNewWeaponMessage
-	, const std::string											& researchTypeString
+	( uint32_t														slotIndex
+	, ::klib::SEntityContainer<_EntityType, _EntityContainerSize>	& entityContainer
+	, const ::klib::SResearchGroup<_EntityType>						& completedResearchPlayer
+	, const ::klib::SResearchGroup<_EntityType>						& completedResearchAgent
+	, const ::klib::SEntityRecord<_EntityType>						(&tableDefinitions	)[_DefinitionCount	]
+	, const ::klib::SEntityRecord<_EntityType>						(&tableModifiers	)[_ModifierCount	]
+	, _EntityType													& equippedEntity
+	, const ::std::string											& cantAccessDefinitionError
+	, const ::std::string											& cantAccessModifierError
+	, const ::std::string											& storeOldWeaponMessage
+	, const ::std::string											& equipNewWeaponMessage
+	, const ::std::string											& researchTypeString
 	)	
 {	
 	if(slotIndex >= entityContainer.Count) //invalid index do nothing.

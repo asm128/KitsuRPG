@@ -1,4 +1,6 @@
 #include "nwol_grid.h"
+#include "ascii_reference.h"
+#include "StageProp.h"
 
 #ifndef __TACTICALTILE_H__9238402734628937234__
 #define __TACTICALTILE_H__9238402734628937234__
@@ -95,6 +97,8 @@ namespace klib
 		static	const uint32_t										Width			= (uint32_t)_Width;
 		static	const uint32_t										Depth			= (uint32_t)_Depth;
 	};
+
+			char												getASCIIWall	(const ::nwol::grid_view<STileProp>& propGrid, int32_t x, int32_t z);
 };
 
 

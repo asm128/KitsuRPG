@@ -32,7 +32,7 @@ int32_t																displayInventoryMenu						(klib::CCharacter& adventurer, 
 	char																	itemOption	[128]							= {};
 	for(uint32_t i=0; i<adventurer.Goods.Inventory.Items.Count; ++i) {
 		const klib::SItem														& itemEntity								= adventurer.Goods.Inventory.Items[i].Entity;
-		std::string																itemName									= klib::getItemName(itemEntity);
+		::std::string															itemName									= klib::getItemName(itemEntity);
 		int32_t																	finalPrice									= klib::getItemPrice(itemEntity, bSellPrice);
 
 		if(bPrintPrice)

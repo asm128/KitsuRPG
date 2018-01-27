@@ -6,7 +6,7 @@
 // returns -1 if the user entered an invalid numeric input
 static inline int64_t										getNumericInput							()																												{
 	// Get user input
-	std::string														userChoice;
+	::std::string													userChoice;
 	getline(std::cin, userChoice);
 	
 	// Convert the input string to a menuitem index.

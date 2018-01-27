@@ -1,6 +1,6 @@
 #include "draw.h"
 
-int main(int argc, char **argv)
+int main(int /*argc*/, char ** /*argv*/)
 {
 #if defined(NWOL_DEBUG_ENABLED)
 	int tmp = _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF|_CRTDBG_DELAY_FREE_MEM_DF);
@@ -35,10 +35,10 @@ int main(int argc, char **argv)
 
 
 int WINAPI WinMain 
-(    _In_		HINSTANCE	hInstance
-,    _In_opt_	HINSTANCE	hPrevInstance
-,    _In_		LPSTR		lpCmdLine
-,    _In_		int			nShowCmd
+(    _In_		HINSTANCE	//hInstance
+,    _In_opt_	HINSTANCE	//hPrevInstance
+,    _In_		LPSTR		//lpCmdLine
+,    _In_		int			//nShowCmd
 )
 {
 	if(0 > ::main(__argc, __argv))

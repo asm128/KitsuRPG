@@ -158,8 +158,8 @@ namespace klib
 		, const SEntityRecord<_EntityType>			(&entityDefinitions)	[_SizeDefinitions]
 		, const SEntityRecord<_EntityType>			(&entityModifiers)		[_SizeModifiers]
 		, const ::nwol::glabel&						modifierTypeName
-		, std::string&								messageSuccess
-		, std::string&								messageError
+		, ::std::string&							messageSuccess
+		, ::std::string&							messageError
 		)
 	{
 		_EntityType			selectedItem	= playerInventory[selectedChoice].Entity;

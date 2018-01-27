@@ -1,7 +1,7 @@
 #include "EntityImpl.h"
 #include "nwol_misc.h"
 
-#include <string>
+//#include <string>
 
 #ifndef __ITEM_H__98214809271346928734293846__
 #define __ITEM_H__98214809271346928734293846__

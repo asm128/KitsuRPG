@@ -34,7 +34,7 @@ namespace klib
 								void						printMultipageHelp									(char* targetASCII, uint32_t targetWidth, uint32_t targetHeight, uint32_t currentPage, uint32_t pageCount, uint32_t posXOffset);
 
 	template <size_t _FormatLen>
-	static						int32_t						drawExitOption										(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t posXOffset, nwol::ALIGN_SCREEN align, uint32_t rowWidth, const char (&formatString)[_FormatLen], const std::string& exitText, bool bSelected )		{
+	static						int32_t						drawExitOption										(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t posXOffset, nwol::ALIGN_SCREEN align, const char (&formatString)[_FormatLen], const std::string& exitText, bool bSelected )		{
 		int32_t														offsetY												= (int32_t)targetHeight-MENU_ROFFSET-1;
 		int32_t														actualOffsetX										= printfToRect(targetASCII, targetWidth, targetHeight, offsetY, posXOffset, align, formatString, "0", exitText.c_str());	
 
@@ -168,8 +168,8 @@ namespace klib
 				for(uint32_t j = 0; j < rowWidth + 1; ++j)
 					targetAttributes[lineOffset * targetWidth + actualOffsetX + j]	= COLOR_YELLOW << 4;
 			else															  
-				for(uint32_t i = 0; i < rowWidth + 1; ++i)						  
-					targetAttributes[lineOffset * targetWidth + actualOffsetX + i]	= COLOR_YELLOW;
+				for(uint32_t j = 0; j < rowWidth + 1; ++j)						  
+					targetAttributes[lineOffset * targetWidth + actualOffsetX + j]	= COLOR_YELLOW;
 
 			++lineOffset;
 		}

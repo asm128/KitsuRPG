@@ -1,5 +1,7 @@
 #include "draw.h"
 #include "credits.h"
+#include "tactical_draw.h"
+#include "Agent_helper.h"
 
 using namespace klib;
 
@@ -220,3 +222,127 @@ void										drawIntro						( SGame& instanceGame ) {
 	}
 }
 
+
+char										klib::getASCIIWall				(const ::nwol::grid_view<STileProp>& propGrid, int32_t x, int32_t z) {
+	::nwol::SASCIIWallConnection					connection						= {false};
+
+	char											result							= '-';
+	static const ::nwol::glabel						labelWall						= "Wall";
+
+	bool											bIsReinforced					= propGrid[z][x].Modifier > 0;
+
+	if(x - 1 >= 0							&& propGrid[z    ][x - 1].Definition != -1 && definitionsStageProp[propGrid[z    ][x - 1].Definition].Name == labelWall) { connection.Left		= true;	if(propGrid[z    ][x - 1].Modifier > 0) connection.ReinforcedLeft	= true; }
+	if(x + 1 < (int32_t)propGrid.width()	&& propGrid[z    ][x + 1].Definition != -1 && definitionsStageProp[propGrid[z    ][x + 1].Definition].Name == labelWall) { connection.Right		= true;	if(propGrid[z    ][x + 1].Modifier > 0) connection.ReinforcedRight	= true; }
+	if(z - 1 >= 0							&& propGrid[z - 1][x    ].Definition != -1 && definitionsStageProp[propGrid[z - 1][x    ].Definition].Name == labelWall) { connection.Top		= true;	if(propGrid[z - 1][x    ].Modifier > 0) connection.ReinforcedTop	= true; }
+	if(z + 1 < (int32_t)propGrid.height()	&& propGrid[z + 1][x    ].Definition != -1 && definitionsStageProp[propGrid[z + 1][x    ].Definition].Name == labelWall) { connection.Bottom	= true;	if(propGrid[z + 1][x    ].Modifier > 0) connection.ReinforcedBottom	= true; }
+		
+			if(connection.Bottom	&& connection.Top		&& connection.Left && connection.Right	) { result = ::nwol::resolveASCIIConnectionCross			(bIsReinforced, connection); }
+	else if(connection.Left		&& connection.Right		&& connection.Top						) { result = ::nwol::resolveASCIIConnectionHorizontalUp		(bIsReinforced, connection); }
+	else if(connection.Left		&& connection.Right		&& connection.Bottom					) { result = ::nwol::resolveASCIIConnectionHorizontalDown	(bIsReinforced, connection); }
+	else if(connection.Top		&& connection.Bottom	&& connection.Right						) { result = ::nwol::resolveASCIIConnectionVerticalRight	(bIsReinforced, connection); }
+	else if(connection.Top		&& connection.Bottom	&& connection.Left						) { result = ::nwol::resolveASCIIConnectionVerticalLeft		(bIsReinforced, connection); }
+	else if(connection.Top		&& connection.Right												) { result = ::nwol::resolveASCIICornerUpRight				(bIsReinforced, connection); }
+	else if(connection.Top		&& connection.Left												) { result = ::nwol::resolveASCIICornerUpLeft				(bIsReinforced, connection); }
+	else if(connection.Bottom	&& connection.Right												) { result = ::nwol::resolveASCIICornerDownRight			(bIsReinforced, connection); }
+	else if(connection.Bottom	&& connection.Left												) { result = ::nwol::resolveASCIICornerDownLeft				(bIsReinforced, connection); }
+	//else iconnection.(bTop	&& connection.Bottom											) { result = ::nwol::resolveASCIIVertical					(bIsReinforced, connection); }
+	//else iconnection.(bLeft	&& connection.Right												) { result = ::nwol::resolveASCIIHorizontal					(bIsReinforced, connection); }
+	else if(connection.Top		|| connection.Bottom											) { result = ::nwol::resolveASCIIVertical					(bIsReinforced, connection); }
+	else if(connection.Left		|| connection.Right												) { result = ::nwol::resolveASCIIHorizontal					(bIsReinforced, connection); }
+
+	return result;
+}
+
+uint16_t									klib::getPlayerColor			( const STacticalInfo& tacticalInfo, const SPlayer& boardPlayer, int8_t indexBoardPlayer, int8_t indexPlayerViewer, bool bIsSelected )	{
+	uint16_t										color							= COLOR_BLACK;
+	if(tacticalInfo.Setup.TeamPerPlayer[indexBoardPlayer] == tacticalInfo.Setup.TeamPerPlayer[indexPlayerViewer]) {
+		if(indexBoardPlayer == indexPlayerViewer)
+			color								= (bIsSelected) ? COLOR_CYAN :COLOR_DARKBLUE;	
+		else
+			color								= (bIsSelected) ? COLOR_MAGENTA :COLOR_DARKMAGENTA;	
+	}
+	else {
+		switch(boardPlayer.Control.Type) {
+		case PLAYER_CONTROL_REMOTE	:
+		case PLAYER_CONTROL_LOCAL	: color		= (bIsSelected) ? COLOR_RED : COLOR_DARKRED;
+			break;
+
+		case PLAYER_CONTROL_AI:
+			switch(boardPlayer.Control.AIMode) {
+			case PLAYER_AI_NEUTRAL		: color		= bIsSelected ? COLOR_DARKGREY	: COLOR_DARKGREY	; break;
+			case PLAYER_AI_FEARFUL		: color		= bIsSelected ? COLOR_DARKGREY	: COLOR_DARKGREY	; break;
+			case PLAYER_AI_CURIOUS		: color		= bIsSelected ? COLOR_DARKGREY	: COLOR_DARKGREY	; break;
+			case PLAYER_AI_ASSISTS		: color		= bIsSelected ? COLOR_WHITE		: COLOR_GREEN		; break;
+			case PLAYER_AI_RIOTERS		: color		= bIsSelected ? COLOR_YELLOW	: COLOR_ORANGE		; break;
+			case PLAYER_AI_VIOLENT		: color		= bIsSelected ? COLOR_YELLOW	: COLOR_ORANGE		; break;
+			case PLAYER_AI_TEAMERS		: color		= bIsSelected ? COLOR_RED		: COLOR_DARKRED		; break;
+			}
+		}
+	}
+	return color;
+}
+
+uint16_t									klib::getStatusColor			( COMBAT_STATUS status, bool bSwap, uint16_t defaultColor )																																	{
+	static SStatusColor								statusColors	[32];
+	static const int32_t							initedColors			= initStatusColors(statusColors);
+
+	uint32_t										bitIndex				= (uint32_t)-1;
+
+		 if(nwol::bit_true(status, COMBAT_STATUS_FROZEN		)) { bitIndex	= getBitIndex(COMBAT_STATUS_FROZEN		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_PANIC		)) { bitIndex	= getBitIndex(COMBAT_STATUS_PANIC		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_SLEEP		)) { bitIndex	= getBitIndex(COMBAT_STATUS_SLEEP		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_STUN		)) { bitIndex	= getBitIndex(COMBAT_STATUS_STUN		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_SHOCK		)) { bitIndex	= getBitIndex(COMBAT_STATUS_SHOCK		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_PETRIFY	)) { bitIndex	= getBitIndex(COMBAT_STATUS_PETRIFY		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_CHARMED	)) { bitIndex	= getBitIndex(COMBAT_STATUS_CHARMED		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_BERSERK	)) { bitIndex	= getBitIndex(COMBAT_STATUS_BERSERK		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_BLEEDING	)) { bitIndex	= getBitIndex(COMBAT_STATUS_BLEEDING	, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_POISON		)) { bitIndex	= getBitIndex(COMBAT_STATUS_POISON		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_BURN		)) { bitIndex	= getBitIndex(COMBAT_STATUS_BURN		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_FREEZING	)) { bitIndex	= getBitIndex(COMBAT_STATUS_FREEZING	, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_WEAKNESS	)) { bitIndex	= getBitIndex(COMBAT_STATUS_WEAKNESS	, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_SLOW		)) { bitIndex	= getBitIndex(COMBAT_STATUS_SLOW		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_BULLIED	)) { bitIndex	= getBitIndex(COMBAT_STATUS_BULLIED		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_DRUNK		)) { bitIndex	= getBitIndex(COMBAT_STATUS_DRUNK		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_BLIND		)) { bitIndex	= getBitIndex(COMBAT_STATUS_BLIND		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_RAGE		)) { bitIndex	= getBitIndex(COMBAT_STATUS_RAGE		, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_INVISIBLE	)) { bitIndex	= getBitIndex(COMBAT_STATUS_INVISIBLE	, MAX_COMBAT_STATUS_COUNT); }
+	else if(nwol::bit_true(status, COMBAT_STATUS_BLACKOUT	)) { bitIndex	= getBitIndex(COMBAT_STATUS_BLACKOUT	, MAX_COMBAT_STATUS_COUNT); }
+	if(bitIndex != -1)
+		defaultColor														= (bSwap ?	statusColors[bitIndex].Bright : statusColors[bitIndex].Dark);
+
+	return defaultColor;
+}
+
+
+void									klib::drawSquadSlots					(SGame& instanceGame)																																						{
+	SGlobalDisplay								& display								= instanceGame.GlobalDisplay;
+	static const int32_t						slotWidth								= display.Width / MAX_AGENT_COLUMNS;
+	static const int32_t						slotRowSpace							= 30;// display.Depth / (MAX_AGENT_ROWS);
+
+	static const int32_t						offsetYBase								= 2;
+	static const int32_t						offsetXBase								= 5;
+
+	SPlayer										& player								= instanceGame.Players[PLAYER_INDEX_USER];
+	int32_t										playerOffset							= (player.Selection.PlayerUnit != -1) ? nwol::min(nwol::max(0, player.Selection.PlayerUnit-5), (int16_t)nwol::size(player.Squad.Agents)-6) : 0;
+
+	bool										bStop									= false;
+	for(int32_t y = 0, countY=MAX_AGENT_ROWS; y < countY; ++y) {
+		for(int32_t x = 0, countX=MAX_AGENT_COLUMNS; x < countX; ++x)  {		
+			int32_t										linearIndex								= y*countX+x;
+			if(linearIndex >= player.Squad.Size) {					
+				bStop									= true;
+				break;
+			}
+			int32_t										agentIndexOffset						= linearIndex+playerOffset;
+			if(agentIndexOffset < (int32_t)nwol::size(player.Squad.Agents))  {
+				if( player.Squad.Agents[agentIndexOffset] != -1 )
+					::klib::displayAgentSlot(display, offsetYBase+slotRowSpace*y, offsetXBase+slotWidth*x, agentIndexOffset+1, *player.Army[player.Squad.Agents[agentIndexOffset]], true);
+				else											 
+					::klib::displayEmptySlot(display, offsetYBase+slotRowSpace*y, offsetXBase+slotWidth*x, agentIndexOffset+1);
+			}
+		}
+		if(bStop)
+			break;
+	}
+}

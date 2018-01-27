@@ -38,12 +38,12 @@ namespace klib
 	}
 
 	//-------------------------------------------------------------------------------------------
-	static void																acknowledgeResearch				(const SEntityResearch& selectedChoice, SPlayerProjects& playerProjects, std::string& successMessage)	{
+	static inline	void													acknowledgeResearch				(const SEntityResearch& selectedChoice, SPlayerProjects& playerProjects, std::string& successMessage)	{
 		playerProjects.EnqueueResearch(selectedChoice); 
 		successMessage															= selectedChoice.Name + " research has begun. Research cost: " + std::to_string(selectedChoice.PriceUnit - selectedChoice.PricePaid);
 	}
 
-	static void																acknowledgeProduction			(const SEntityResearch& selectedChoice, SPlayerProjects& playerProjects, std::string& successMessage)	{
+	static inline	void													acknowledgeProduction			(const SEntityResearch& selectedChoice, SPlayerProjects& playerProjects, std::string& successMessage)	{
 		playerProjects.EnqueueProduction(selectedChoice); 
 		successMessage															= selectedChoice.Name + " production has begun. Cost: " + std::to_string(selectedChoice.PriceUnit - selectedChoice.PricePaid);
 	}

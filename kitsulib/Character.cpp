@@ -45,12 +45,12 @@ void									klib::SCharacter::RecalculateFinalFlags		()																						no
 }
 
 void									klib::addStatus								(SCombatStatus& characterStatus, COMBAT_STATUS statusType, int32_t turnCount)						{
-	for(int i=0, count=characterStatus.MaxStatus; i<count; ++i) {
+	for(int i = 0, count = characterStatus.MaxStatus; i < count; ++i) {
 		const COMBAT_STATUS							bitStatus									=  (COMBAT_STATUS)(1<<i);
 		if(0 == (bitStatus & statusType))
 			continue;
 
-		characterStatus.TurnsLeft[i]			+= turnCount;
+		characterStatus.TurnsLeft[i]			+= (int8_t)turnCount;
 		characterStatus.Status					= (COMBAT_STATUS)(characterStatus.Status | bitStatus);
 	}
 }
