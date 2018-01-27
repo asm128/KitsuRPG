@@ -177,7 +177,7 @@ namespace klib
 		int32_t														exitOffset											= 0;
 		// Print Exit option at the end.
 		if(localPersistentState.MenuItemAccum > actualOptionCount)
-			exitOffset												= drawExitOption(targetASCII, targetAttributes, targetWidth, targetHeight, posXOffset, nwol::SCREEN_CENTER, rowWidth, formatString, exitText, localPersistentState.CurrentOption == 10);
+			exitOffset												= drawExitOption(targetASCII, targetAttributes, targetWidth, targetHeight, posXOffset, nwol::SCREEN_CENTER, formatString, exitText, localPersistentState.CurrentOption == 10);
 
 		// Print page control help if multipage.
 		if(multipage) 
