@@ -14,7 +14,7 @@ namespace klib
 	template<size_t _Width, size_t _Height>
 	void													drawSnowBackground							( SWeightedDisplay<_Width, _Height>& display, double lastTimeSeconds, uint32_t disturbance = 1 )																							{
 		int32_t														displayWidth								= (int32_t)display.Width;
-		int32_t														displayDepth								= (int32_t)display.Depth;
+		//int32_t														displayDepth								= (int32_t)display.Depth;
 
 		for(int32_t x=0; x<displayWidth; ++x) 
 			if(display.DisplayWeights[0][x] == 0)  {

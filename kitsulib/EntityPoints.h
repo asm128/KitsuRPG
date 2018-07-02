@@ -8,8 +8,7 @@ namespace klib
 {
 #pragma pack(push, 1)
 
-	struct SEntityPointsMultiplier 
-	{
+	struct SEntityPointsMultiplier {
 							SLifePointsMultiplier		LifeMax										= {};
 							SLifePointsMultiplier		LifeCurrent									= {};
 							SAttackPointsMultiplier		Attack										= {};

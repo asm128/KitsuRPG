@@ -107,7 +107,6 @@ int32_t									loadSettings			(SLauncherSettings& launcherSettings, const char*
 			char										path[256]				= {};							fread(&path[0], 1, nameLen > 256 ? 256 : nameLen, fp);
 			launcherSettings.Files[i].Path			= path;
 		}
-
 		fclose(fp);
 	}
 	else
@@ -382,17 +381,17 @@ void initConsole(const char* windowTitle)
 
 
 enum APPLICATION_STATE
-{	APPLICATION_STATE_INIT						= 0
-,	APPLICATION_STATE_CONNECT					= 1
-,	APPLICATION_STATE_LOAD_SETTINGS				= 2
-,	APPLICATION_STATE_PATCH_INFO_LIST			= 3
-,	APPLICATION_STATE_PATCH_INFO_DOWNLOAD		= 4
-,	APPLICATION_STATE_PATCH_CONTENT_DOWNLOAD	= 5
-,	APPLICATION_STATE_DISCONNECT				= 6
-,	APPLICATION_STATE_SAVE_SETTINGS				= 7
-,	APPLICATION_STATE_CLOSE_UI					= 8
-,	APPLICATION_STATE_INVALID					= -1
-};
+	{	APPLICATION_STATE_INIT						= 0
+	,	APPLICATION_STATE_CONNECT					= 1
+	,	APPLICATION_STATE_LOAD_SETTINGS				= 2
+	,	APPLICATION_STATE_PATCH_INFO_LIST			= 3
+	,	APPLICATION_STATE_PATCH_INFO_DOWNLOAD		= 4
+	,	APPLICATION_STATE_PATCH_CONTENT_DOWNLOAD	= 5
+	,	APPLICATION_STATE_DISCONNECT				= 6
+	,	APPLICATION_STATE_SAVE_SETTINGS				= 7
+	,	APPLICATION_STATE_CLOSE_UI					= 8
+	,	APPLICATION_STATE_INVALID					= -1
+	};
 
 static const char windowTitle		[] = "Launcher v1.0 - dreadwords@gmail.com";
 static const char userName			[] = "launcher";//"launcher@warcry.com.ar";
