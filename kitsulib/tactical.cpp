@@ -355,11 +355,11 @@ bool																	shoot											(SGame& instanceGame, int32_t tacticalPlaye
 		printf("Blindness causes %s to have %u hit chance for this turn.\n", agentShooter.Name.c_str(), agentShooter.FinalPoints.Attack.Hit >>= 1);
 
 	//if ((rand() % 100) < finalChance ) {
-		 if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType		, ATTACK_TYPE_SPLASH		)) PlaySound("sounds\\Shotgun_Blast-Jim_Rogers-1914772763.wav"		, 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_ROCKET	)) PlaySound("sounds\\Missle_Launch-Kibblesbob-2118796725.wav"		, 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_GRENADE	)) PlaySound("sounds\\grenade-launcher-daniel_simon.wav"			, 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_BULLET	)) PlaySound("sounds\\Anti Aircraft Gun-Mike_Koenig-1303768514.wav"	, 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_RAY		)) PlaySound("sounds\\Gun_Shot-Marvin-1140816320.wav"				, 0, SND_ASYNC | SND_FILENAME);
+		 if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType		, ATTACK_TYPE_SPLASH		)) PlaySound("..\\..\\gpk_data\\sounds\\Shotgun_Blast-Jim_Rogers-1914772763.wav"		, 0, SND_ASYNC | SND_FILENAME);
+	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_ROCKET	)) PlaySound("..\\..\\gpk_data\\sounds\\Missle_Launch-Kibblesbob-2118796725.wav"		, 0, SND_ASYNC | SND_FILENAME);
+	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_GRENADE	)) PlaySound("..\\..\\gpk_data\\sounds\\grenade-launcher-daniel_simon.wav"			, 0, SND_ASYNC | SND_FILENAME);
+	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_BULLET	)) PlaySound("..\\..\\gpk_data\\sounds\\Anti Aircraft Gun-Mike_Koenig-1303768514.wav"	, 0, SND_ASYNC | SND_FILENAME);
+	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_RAY		)) PlaySound("..\\..\\gpk_data\\sounds\\Gun_Shot-Marvin-1140816320.wav"				, 0, SND_ASYNC | SND_FILENAME);
 	
 	for(int32_t iBullet=0; iBullet<totalBullets; ++iBullet) {
 		::nwol::bit_clear(playerShooter.Squad.AgentStates[squadAgent], AGENT_STATE_MOVE);
@@ -743,7 +743,7 @@ void																	updateBullets									(SGame& instanceGame)									{
 						)
 					)
 				{
-					PlaySound("sounds\\Explosion_Ultra_Bass-Mark_DiAngelo-1810420658.wav", 0, SND_ASYNC | SND_FILENAME);
+					PlaySound("..\\..\\gpk_data\\Explosion_Ultra_Bass-Mark_DiAngelo-1810420658.wav", 0, SND_ASYNC | SND_FILENAME);
 					SAOE																		newAOE										= {};
 					newAOE.Position															= newBullet.Position;
 					newAOE.RadiusOrHalfSize													= newBullet.Points.Level;
@@ -854,7 +854,7 @@ SGameState																drawTacticalScreen								(SGame& instanceGame, const 
 			return {GAME_STATE_WELCOME_COMMANDER};
 		}
 		//int32_t finalCost = ::klib::missionCost(instanceGame.Players[PLAYER_INDEX_USER], instanceGame.Players[PLAYER_INDEX_USER].Squad, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
-		PlaySound("sounds\\Intro_Wind-Mark_DiAngelo-844491759.wav", 0, SND_ASYNC | SND_FILENAME);
+		PlaySound("..\\..\\gpk_data\\Intro_Wind-Mark_DiAngelo-844491759.wav", 0, SND_ASYNC | SND_FILENAME);
 		//instanceGame.Players[PLAYER_INDEX_USER].Money -= finalCost;
 	}
 	
