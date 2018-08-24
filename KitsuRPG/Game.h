@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Combat.h"
+#include "GameMenu.h"
 
 #ifndef __GAME_H__99823740927349023649827346982734__
 #define __GAME_H__99823740927349023649827346982734__
@@ -28,7 +29,7 @@ void																displayInventory							(const klib::SEntityContainer<klib::S
 
 template <size_t _Size1, size_t _Size2>
 int32_t																displayInventoryMenu						(klib::CCharacter& adventurer, const char (&menuTitle)[_Size1], const char (&exitOption)[_Size2], bool bPrintPrice=false, bool bSellPrice=true)			{
-	klib::SMenuItem<int32_t>												itemOptions	[MAX_INVENTORY_SLOTS+1]			= {};
+	::klib::SMenuItem<int32_t>												itemOptions	[MAX_INVENTORY_SLOTS+1]			= {};
 	char																	itemOption	[128]							= {};
 	for(uint32_t i=0; i<adventurer.Goods.Inventory.Items.Count; ++i) {
 		const klib::SItem														& itemEntity								= adventurer.Goods.Inventory.Items[i].Entity;
