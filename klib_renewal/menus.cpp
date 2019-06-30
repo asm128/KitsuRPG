@@ -64,11 +64,11 @@ SGameState processMenuReturn(SGame& instanceGame, TURN_ACTION returnValue) {
 
 void handleSubstateChange(SGame& instanceGame, const SGameState& newState, const SGameState& prevState) 
 {
-	nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
+	::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
 	instanceGame.GlobalDisplay		.Clear();
 	//instanceGame.TacticalDisplay	.Clear();	
 	//instanceGame.PostEffectDisplay	.Clear();	
-	::nwol::clearGrid(instanceGame.MenuDisplay);
+	::klib::clearGrid(instanceGame.MenuDisplay);
 
 	switch(newState.State) {
 	case GAME_STATE_MENU_OPTIONS:
@@ -106,7 +106,7 @@ void handleStateChange(SGame& instanceGame, const SGameState& newState, const SG
 {
 	nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
 	instanceGame.ClearDisplays();
-	::nwol::resetCursorString(instanceGame.SlowMessage);
+	::klib::resetCursorString(instanceGame.SlowMessage);
 
 	SPlayer& playerUser = instanceGame.Players[PLAYER_INDEX_USER];
 	int64_t playCost = 0;
@@ -212,15 +212,15 @@ void klib::showMenu(SGame& instanceGame) {
 	switch(instanceGame.State.State) {
 	case GAME_STATE_MENU_MAIN			:	
 		if( nwol::bit_true(instanceGame.Flags, GAME_FLAGS_STARTED) )
-			newAction = processMenuReturn(instanceGame, drawMenu(::gpk::view_grid<char_t>{globalDisplay.Screen.begin(), {globalDisplay.Screen.width(), globalDisplay.Screen.height()}}, &globalDisplay.TextAttributes[0][0], menuMainInGame, optionsMainInGame, instanceGame.FrameInput, instanceGame.State));	
-		else																			  
-			newAction = processMenuReturn(instanceGame, drawMenu(::gpk::view_grid<char_t>{globalDisplay.Screen.begin(), {globalDisplay.Screen.width(), globalDisplay.Screen.height()}}, &globalDisplay.TextAttributes[0][0], menuMain, optionsMain, instanceGame.FrameInput, instanceGame.State));	
+			newAction = processMenuReturn(instanceGame, drawMenu(globalDisplay.Screen, &globalDisplay.TextAttributes[0][0], menuMainInGame, optionsMainInGame, instanceGame.FrameInput, instanceGame.State));	
+		else													
+			newAction = processMenuReturn(instanceGame, drawMenu(globalDisplay.Screen, &globalDisplay.TextAttributes[0][0], menuMain, optionsMain, instanceGame.FrameInput, instanceGame.State));	
 
 		break;
 
-	case GAME_STATE_MENU_OPTIONS		:	newAction = processMenuReturn(instanceGame, drawMenu(::gpk::view_grid<char_t>{globalDisplay.Screen.begin(), {globalDisplay.Screen.width(), globalDisplay.Screen.height()}}, &globalDisplay.TextAttributes.Cells[0][0], menuConfig, optionsConfig, instanceGame.FrameInput, instanceGame.State ));	break;
+	case GAME_STATE_MENU_OPTIONS		:	newAction = processMenuReturn(instanceGame, drawMenu(globalDisplay.Screen, &globalDisplay.TextAttributes.Cells[0][0], menuConfig, optionsConfig, instanceGame.FrameInput, instanceGame.State ));	break;
 	case GAME_STATE_MENU_EQUIPMENT		:	newAction = processMenuReturn(instanceGame, drawEquip(instanceGame, instanceGame.State));	break;
-	case GAME_STATE_MENU_SELL			:	newAction = processMenuReturn(instanceGame, drawMenu(::gpk::view_grid<char_t>{globalDisplay.Screen.begin(), {globalDisplay.Screen.width(), globalDisplay.Screen.height()}}, &globalDisplay.TextAttributes[0][0], menuSell, optionsSell, instanceGame.FrameInput, instanceGame.State ));	break;
+	case GAME_STATE_MENU_SELL			:	newAction = processMenuReturn(instanceGame, drawMenu(globalDisplay.Screen, &globalDisplay.TextAttributes[0][0], menuSell, optionsSell, instanceGame.FrameInput, instanceGame.State ));	break;
 	case GAME_STATE_MENU_LAN_MISSION	:	//newAction = processMenuReturn(instanceGame, drawLANSetup		(instanceGame, instanceGame.State));	break;
 	case GAME_STATE_START_MISSION		:	newAction = processMenuReturn(instanceGame, drawTacticalScreen	(instanceGame, instanceGame.State));	break;
 	case GAME_STATE_TACTICAL_CONTROL	:	newAction = processMenuReturn(instanceGame, drawTacticalScreen	(instanceGame, instanceGame.State));	break;

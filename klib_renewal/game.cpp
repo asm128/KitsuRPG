@@ -31,7 +31,7 @@ void prompt(std::string& userInput, const std::string& displayText, ::nwol::SASC
 	uint32_t								screenWidth				=	asciiTarget.Width()
 		,									screenHeight			=	asciiTarget.Height()
 		;
-	::nwol::lineToRect((char_t*)asciiTarget.Characters.begin(), screenWidth, screenHeight, (screenHeight>>1)-1, 0, ::nwol::SCREEN_CENTER, displayText.c_str());
+	::klib::lineToRect((char_t*)asciiTarget.Characters.begin(), screenWidth, screenHeight, (screenHeight>>1)-1, 0, ::nwol::SCREEN_CENTER, displayText.c_str());
 	::nwol::presentASCIIBackBuffer();
 
 	static const HANDLE						hConsoleOut				= ::GetStdHandle( STD_OUTPUT_HANDLE );
@@ -97,7 +97,7 @@ void klib::initGame(SGame& instanceGame) {
 	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE	);
 	instanceGame.Seed		= 12;
 	::srand((unsigned int)instanceGame.Seed);
-	::nwol::resetCursorString(instanceGame.SlowMessage);
+	::klib::resetCursorString(instanceGame.SlowMessage);
 	instanceGame.ClearDisplays();
 	instanceGame.TacticalInfo.Clear();
 #define CAMPAIGN_AGENT_COUNT 12

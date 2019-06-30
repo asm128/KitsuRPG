@@ -3,6 +3,7 @@
 #include "Game.h"
 
 #include "gpk_noise.h"
+#include "nwol_noise.h"
 
 #include "gpk_view_array.h"
 
@@ -254,7 +255,7 @@ namespace klib
 		int32_t			curDifference	= curLine;
 		double			bbHeight		= (double)depth;
 
-		for(uint32_t i=0, count = (uint32_t)nwol::size(namesCredits); i < count && curLine < bbHeight; ++i)
+		for(uint32_t i=0, count = (uint32_t)::gpk::size(namesCredits); i < count && curLine < bbHeight; ++i)
 			if((curLine+=2) >= 0)
 				printfToRect((char_t*)display, width, depth, curLine, 0, ::nwol::SCREEN_CENTER, "%s", namesCredits[i].begin());
 
@@ -269,7 +270,7 @@ namespace klib
 	}
 
 	template<typename _TCell, size_t _Width, size_t _Depth, size_t _LineCount>
-	SGameState drawCredits(::nwol::SGrid<_TCell, _Width, _Depth>& display, double lastFrameTime, const ::gpk::view_const_string (&namesCredits)[_LineCount], const SGameState& returnValue) {
+	SGameState drawCredits(::klib::SGrid<_TCell, _Width, _Depth>& display, double lastFrameTime, const ::gpk::view_const_string (&namesCredits)[_LineCount], const SGameState& returnValue) {
 		return drawCredits(&display.Cells[0][0], (uint32_t)_Width, (uint32_t)_Depth, lastFrameTime, namesCredits, returnValue);
 	}
 

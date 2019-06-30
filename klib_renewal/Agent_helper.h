@@ -86,7 +86,7 @@ namespace klib
 
 	template <size_t _Width, size_t _Depth>
 	static void								displayResumedAgentSlot			(SWeightedDisplay<_Width, _Depth>& display_, int32_t offsetY, int32_t offsetX, int32_t agentIndex, CCharacter& character)													{
-		::nwol::SGrid<char, _Width, _Depth>			& display						= display_.Screen;
+		::klib::SGrid<char, _Width, _Depth>			& display						= display_.Screen;
 
 		static const char							formatAgentTitle	[]			= "-- Agent #%i:" " %-34.34s --"	;
 		static const char							formatAgentCoins	[]			= "%-21.21s: %-11.11s"				;
@@ -95,8 +95,8 @@ namespace klib
 
 		static const size_t							LINE_SIZE						= 56;
 		uint16_t									color							= COLOR_GREEN;
-		printfToGridColored(display, display_.TextAttributes, color, offsetY, offsetX, nwol::SCREEN_LEFT,  formatAgentTitle, agentIndex, character.Name.c_str());
-		valueToGrid(display_.TextAttributes, offsetY, offsetX+13, nwol::SCREEN_LEFT, &color, 1, LINE_SIZE-14);
+		::klib::printfToGridColored(display, display_.TextAttributes, color, offsetY, offsetX, nwol::SCREEN_LEFT,  formatAgentTitle, agentIndex, character.Name.c_str());
+		::klib::valueToGrid(display_.TextAttributes, offsetY, offsetX+13, nwol::SCREEN_LEFT, &color, 1, LINE_SIZE-14);
 		offsetY									+= 2;
 
 		std::string									equipName;	
@@ -105,7 +105,7 @@ namespace klib
 		equipName	 = getArmorName			(character.CurrentEquip.Armor		); printfToGrid(display, offsetY++, offsetX, nwol::SCREEN_LEFT, formatAgentEquip, "Armor"		, equipName.c_str(), character.CurrentEquip.Armor		.Level);
 		equipName	 = getAccessoryName		(character.CurrentEquip.Accessory	); printfToGrid(display, offsetY++, offsetX, nwol::SCREEN_LEFT, formatAgentEquip, "Accessory"	, equipName.c_str(), character.CurrentEquip.Accessory	.Level);
 			
-		lineToGridColored(display, display_.TextAttributes, COLOR_RED, ++offsetY, offsetX, nwol::SCREEN_LEFT, "- Final Points:");
+		::klib::lineToGridColored(display, display_.TextAttributes, COLOR_RED, ++offsetY, offsetX, nwol::SCREEN_LEFT, "- Final Points:");
 		offsetY									+=2;
 		
 		const SEntityPoints							& agentFinalPoints				= character.FinalPoints;
@@ -141,7 +141,7 @@ namespace klib
 
 	template <size_t _Width, size_t _Depth>
 	static void								displayDetailedAgentSlot		(SWeightedDisplay<_Width, _Depth>& display_, int32_t offsetY, int32_t offsetX, const CCharacter& character, uint16_t color=COLOR_GREEN)										{
-		::nwol::SGrid<char, _Width, _Depth>			& display						= display_.Screen;
+		::klib::SGrid<char, _Width, _Depth>			& display						= display_.Screen;
 		static const char							formatAgentTitle	[]			= " - %-34.34s"			;
 		static const char							formatAgentEquip	[]			= "%-36.36s Lv. %i"		;
 		static const char							formatAgentPoints	[]			= "%-21.21s: %-10.10s"	;

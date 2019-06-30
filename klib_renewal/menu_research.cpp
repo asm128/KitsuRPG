@@ -158,7 +158,7 @@ SGameState drawResearchMenu(SGame& instanceGame, const SGameState& returnState)
 	ADD_RESEARCH_MODIFIERS(researchableItems.StageProp	, ENTITY_TYPE_STAGE_PROP	, modifiersStageProp	, "Enhacement"			);
 
 	SEntityResearch											selectedChoice							=	drawMenu
-		( ::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}
+		( instanceGame.GlobalDisplay.Screen
 		, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0]
 		, (size_t)researchableCount
 		, "Available Research"
@@ -194,7 +194,7 @@ SGameState drawResearchMenu(SGame& instanceGame, const SGameState& returnState)
 SGameState drawResearch(SGame& instanceGame, const SGameState& returnState) {
 	const std::string textToPrint = "Research center.";
 
-	bool bDonePrinting = ::nwol::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
+	bool bDonePrinting = ::klib::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
 	memcpy(&instanceGame.PostEffectDisplay.Screen.Cells[instanceGame.PostEffectDisplay.Depth>>1][instanceGame.PostEffectDisplay.Width/2-(strlen(instanceGame.SlowMessage)+1)/2], instanceGame.SlowMessage, strlen(instanceGame.SlowMessage));
 	if ( !bDonePrinting ) 
 		return returnState;

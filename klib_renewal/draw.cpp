@@ -17,12 +17,12 @@ void										klib::printMultipageHelp										(char* targetASCII, uint32_t tar
 		 if(currentPage == 0)				selectedText	= textToShow[0];	
 	else if(currentPage == (pageCount-1))	selectedText	= textToShow[1];	
 	else									selectedText	= textToShow[2];	
-	::nwol::lineToRect(targetASCII, targetWidth, targetHeight, (int32_t)targetHeight-MENU_ROFFSET+1, posXOffset, nwol::SCREEN_CENTER, selectedText.begin());
+	::klib::lineToRect(targetASCII, targetWidth, targetHeight, (int32_t)targetHeight-MENU_ROFFSET+1, posXOffset, nwol::SCREEN_CENTER, selectedText.begin());
 }
 
 // Currently what this function is lacking is the ability to receive negative offsets.
 template<typename _TCell, size_t _Width, size_t _Depth>
-void										blitGrid						(::nwol::SGrid<_TCell, _Width, _Depth>& source, int32_t offsetY, uint32_t offsetX, _TCell* target, size_t targetWidth, size_t targetHeight, int32_t rowPitch=-1)	{
+void										blitGrid						(::klib::SGrid<_TCell, _Width, _Depth>& source, int32_t offsetY, uint32_t offsetX, _TCell* target, size_t targetWidth, size_t targetHeight, int32_t rowPitch=-1)	{
 	size_t											actualWidth						= ::std::min(_Width, ::std::max((size_t)0, targetWidth-offsetX));
 	if(rowPitch < 0)
 		rowPitch									= (int32_t)targetWidth;
@@ -36,7 +36,7 @@ void										blitGrid						(::nwol::SGrid<_TCell, _Width, _Depth>& source, int3
 }
 
 template<typename _TCell, size_t _Width, size_t _Depth>
-void										drawDisplay						(::nwol::SGrid<_TCell, _Width, _Depth>& source, uint32_t offsetY, uint32_t offsetX, ::nwol::SASCIITarget& asciiTarget)												{ blitGrid(source, offsetY, offsetX, (_TCell*)asciiTarget.Characters.begin(), asciiTarget.Characters.width(), asciiTarget.Characters.height()); }
+void										drawDisplay						(::klib::SGrid<_TCell, _Width, _Depth>& source, uint32_t offsetY, uint32_t offsetX, ::nwol::SASCIITarget& asciiTarget)												{ blitGrid(source, offsetY, offsetX, (_TCell*)asciiTarget.Characters.begin(), asciiTarget.Characters.width(), asciiTarget.Characters.height()); }
 void										drawStateBackground				( SGame& instanceGame )																																				{
 	switch(instanceGame.State.State) {
 	case	GAME_STATE_MENU_MAIN		:	drawIntro(instanceGame);																	; break;
@@ -114,41 +114,41 @@ void										klib::drawAndPresentGame		(SGame& instanceGame, ::nwol::SASCIITarg
 	const int32_t									MAX_LOG_LINES					= iif(instanceGame.State.State == GAME_STATE_WELCOME_COMMANDER || nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL)) 30 : 4;
 	int32_t											logSize							= (int32_t)instanceGame.UserLog.size();
 	for(uint32_t iLogLine=0, logLineCount = std::min(MAX_LOG_LINES, logSize); iLogLine< logLineCount; ++iLogLine)
-		actualOffsetX								= ::nwol::lineToRectColored(target, instanceGame.UserLog[logSize-1-iLogLine].Color, bbHeight-9-iLogLine, 1, nwol::SCREEN_LEFT, instanceGame.UserLog[logSize-1-iLogLine].Message.c_str());	
+		actualOffsetX								= ::klib::lineToRectColored(target, instanceGame.UserLog[logSize-1-iLogLine].Color, bbHeight-9-iLogLine, 1, nwol::SCREEN_LEFT, instanceGame.UserLog[logSize-1-iLogLine].Message.c_str());	
 
 	// Print some debugging information 
 	if(nwol::bit_true(instanceGame.Flags,GAME_FLAGS_HELPON)) {
 		int32_t											offsetYHelp						= TACTICAL_DISPLAY_POSY+instanceGame.TacticalDisplay.Depth;
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_YELLOW	, offsetYHelp+18-5, 2, ::nwol::SCREEN_RIGHT, "Help!!! Press F1 to hide.");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_YELLOW	, offsetYHelp+18-5, 2, ::nwol::SCREEN_RIGHT, "Help!!! Press F1 to hide.");
 		//												::																																		 
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_ORANGE	, offsetYHelp+20-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Keys:");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+21-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Up    : Menu cursor up.");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+22-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Down  : Menu cursor down.");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+23-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left  : Previous menu page.");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+24-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Right : Next menu page.");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+25-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Enter : Select menu option.");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_ORANGE	, offsetYHelp+20-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Keys:");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+21-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Up    : Menu cursor up.");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+22-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Down  : Menu cursor down.");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+23-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left  : Previous menu page.");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+24-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Right : Next menu page.");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+25-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Enter : Select menu option.");
+		//																																													 
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_ORANGE	, offsetYHelp+27-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Mouse:");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+28-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select menu option");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+29-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select move destination");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+30-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select attack target");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+31-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Right Click : Return to the previous screen.");
 		//												::																																		 
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_ORANGE	, offsetYHelp+27-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Mouse:");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+28-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select menu option");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+29-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select move destination");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+30-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Left Click  : Select attack target");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_DARKGREY	, offsetYHelp+31-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Right Click : Return to the previous screen.");
+		actualOffsetX								= ::klib::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_CYAN	:	COLOR_DARKBLUE		, offsetYHelp+33-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\x0C, \x0B: Blue characters are your own squad.");
+		actualOffsetX								= ::klib::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_MAGENTA	:	COLOR_DARKMAGENTA	, offsetYHelp+34-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\x0C, \x0B: Magenta characters are your ally squads.");
+		actualOffsetX								= ::klib::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_RED		:	COLOR_DARKRED		, offsetYHelp+35-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\x0C, \x0B: Red characters are your enemies.");
+		actualOffsetX								= ::klib::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_ORANGE	:	COLOR_DARKYELLOW	, offsetYHelp+36-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\x04: Money is picked up when you walk over it.");
+		actualOffsetX								= ::klib::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_WHITE	:	COLOR_DARKGREY		, offsetYHelp+37-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\xB9: Obstacles turn gray when destroyed.");
 		//												::																																		 
-		actualOffsetX								= ::nwol::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_CYAN	:	COLOR_DARKBLUE		, offsetYHelp+33-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\x0C, \x0B: Blue characters are your own squad.");
-		actualOffsetX								= ::nwol::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_MAGENTA	:	COLOR_DARKMAGENTA	, offsetYHelp+34-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\x0C, \x0B: Magenta characters are your ally squads.");
-		actualOffsetX								= ::nwol::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_RED		:	COLOR_DARKRED		, offsetYHelp+35-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\x0C, \x0B: Red characters are your enemies.");
-		actualOffsetX								= ::nwol::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_ORANGE	:	COLOR_DARKYELLOW	, offsetYHelp+36-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\x04: Money is picked up when you walk over it.");
-		actualOffsetX								= ::nwol::lineToRectColored(target, (animTimerAccum.Value > 0.5)? COLOR_WHITE	:	COLOR_DARKGREY		, offsetYHelp+37-5, bbWidth/4*3, nwol::SCREEN_LEFT, "\xB9: Obstacles turn gray when destroyed.");
-		//												::																																		 
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_YELLOW		, offsetYHelp+39-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Melee attacks and grenades currently require ");
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_YELLOW		, offsetYHelp+40-5, bbWidth/4*3, nwol::SCREEN_LEFT, "a valid target selected in order to work!");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_YELLOW		, offsetYHelp+39-5, bbWidth/4*3, nwol::SCREEN_LEFT, "Melee attacks and grenades currently require ");
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_YELLOW		, offsetYHelp+40-5, bbWidth/4*3, nwol::SCREEN_LEFT, "a valid target selected in order to work!");
 	}
 	else
-		actualOffsetX								= ::nwol::lineToRectColored(target, COLOR_YELLOW, TACTICAL_DISPLAY_POSY+instanceGame.TacticalDisplay.Depth+18-5, 2, ::nwol::SCREEN_RIGHT, "Press F1 to display help.");	
+		actualOffsetX								= ::klib::lineToRectColored(target, COLOR_YELLOW, TACTICAL_DISPLAY_POSY+instanceGame.TacticalDisplay.Depth+18-5, 2, ::nwol::SCREEN_RIGHT, "Press F1 to display help.");	
 	
-	actualOffsetX								= ::nwol::printfToRectColored(target, COLOR_DARKGREEN	, bbHeight-4, 1, nwol::SCREEN_LEFT, "Mouse: %i, %i."			, instanceGame.FrameInput.Mouse.Deltas.x, instanceGame.FrameInput.Mouse.Deltas.y);
-	actualOffsetX								= ::nwol::printfToRectColored(target, COLOR_GREEN		, bbHeight-3, 1, nwol::SCREEN_LEFT, "Frame time: %.5f seconds."	, instanceGame.FrameTimer.LastTimeSeconds	);
-	actualOffsetX								= ::nwol::printfToRectColored(target, COLOR_CYAN		, bbHeight-2, 1, nwol::SCREEN_LEFT, "Frames last second: %f."	, instanceGame.FrameTimer.FramesLastSecond	);
+	actualOffsetX								= ::klib::printfToRectColored(target, COLOR_DARKGREEN	, bbHeight-4, 1, nwol::SCREEN_LEFT, "Mouse: %i, %i."			, instanceGame.FrameInput.Mouse.Deltas.x, instanceGame.FrameInput.Mouse.Deltas.y);
+	actualOffsetX								= ::klib::printfToRectColored(target, COLOR_GREEN		, bbHeight-3, 1, nwol::SCREEN_LEFT, "Frame time: %.5f seconds."	, instanceGame.FrameTimer.LastTimeSeconds	);
+	actualOffsetX								= ::klib::printfToRectColored(target, COLOR_CYAN		, bbHeight-2, 1, nwol::SCREEN_LEFT, "Frames last second: %f."	, instanceGame.FrameTimer.FramesLastSecond	);
 	time_t											curTimeWithUnreliableSize		= 0; 
 	{ 
 		::nwol::CMutexGuard								thelock							(instanceGame.ServerTimeMutex);
@@ -159,21 +159,21 @@ void										klib::drawAndPresentGame		(SGame& instanceGame, ::nwol::SASCIITarg
 
 	::std::string									serverTime						= ::std::string("Server time: ") + send_buffer;
 	serverTime									= serverTime.substr(0, serverTime .size()-2);
-	actualOffsetX								= nwol::printfToRectColored((char_t*)bbChar, bbWidth, bbHeight, bbColor, COLOR_CYAN		, bbHeight-2, 1, ::nwol::SCREEN_RIGHT, "%s."	, serverTime.c_str());	
-	actualOffsetX								= nwol::printfToRectColored((char_t*)bbChar, bbWidth, bbHeight, bbColor, COLOR_DARKGREY	, bbHeight-1, 1, ::nwol::SCREEN_CENTER, "%s."	, instanceGame.StateMessage.c_str()); 
+	actualOffsetX								= ::klib::printfToRectColored((char_t*)bbChar, bbWidth, bbHeight, bbColor, COLOR_CYAN		, bbHeight-2, 1, ::nwol::SCREEN_RIGHT, "%s."	, serverTime.c_str());	
+	actualOffsetX								= ::klib::printfToRectColored((char_t*)bbChar, bbWidth, bbHeight, bbColor, COLOR_DARKGREY	, bbHeight-1, 1, ::nwol::SCREEN_CENTER, "%s."	, instanceGame.StateMessage.c_str()); 
 
 	// Print user error messages and draw cursor.
 	if(instanceGame.State.State != GAME_STATE_CREDITS) {
 		int32_t											finalMissionCost				= ::klib::missionCost(instanceGame.Players[PLAYER_INDEX_USER], instanceGame.Players[PLAYER_INDEX_USER].Squad, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
 		int32_t											playerFunds						= instanceGame.Players[PLAYER_INDEX_USER].Money;
-		::nwol::printfToRectColored(target, (finalMissionCost > playerFunds) ? COLOR_ORANGE : COLOR_CYAN	, bbHeight-5, 1, ::nwol::SCREEN_RIGHT, "Squad size: %i."	, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
-		::nwol::printfToRectColored(target, (finalMissionCost > playerFunds) ? COLOR_RED : COLOR_ORANGE		, bbHeight-4, 1, ::nwol::SCREEN_RIGHT, "Mission cost: %i"	, finalMissionCost);
-		::nwol::printfToRectColored(target, (playerFunds < 0) ? COLOR_RED : COLOR_YELLOW					, bbHeight-3, 1, ::nwol::SCREEN_RIGHT, "Funds: %i"			, playerFunds);
+		::klib::printfToRectColored(target, (finalMissionCost > playerFunds) ? COLOR_ORANGE : COLOR_CYAN	, bbHeight-5, 1, ::nwol::SCREEN_RIGHT, "Squad size: %i."	, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);
+		::klib::printfToRectColored(target, (finalMissionCost > playerFunds) ? COLOR_RED : COLOR_ORANGE		, bbHeight-4, 1, ::nwol::SCREEN_RIGHT, "Mission cost: %i"	, finalMissionCost);
+		::klib::printfToRectColored(target, (playerFunds < 0) ? COLOR_RED : COLOR_YELLOW					, bbHeight-3, 1, ::nwol::SCREEN_RIGHT, "Funds: %i"			, playerFunds);
 
-		::nwol::printfToRectColored(target, COLOR_YELLOW	, bbHeight-5, 0, ::nwol::SCREEN_CENTER, "%s", instanceGame.UserMessage.c_str());
-		::nwol::printfToRectColored(target, COLOR_CYAN		, bbHeight-4, 0, ::nwol::SCREEN_CENTER, "%s", instanceGame.UserSuccess.c_str());
-		::nwol::printfToRectColored(target, COLOR_RED		, bbHeight-3, 0, ::nwol::SCREEN_CENTER, "%s", instanceGame.UserMiss.c_str());
-		::nwol::printfToRectColored(target, COLOR_RED		, bbHeight-2, 0, ::nwol::SCREEN_CENTER, "%s", instanceGame.UserError.c_str());
+		::klib::printfToRectColored(target, COLOR_YELLOW	, bbHeight-5, 0, ::nwol::SCREEN_CENTER, "%s", instanceGame.UserMessage.c_str());
+		::klib::printfToRectColored(target, COLOR_CYAN		, bbHeight-4, 0, ::nwol::SCREEN_CENTER, "%s", instanceGame.UserSuccess.c_str());
+		::klib::printfToRectColored(target, COLOR_RED		, bbHeight-3, 0, ::nwol::SCREEN_CENTER, "%s", instanceGame.UserMiss.c_str());
+		::klib::printfToRectColored(target, COLOR_RED		, bbHeight-2, 0, ::nwol::SCREEN_CENTER, "%s", instanceGame.UserError.c_str());
 
 		// Draw cursor
 		//int32_t mouseX = instanceGame.FrameInput.MouseX, mouseY = instanceGame.FrameInput.MouseY;

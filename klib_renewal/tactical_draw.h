@@ -273,7 +273,7 @@ namespace klib
 						target.TextAttributes.Cells[z][x] |= bSwaps[10] ? COLOR_YELLOW : COLOR_BLACK; 
 					}
 					else if(wallLabel == definitionsStageProp[board.Tiles.Entities.Props.Cells[z][x].Definition].Name){
-						target.Screen.Cells[z][x] = ::klib::getASCIIWall(::gpk::view_grid<const STileProp>{board.Tiles.Entities.Props.begin(), ::gpk::SCoord2<uint32_t>{board.Tiles.Entities.Props.width(), board.Tiles.Entities.Props.height()}}, x, z);
+						target.Screen.Cells[z][x] = ::klib::getASCIIWall(::gpk::view_grid<const STileProp>{board.Tiles.Entities.Props.begin(), board.Tiles.Entities.Props.metrics()}, x, z);
 						target.TextAttributes.Cells[z][x] |= COLOR_BLACK; 
 					}
 					else {

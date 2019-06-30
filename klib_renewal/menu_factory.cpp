@@ -142,7 +142,7 @@ SGameState													drawFactoryMenu										(SGame& instanceGame, const SGam
 //	ADD_RESEARCH_MODIFIERS(researchedItems.StageProp	, ENTITY_TYPE_STAGE_PROP	, modifiersStageProp	, "Enhacement"			);
 
 	SEntityResearch											selectedChoice								= drawMenu
-		( ::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}
+		( instanceGame.GlobalDisplay.Screen
 		, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0]
 		, (size_t)researchedCount
 		, "Available Production"
@@ -176,7 +176,7 @@ SGameState													drawFactoryMenu										(SGame& instanceGame, const SGam
 
 SGameState																		drawFactory							(SGame& instanceGame, const SGameState& returnState)																						{
 	const ::std::string																	textToPrint							= "Factory.";
-	bool																				bDonePrinting						= ::nwol::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
+	bool																				bDonePrinting						= ::klib::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
 	memcpy(&instanceGame.PostEffectDisplay.Screen.Cells[instanceGame.PostEffectDisplay.Depth >> 1][instanceGame.PostEffectDisplay.Width / 2 - (strlen(instanceGame.SlowMessage) + 1) / 2], instanceGame.SlowMessage, strlen(instanceGame.SlowMessage));
 	if ( !bDonePrinting ) 
 		return returnState;

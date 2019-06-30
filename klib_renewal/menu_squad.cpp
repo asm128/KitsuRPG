@@ -27,7 +27,7 @@ SGameState														drawSquadSetupMenu									(SGame& instanceGame, const S
 		}
 	}
 
-	int32_t																result												= drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], player.Squad.Size, "Squad setup", menuItems, instanceGame.FrameInput, (int32_t)nwol::size(player.Squad.Agents), -1, std::max(24, maxNameLen+4));
+	int32_t																result												= drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], player.Squad.Size, "Squad setup", menuItems, instanceGame.FrameInput, (int32_t)nwol::size(player.Squad.Agents), -1, std::max(24, maxNameLen+4));
 	if(nwol::size(player.Squad.Agents) == result)
 		return {GAME_STATE_WELCOME_COMMANDER};
 

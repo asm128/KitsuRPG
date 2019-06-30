@@ -43,6 +43,7 @@
 #include "Profession.h"
 
 #include <algorithm>
+#include "nwol_noise.h"
 
 using namespace klib;
 
@@ -60,7 +61,7 @@ void												deployCampaignAgents
 	( SPlayer																				& player
 	, const int8_t																			playerIndex
 	, STacticalSetup																		& tacticalSetup
-	, const ::nwol::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology	 
+	, const ::klib::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology	 
 	, SEntityTiles<STacticalBoard::Width, STacticalBoard::Depth>							& terrainEntities	
 	)
 {
@@ -133,12 +134,12 @@ void												deployCampaignAgents
 	}
 }
 
-void												generateTopology									( ::nwol::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology, int64_t seed )		{
+void												generateTopology									( ::klib::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology, int64_t seed )		{
 	const uint32_t											terrainWidth										= terrainTopology.Width
 		,													terrainDepth										= terrainTopology.Depth
 		;
-	::nwol::fillCellsFromNoise(terrainTopology, {- 1,  0}, (int32_t)(seed+ 987+ 1), 200);
-	::nwol::fillCellsFromNoise(terrainTopology, {-15,  0}, (int32_t)(seed+7331+ 5), 200);
+	::klib::fillCellsFromNoise(terrainTopology, {- 1,  0}, (int32_t)(seed+ 987+ 1), 200);
+	::klib::fillCellsFromNoise(terrainTopology, {-15,  0}, (int32_t)(seed+7331+ 5), 200);
 
 	STopologyDetail											* cellsHeight										= &terrainTopology	.Cells[0][0];
 	for(uint32_t i=0, count = terrainDepth*terrainWidth; i<count; i++) 
@@ -146,7 +147,7 @@ void												generateTopology									( ::nwol::SGrid<STopologyDetail, STacti
 }
 //
 void												populateProps
-	( ::nwol::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology	 
+	( ::klib::SGrid<STopologyDetail, STacticalBoard::Width, STacticalBoard::Depth>	& terrainTopology	 
 	, SEntityTiles<STacticalBoard::Width, STacticalBoard::Depth>					& terrainEntities	
 	, int64_t																		seed
 	, int32_t																		maxCoins
@@ -231,7 +232,7 @@ void												klib::initTacticalMap								(SGame& instanceGame)														
 	STacticalInfo											& tacticalInfo										= instanceGame.TacticalInfo;
 	tacticalInfo.Board.Clear();
 
-	::nwol::SGrid<STopologyDetail
+	::klib::SGrid<STopologyDetail
 		, STacticalBoard::Width
 		, STacticalBoard::Depth
 		>													& terrainTopology									= tacticalInfo.Board.Tiles.Terrain.Topology;

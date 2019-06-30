@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "nwol_grid.h"
+#include "klib_grid.h"
 #include "menus.h"
 #include "TacticalInfo.h"
 
@@ -38,18 +38,18 @@ namespace klib
 		static constexpr	const uint32_t								Width					= (uint32_t)_Width;
 		static constexpr	const uint32_t								Depth					= (uint32_t)_Depth;
 
-							::nwol::SGrid<char		, _Width, _Depth>	Screen					= {};
-							::nwol::SGrid<uint16_t	, _Width, _Depth>	TextAttributes			= {};
-							::nwol::SGrid<float		, _Width, _Depth>	DisplayWeights			= {};
-							::nwol::SGrid<float		, _Width, _Depth>	Speed					= {};
-							::nwol::SGrid<float		, _Width, _Depth>	SpeedTarget				= {};
+							::klib::SGrid<char		, _Width, _Depth>	Screen					= {};
+							::klib::SGrid<uint16_t	, _Width, _Depth>	TextAttributes			= {};
+							::klib::SGrid<float		, _Width, _Depth>	DisplayWeights			= {};
+							::klib::SGrid<float		, _Width, _Depth>	Speed					= {};
+							::klib::SGrid<float		, _Width, _Depth>	SpeedTarget				= {};
 
 		inline				void										Clear					()																							{
-			::nwol::clearGrid(Screen			, ' ');
-			::nwol::clearGrid(TextAttributes	, (uint16_t)COLOR_WHITE);
-			::nwol::clearGrid(DisplayWeights	, 0.0f);
-			::nwol::clearGrid(Speed				, 0.0f);
-			::nwol::clearGrid(SpeedTarget		, 0.0f);
+			::klib::clearGrid(Screen			, ' ');
+			::klib::clearGrid(TextAttributes	, (uint16_t)COLOR_WHITE);
+			::klib::clearGrid(DisplayWeights	, 0.0f);
+			::klib::clearGrid(Speed			, 0.0f);
+			::klib::clearGrid(SpeedTarget	, 0.0f);
 		}
 	};
 
@@ -59,7 +59,7 @@ namespace klib
 	typedef	SWeightedDisplay<DEFAULT_ASCII_DISPLAY_WIDTH, DEFAULT_ASCII_DISPLAY_HEIGHT>	SGlobalDisplay		;
 	typedef SWeightedDisplay<STacticalBoard::Width, STacticalBoard::Depth>				STacticalDisplay	;
 	typedef SWeightedDisplay<STacticalBoard::Width, STacticalBoard::Depth>				SPostEffectDisplay	;
-	typedef ::nwol::SGrid<char, SGlobalDisplay::Width, SGlobalDisplay::Depth>			SMenuDisplay		;
+	typedef ::klib::SGrid<char, SGlobalDisplay::Width, SGlobalDisplay::Depth>			SMenuDisplay		;
 
 	//
 	struct SFrameInfo {

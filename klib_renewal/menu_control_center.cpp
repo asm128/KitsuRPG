@@ -42,7 +42,7 @@ int32_t drawList(SWeightedDisplay<_Width, _Height>& display, const SListItem<_TR
 	sprintf_s(formatRow, "%%-%i.%is", width, width);
 	rowCount = nwol::min((uint32_t)_SizeList, rowCount);
 	for(uint32_t iRow = 0; iRow < rowCount; ++iRow)
-		nwol::printfToGridColored(display.Screen, display.TextAttributes, (uint16_t)listItems[iRow].Color, offsetY+iRow, offsetX, nwol::SCREEN_LEFT, formatRow, listItems[iRow].Text.c_str());
+		::klib::printfToGridColored(display.Screen, display.TextAttributes, (uint16_t)listItems[iRow].Color, offsetY+iRow, offsetX, nwol::SCREEN_LEFT, formatRow, listItems[iRow].Text.c_str());
 
 	return 0;
 }
@@ -53,7 +53,7 @@ int32_t drawList(SGlobalDisplay& display, const ::nwol::array_obj<SListItem<_TRe
 	sprintf_s(formatRow, "%%-%i.%is", width, width);
 	for(uint32_t iRow = 0; iRow < rowCount; ++iRow) {
 		const std::string& rowText = listItems[iRow].Text;
-		nwol::printfToGridColored(display.Screen, display.TextAttributes, (uint16_t)listItems[iRow].Color, offsetY, offsetX, nwol::SCREEN_LEFT, formatRow, rowText.c_str());
+		::klib::printfToGridColored(display.Screen, display.TextAttributes, (uint16_t)listItems[iRow].Color, offsetY, offsetX, nwol::SCREEN_LEFT, formatRow, rowText.c_str());
 	}
 	return 0;
 }
@@ -440,7 +440,7 @@ SGameState drawWelcome(SGame& instanceGame, const SGameState& returnValue) {
 	int32_t							lineOffset			= (display.Screen.Depth>>1)-1;
 	int32_t							columnOffset		=  display.Screen.Width/2-(int32_t)textToPrint.size()/2;
 
-	bool							bDonePrinting		= ::nwol::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
+	bool							bDonePrinting		= ::klib::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
 	columnOffset				= printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN, lineOffset, columnOffset, nwol::SCREEN_LEFT, "%s", instanceGame.SlowMessage);
 
 	if ( bDonePrinting ) {
@@ -448,9 +448,9 @@ SGameState drawWelcome(SGame& instanceGame, const SGameState& returnValue) {
 
 		// Menu
 		static const SMenu<SGameState>	menuControlCenter	({GAME_STATE_MENU_MAIN}, "Control Center", 28);
-		bool							bInCourse			= nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL) || nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE);
+		bool							bInCourse			= ::gpk::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL) || nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE);
 
-		return drawMenu(::gpk::view_grid<char_t>{display.Screen.begin(), {display.Screen.width(), display.Screen.height()}}, &display.TextAttributes[0][0], menuControlCenter, (bInCourse) ? optionsControlCenterMissionInCourse : optionsControlCenter, instanceGame.FrameInput, returnValue);
+		return drawMenu(display.Screen, &display.TextAttributes[0][0], menuControlCenter, (bInCourse) ? optionsControlCenterMissionInCourse : optionsControlCenter, instanceGame.FrameInput, returnValue);
 	}
 	return returnValue;
 };

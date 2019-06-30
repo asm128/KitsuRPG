@@ -1,6 +1,7 @@
-#include "nwol_grid.h"
-#include "ascii_reference.h"
 #include "StageProp.h"
+
+#include "klib_grid.h"
+#include "ascii_reference.h"
 
 #ifndef __TACTICALTILE_H__9238402734628937234__
 #define __TACTICALTILE_H__9238402734628937234__
@@ -49,8 +50,8 @@ namespace klib
 
 	template <size_t _Width, size_t _Depth> 
 	struct STerrainTiles {
-				::nwol::SGrid<STileGeometry		, _Width, _Depth>	Geometry;
-				::nwol::SGrid<STopologyDetail	, _Width, _Depth>	Topology;
+				::klib::SGrid<STileGeometry		, _Width, _Depth>	Geometry;
+				::klib::SGrid<STopologyDetail	, _Width, _Depth>	Topology;
 
 		inline	void												Clear			()											{
 					clearGrid(Geometry, {{0, 0, 0, 0}, 0});
@@ -61,14 +62,14 @@ namespace klib
 	template <size_t _Width, size_t _Depth> 
 	struct SEntityTiles
 	{
-				::nwol::SGrid<STileCharacter	, _Width, _Depth>	Agents	;	
-				::nwol::SGrid<STileProp			, _Width, _Depth>	Props	;	
-				::nwol::SGrid<int32_t			, _Width, _Depth>	Coins	;	
+				::klib::SGrid<STileCharacter	, _Width, _Depth>	Agents	;	
+				::klib::SGrid<STileProp			, _Width, _Depth>	Props	;	
+				::klib::SGrid<int32_t			, _Width, _Depth>	Coins	;	
 
 		inline	void												Clear			()											{
-			clearGrid(	Agents	, {TEAM_TYPE_INVALID, -1, -1, -1} );
-			clearGrid(	Props	, {-1, -1, -1, -1} );
-			clearGrid(	Coins	, 0 );
+			clearGrid(Agents, {TEAM_TYPE_INVALID, -1, -1, -1} );
+			clearGrid(Props	, {-1, -1, -1, -1} );
+			clearGrid(Coins	, 0 );
 		}
 	};
 

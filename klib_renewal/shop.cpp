@@ -91,15 +91,15 @@ SGameState drawBuyMenu(SGame& instanceGame, const SGameState& returnState) {
 	static ::klib::SMenuItem<SBuyable> menuItems[MAX_BUY_ITEMS+1] = {};
 	::std::string menuTitle;
 	switch(instanceGame.State.Substate) {
-	case GAME_SUBSTATE_ACCESSORY	:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuAccessory	,	menuItemsAccessory		,  instanceGame.FrameInput, {-1});	break;
-	case GAME_SUBSTATE_STAGEPROP	:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuStageProp	,	menuItemsStageProp		,  instanceGame.FrameInput, {-1});	break;
-	case GAME_SUBSTATE_FACILITY		:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuFacility	,	menuItemsFacility		,  instanceGame.FrameInput, {-1});	break;
-	case GAME_SUBSTATE_VEHICLE		:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuVehicle	,	menuItemsVehicle		,  instanceGame.FrameInput, {-1});	break;
-	case GAME_SUBSTATE_PROFESSION	:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuProfession	,	menuItemsProfession		,  instanceGame.FrameInput, {-1});	break;
-	case GAME_SUBSTATE_WEAPON		:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuWeapon		,	menuItemsWeapon			,  instanceGame.FrameInput, {-1});	break;
-	case GAME_SUBSTATE_ARMOR		:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuArmor		,	menuItemsArmor			,  instanceGame.FrameInput, {-1});	break;
-	case GAME_SUBSTATE_ITEM			:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuItem		,	menuItemsItem			,  instanceGame.FrameInput, {-1});	break;
-	case GAME_SUBSTATE_CHARACTER	:	selectedChoice = ::klib::drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuAgent		,	menuItemsAgent			,  4, instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_ACCESSORY	:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuAccessory	,	menuItemsAccessory		,  instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_STAGEPROP	:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuStageProp	,	menuItemsStageProp		,  instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_FACILITY		:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuFacility	,	menuItemsFacility		,  instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_VEHICLE		:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuVehicle	,	menuItemsVehicle		,  instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_PROFESSION	:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuProfession	,	menuItemsProfession		,  instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_WEAPON		:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuWeapon		,	menuItemsWeapon			,  instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_ARMOR		:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuArmor		,	menuItemsArmor			,  instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_ITEM			:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuItem		,	menuItemsItem			,  instanceGame.FrameInput, {-1});	break;
+	case GAME_SUBSTATE_CHARACTER	:	selectedChoice = ::klib::drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuAgent		,	menuItemsAgent			,  4, instanceGame.FrameInput, {-1});	break;
 	default:
 		break;
 	}
@@ -168,14 +168,14 @@ SGameState drawBuy(SGame& instanceGame, const SGameState& returnState)
 {
 	static const ::gpk::label textToPrint = "Tell me how much money you have and I will tell you what you'll become.";
 
-	bool bDonePrinting = ::nwol::getMessageSlow(instanceGame.SlowMessage, textToPrint.begin(), textToPrint.size(), instanceGame.FrameTimer.LastTimeSeconds*3);
+	bool bDonePrinting = ::klib::getMessageSlow(instanceGame.SlowMessage, textToPrint.begin(), textToPrint.size(), instanceGame.FrameTimer.LastTimeSeconds*3);
 	memcpy(&instanceGame.PostEffectDisplay.Screen.Cells[instanceGame.PostEffectDisplay.Depth>>1][instanceGame.PostEffectDisplay.Width/2-(strlen(instanceGame.SlowMessage)+1)/2], instanceGame.SlowMessage, strlen(instanceGame.SlowMessage));
 	if ( !bDonePrinting ) 
 		return returnState;
 
 	if(GAME_SUBSTATE_MAIN == instanceGame.State.Substate) {
 		static const SMenu<SGameState> menuBuy({GAME_STATE_WELCOME_COMMANDER}, "Order Menu", 26);
-		return drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuBuy, optionsBuy, instanceGame.FrameInput, instanceGame.State);
+		return drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], menuBuy, optionsBuy, instanceGame.FrameInput, instanceGame.State);
 	}
 	else 
 		return drawBuyMenu(instanceGame, returnState);

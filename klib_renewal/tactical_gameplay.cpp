@@ -160,7 +160,7 @@ bool																					klib::moveStep															(SGame& instanceGame, SPla
 
 	player.Squad.ActionsLeft[agentIndex].Moves												= movesLeft; 
 
-	::nwol::SGrid<STileCharacter, STacticalBoard::Width, STacticalBoard::Depth>					& terrainAgents															= board.Tiles.Entities.Agents;
+	::klib::SGrid<STileCharacter, STacticalBoard::Width, STacticalBoard::Depth>					& terrainAgents															= board.Tiles.Entities.Agents;
 
 	bool																						bArrived																= true;
 	if( initialPosition == finalPosition ) {	// If we didn't move yet is because we're stuck.

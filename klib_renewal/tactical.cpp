@@ -208,7 +208,7 @@ void																	drawTileInfo
 			//	bDrawText																= true;
 			//}
 		}
-		::nwol::getMessageSlow(messageSlow, selectedTile.c_str(), (uint32_t)selectedTile.size(), instanceGame.FrameTimer.LastTimeSeconds*4);
+		::klib::getMessageSlow(messageSlow, selectedTile.c_str(), (uint32_t)selectedTile.size(), instanceGame.FrameTimer.LastTimeSeconds*4);
 	}
 
 	if(bDrawText)
@@ -547,7 +547,7 @@ int32_t																	drawInventoryMenu								(SGame& instanceGame, SPlayer& 
 	SGlobalDisplay&																globalDisplay									= instanceGame.GlobalDisplay;
 	SCharacterInventory&														characterInventory								= adventurer.Goods.Inventory;
 	int32_t																		initMenu										= initInventoryMenu(adventurer, itemOptions, false, false);
-	return drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &globalDisplay.TextAttributes.Cells[0][0], characterInventory.Items.Count, menuTitle, itemOptions, instanceGame.FrameInput, (int32_t)adventurer.Goods.Inventory.Items.Count, -1, 50);
+	return drawMenu(instanceGame.GlobalDisplay.Screen, &globalDisplay.TextAttributes.Cells[0][0], characterInventory.Items.Count, menuTitle, itemOptions, instanceGame.FrameInput, (int32_t)adventurer.Goods.Inventory.Items.Count, -1, 50);
 		
 };
 
@@ -899,7 +899,7 @@ SGameState																drawTacticalScreen								(SGame& instanceGame, const 
 			}
  			else if(instanceGame.State.Substate == GAME_SUBSTATE_EQUIPMENT) {
 				menuTitle += " - Equipment";
-				exitState = drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &globalDisplay.TextAttributes.Cells[0][0], menuTitle, optionsCombatTurnEquip, instanceGame.FrameInput, {GAME_STATE_TACTICAL_CONTROL, GAME_SUBSTATE_MAIN}, exitState, 10);
+				exitState = drawMenu(instanceGame.GlobalDisplay.Screen, &globalDisplay.TextAttributes.Cells[0][0], menuTitle, optionsCombatTurnEquip, instanceGame.FrameInput, {GAME_STATE_TACTICAL_CONTROL, GAME_SUBSTATE_MAIN}, exitState, 10);
 				selectedAction = TURN_ACTION_CONTINUE;
 			}
 			else {
@@ -908,7 +908,7 @@ SGameState																drawTacticalScreen								(SGame& instanceGame, const 
 					instanceGame.UserError = "Unrecognized game substate!";
 					instanceGame.LogError();
 				}
-				selectedAction = drawMenu(::gpk::view_grid<char_t>{instanceGame.GlobalDisplay.Screen.begin(), {instanceGame.GlobalDisplay.Screen.width(), instanceGame.GlobalDisplay.Screen.height()}}, &globalDisplay.TextAttributes.Cells[0][0], menuTitle, optionsCombatTurn, instanceGame.FrameInput, TURN_ACTION_MENUS, TURN_ACTION_CONTINUE, 10);
+				selectedAction = drawMenu(instanceGame.GlobalDisplay.Screen, &globalDisplay.TextAttributes.Cells[0][0], menuTitle, optionsCombatTurn, instanceGame.FrameInput, TURN_ACTION_MENUS, TURN_ACTION_CONTINUE, 10);
 			}
 		}
 		else if(currentPlayer.Control.Type == PLAYER_CONTROL_AI)  {

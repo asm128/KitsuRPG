@@ -138,6 +138,12 @@
     <ClInclude Include="ascii_screen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="klib_grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp">
@@ -204,6 +210,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ascii_screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="klib_text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
