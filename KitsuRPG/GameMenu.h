@@ -7,7 +7,7 @@
 static inline int64_t										getNumericInput							()																												{
 	// Get user input
 	::std::string													userChoice;
-	getline(std::cin, userChoice);
+	::std::getline(::std::cin, userChoice);
 	
 	// Convert the input string to a menuitem index.
 	int64_t															selectedOption							= -1;
@@ -30,7 +30,7 @@ _ReturnType													displayMenu								(size_t optionCount, const std::strin
 			printf("%u: %s.\n", (uint32_t)(i+1), menuItems[i].Text.begin());	
 		
 		// Get user input. 
-		const uint32_t													selectedIndex							= (uint32_t)(getNumericInput()-1);	//	Convert the input string to a menuitem index.
+		const uint32_t													selectedIndex							= (uint32_t)(::getNumericInput()-1);	//	Convert the input string to a menuitem index.
 
 		if(selectedIndex >= optionCount)	// We only accept from 0 to optionCount
 			printf("Invalid answer. Answer again...\n");

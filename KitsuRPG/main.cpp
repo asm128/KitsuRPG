@@ -39,8 +39,8 @@ int												main											(int argc, char **argv)											{
 
 	printf("Welcome Stranger!! who are you?\n");
 	printf("My name is: \n");
-	std::string											adventurerName;
-	getline(std::cin, adventurerName);
+	::std::string											adventurerName;
+	::std::getline(std::cin, adventurerName);
 
 	::klib::CCharacter									* pAdventurer									= new klib::CCharacter(4, 50, 1, 100, {1,4}, {}, {klib::COMBAT_STATUS_NONE, klib::COMBAT_STATUS_STUN}, adventurerName);
 	::klib::CCharacter									& adventurer									= *pAdventurer;
@@ -53,15 +53,15 @@ int												main											(int argc, char **argv)											{
 	bool												bPlayAgain										= true;
 
 	while(bPlayAgain) {
-		initPlayerCharacter(adventurer, adventurerName);
+		::initPlayerCharacter(adventurer, adventurerName);
 
 		std::cout << "\nSo, " << adventurer.Name << "... What brings you here?\n";
-		tavern(adventurer);	// Tavern is the main menu of our game.
+		::tavern(adventurer);	// Tavern is the main menu of our game.
 
 		printf("\n-- Game Over! --\n");
-		displayScore(adventurer.Score);
+		::displayScore(adventurer.Score);
 
-		bPlayAgain										= displayMenu("Play again? ..", playAgainMenu) ? true : false;
+		bPlayAgain										= ::displayMenu("Play again? ..", playAgainMenu) ? true : false;
 	}
 
 	if( pAdventurer )
@@ -78,18 +78,18 @@ void											createPlayerCharacter							(klib::CCharacter& adventurer, const 
 }
 
 void											researchEquipped								(klib::CCharacter& agent)										{
-	completeAgentResearch(agent.Goods.CompletedResearch.Weapon		, agent.CurrentEquip.Weapon		);
-	completeAgentResearch(agent.Goods.CompletedResearch.Armor		, agent.CurrentEquip.Armor		);
-	completeAgentResearch(agent.Goods.CompletedResearch.Accessory	, agent.CurrentEquip.Accessory	);
-	completeAgentResearch(agent.Goods.CompletedResearch.Vehicle		, agent.CurrentEquip.Vehicle	);
-	completeAgentResearch(agent.Goods.CompletedResearch.Facility	, agent.CurrentEquip.Facility	);
-	completeAgentResearch(agent.Goods.CompletedResearch.Profession	, agent.CurrentEquip.Profession	);
-	completeAgentResearch(agent.Goods.CompletedResearch.StageProp	, agent.CurrentEquip.StageProp	);
+	::klib::completeAgentResearch(agent.Goods.CompletedResearch.Weapon		, agent.CurrentEquip.Weapon		);
+	::klib::completeAgentResearch(agent.Goods.CompletedResearch.Armor		, agent.CurrentEquip.Armor		);
+	::klib::completeAgentResearch(agent.Goods.CompletedResearch.Accessory	, agent.CurrentEquip.Accessory	);
+	::klib::completeAgentResearch(agent.Goods.CompletedResearch.Vehicle		, agent.CurrentEquip.Vehicle	);
+	::klib::completeAgentResearch(agent.Goods.CompletedResearch.Facility	, agent.CurrentEquip.Facility	);
+	::klib::completeAgentResearch(agent.Goods.CompletedResearch.Profession	, agent.CurrentEquip.Profession	);
+	::klib::completeAgentResearch(agent.Goods.CompletedResearch.StageProp	, agent.CurrentEquip.StageProp	);
 }
 
 //
 void											initPlayerCharacter								(klib::CCharacter& adventurer, const std::string& name)			{
-	createPlayerCharacter(adventurer, name);
+	::createPlayerCharacter(adventurer, name);
 	::klib::SCharacterEquip								& currentEquip									= adventurer.CurrentEquip;
 	adventurer.Goods.CompletedResearch				= klib::SCharacterResearch();
 #if defined(POWER_START)
@@ -126,17 +126,17 @@ void											initPlayerCharacter								(klib::CCharacter& adventurer, const s
 
 	int16_t i = 5;
 	adventurer.Goods.Inventory.Weapon		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsWeapon		), rand()%(int16_t)::gpk::size(klib::modifiersWeapon		), ++i});
-	adventurer.Goods.Inventory.Accessory	.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsAccessory	), rand()%(int16_t)::gpk::size(klib::modifiersAccessory	), ++i});
-	adventurer.Goods.Inventory.Armor		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsArmor		), rand()%(int16_t)::gpk::size(klib::modifiersArmor		), ++i});
+	adventurer.Goods.Inventory.Accessory	.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsAccessory	), rand()%(int16_t)::gpk::size(klib::modifiersAccessory		), ++i});
+	adventurer.Goods.Inventory.Armor		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsArmor		), rand()%(int16_t)::gpk::size(klib::modifiersArmor			), ++i});
 	adventurer.Goods.Inventory.Profession	.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsProfession	), rand()%(int16_t)::gpk::size(klib::modifiersProfession	), ++i});
-	adventurer.Goods.Inventory.Vehicle		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsVehicle		), rand()%(int16_t)::gpk::size(klib::modifiersVehicle	), ++i});
-	adventurer.Goods.Inventory.Facility		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsFacility	), rand()%(int16_t)::gpk::size(klib::modifiersFacility	), ++i});
+	adventurer.Goods.Inventory.Vehicle		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsVehicle		), rand()%(int16_t)::gpk::size(klib::modifiersVehicle		), ++i});
+	adventurer.Goods.Inventory.Facility		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsFacility	), rand()%(int16_t)::gpk::size(klib::modifiersFacility		), ++i});
 
 	adventurer.Goods.Inventory.Items		.AddElement({1,1,1});
 	for(int32_t j = 1;  j < 3; ++j)
 		adventurer.Goods.Inventory.Items		.AddElement({ 1+int16_t(rand()%(::gpk::size(klib::itemDescriptions)-1)), int16_t(1+rand() % ::gpk::size(klib::itemModifiers)), int16_t(rand() % ::gpk::size(klib::itemGrades)) });
 
-	researchEquipped(adventurer);
+	::researchEquipped(adventurer);
 	adventurer.Recalculate();
 	adventurer.Points.LifeCurrent					= adventurer.FinalPoints.LifeMax;
 }

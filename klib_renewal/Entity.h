@@ -1,7 +1,6 @@
-
-#include "draw_misc.h"
 #include "EntityPoints.h"
 
+#include "draw_misc.h"
 #include "gpk_label.h"
 
 #ifndef __ENTITY_H__38924092634721346098170219783096__
