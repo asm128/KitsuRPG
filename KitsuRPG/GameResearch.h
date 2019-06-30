@@ -49,7 +49,7 @@ void																		research
 		if(bIsModifier) {
 			int32_t																			selectedEntityModifier								= equipInventory[i].Entity.Modifier;
 			if( 0 != selectedEntityModifier && (-1) == researchedList.FindElement((int16_t)selectedEntityModifier) ) { 
-				stringLeft																	= definitionsTable[selectedEntityModifier].Name.c_str();
+				stringLeft																	= definitionsTable[selectedEntityModifier].Name.begin();
 				stringRight																	= itemFormat.c_str();
 				value																		= selectedEntityModifier;
 				sprintf_s(menuItemText, stringLeft, stringRight);
@@ -68,7 +68,7 @@ void																		research
 		else {
 			int32_t																			selectedEntityDefinition							= equipInventory[i].Entity.Definition;
 			if( 0 != selectedEntityDefinition && (-1) == researchedList.FindElement((int16_t)selectedEntityDefinition) ) {
-				stringRight																	= definitionsTable[selectedEntityDefinition].Name.c_str();
+				stringRight																	= definitionsTable[selectedEntityDefinition].Name.begin();
 				stringLeft																	= itemFormat.c_str();
 				value																		= selectedEntityDefinition; 
 				sprintf_s(menuItemText, stringLeft, stringRight);
@@ -113,11 +113,11 @@ void																		research
 	} 
 	
 	if(bIsModifier) {
-		sprintf_s(menuItemText, definitionsTable[selectedValue].Name.c_str(), itemFormat.c_str());
+		sprintf_s(menuItemText, definitionsTable[selectedValue].Name.begin(), itemFormat.c_str());
 		printf(startResearching.c_str(), menuItemText); 
 	}
 	else
-		printf(startResearching.c_str(), definitionsTable[selectedValue].Name.c_str()); 
+		printf(startResearching.c_str(), definitionsTable[selectedValue].Name.begin()); 
 
 	researchedList.AddElement((int16_t)selectedValue); 
 
@@ -127,7 +127,7 @@ void																		research
 	}
 	else {
 		adventurerMaxEquip.Definition											= std::max(adventurerMaxEquip.Definition, (int16_t)(selectedValue+1)); 
-		printf(doneResearching.c_str(), definitionsTable[selectedValue].Name.c_str()); 
+		printf(doneResearching.c_str(), definitionsTable[selectedValue].Name.begin()); 
 	}
 	research
 		( equipInventory 

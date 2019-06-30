@@ -86,7 +86,7 @@ namespace klib
 				}
 			}
 
-			if(Count >= nwol::size(Slots))
+			if(Count >= ::gpk::size(Slots))
 				return false;
 			else {	// If we didn't return yet it means that the item was not found and we need to add it to the inventory.
 				Slots[Count].Entity									= element;

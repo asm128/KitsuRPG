@@ -289,8 +289,8 @@ void																	printStatuses				(const ::klib::CCharacter& character)					
 		if(0 == (statusBit & character.ActiveBonus.Status.Status))
 			continue;
 
-		const ::nwol::gsyslabel														statusLabel					= ::nwol::get_value_label(statusBit);
-		printf("%s is affected by \"%s\" for the next %u turn(s).\n", character.Name.c_str(), statusLabel.c_str(), character.ActiveBonus.Status.TurnsLeft[iStatus]);	
+		const ::gpk::label															statusLabel					= ::gpk::get_value_label(statusBit);
+		printf("%s is affected by \"%s\" for the next %u turn(s).\n", character.Name.c_str(), statusLabel.begin(), character.ActiveBonus.Status.TurnsLeft[iStatus]);	
 	}
 }
 

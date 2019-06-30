@@ -36,13 +36,13 @@ bool																	equipEntityIfResearched
 	bool																		bCancel											= false; 
 	if( 0 < entityContainer[slotIndex].Entity.Definition && (-1) == completedResearchPlayer.Definitions.FindElement(entityContainer[slotIndex].Entity.Definition) && (-1) == completedResearchAgent.Definitions.FindElement(entityContainer[slotIndex].Entity.Definition)) { 
 		bCancel																	= true;
-		printf(cantAccessDefinitionError.c_str(), tableDefinitions[entityContainer[slotIndex].Entity.Definition].Name.c_str());	//
+		printf(cantAccessDefinitionError.c_str(), tableDefinitions[entityContainer[slotIndex].Entity.Definition].Name.begin());	//
 	} 
 
 	if( 0 < entityContainer[slotIndex].Entity.Modifier	&& (-1) == completedResearchPlayer.Modifiers.FindElement(entityContainer[slotIndex].Entity.Modifier) && (-1) == completedResearchAgent.Modifiers.FindElement(entityContainer[slotIndex].Entity.Modifier)) { 
 		bCancel																	= true;
 		static char																	itemText	[128]								= {}; 
-		sprintf_s(itemText, tableModifiers[entityContainer[slotIndex].Entity.Modifier].Name.c_str(), researchTypeString.c_str());
+		sprintf_s(itemText, tableModifiers[entityContainer[slotIndex].Entity.Modifier].Name.begin(), researchTypeString.c_str());
 		printf(cantAccessModifierError.c_str(), itemText);
 	}	
 
@@ -377,10 +377,12 @@ void																	tavern										(klib::CCharacter& adventurer)						{
 void																	mercenaryJob								(klib::CCharacter& adventurer)						{
 	// Build menu items.
 	static const size_t															enemyCount									= nwol::size(klib::enemyDefinitions);
+	::std::string t;
 	klib::SMenuItem<int32_t> jobOptions[enemyCount];
 	for(int32_t i=0, count = enemyCount-1; i<count; ++i) {
 		jobOptions[i].ReturnValue												= i+1;
-		jobOptions[i].Text														= "Level " + std::to_string(i+1);
+		t	= "Level " + std::to_string(i+1);;
+		jobOptions[i].Text														= {t.data(), (uint32_t)t.size()};
 	}
 	jobOptions[enemyCount-1].ReturnValue									= enemyCount;
 	jobOptions[enemyCount-1].Text											= "Back to tavern";

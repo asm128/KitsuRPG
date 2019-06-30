@@ -2,6 +2,7 @@
 
 #include "gpk_enum.h"
 #include "gpk_size.h"
+#include "gpk_bit.h"
 
 #ifndef __ENTITYIMPL_H__928374092634923746298374__
 #define __ENTITYIMPL_H__928374092634923746298374__
@@ -72,7 +73,7 @@ namespace klib
 
 								void							Clear							()														{
 			Status		= COMBAT_STATUS_NONE;
-			memset(TurnsLeft, 0, sizeof(uint8_t)*nwol::size(TurnsLeft));
+			memset(TurnsLeft, 0, sizeof(uint8_t)*::gpk::size(TurnsLeft));
 		}
 								int32_t							GetStatusTurns					(const COMBAT_STATUS status)			const			{
 			int32_t			turns		= 0;
@@ -93,21 +94,21 @@ namespace klib
 				if(0 == (statusBit & Status))
 					continue;
 
-				if( ::nwol::bit_true(statusBit, COMBAT_STATUS_FROZEN	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_STUN		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_SLOW		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_PETRIFY	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_INVISIBLE	)
+				if( ::gpk::bit_true(statusBit, COMBAT_STATUS_FROZEN	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_STUN		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_SLOW		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_PETRIFY	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_INVISIBLE	)
 
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_SLEEP		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_BERSERK	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_PANIC		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_RAGE		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_CHARMED	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_SLEEP		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_BERSERK	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_PANIC		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_RAGE		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_CHARMED	)
 
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_BLACKOUT	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_DRUNK		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_BULLIED	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_BLACKOUT	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_DRUNK		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_BULLIED	)
 				)
 					continue;
 
@@ -126,29 +127,29 @@ namespace klib
 				if(0 == (statusBit & Status))
 					continue;
 
-				if( ::nwol::bit_true(statusBit, COMBAT_STATUS_BURN		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_FREEZING	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_POISON	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_BLEEDING	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_SHOCK		)
+				if( ::gpk::bit_true(statusBit, COMBAT_STATUS_BURN		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_FREEZING	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_POISON	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_BLEEDING	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_SHOCK		)
 
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_FROZEN	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_STUN		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_SLOW		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_PETRIFY	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_INVISIBLE	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_FROZEN	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_STUN		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_SLOW		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_PETRIFY	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_INVISIBLE	)
 
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_SLEEP		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_BERSERK	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_PANIC		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_RAGE		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_CHARMED	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_SLEEP		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_BERSERK	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_PANIC		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_RAGE		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_CHARMED	)
 
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_BLACKOUT	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_FROZEN	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_DRUNK		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_BULLIED	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_WEAKNESS	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_BLACKOUT	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_FROZEN	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_DRUNK		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_BULLIED	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_WEAKNESS	)
 				)
 					continue;
 
@@ -168,12 +169,12 @@ namespace klib
 				if(0 == (statusBit & Status))
 					continue;
 
-				if( ::nwol::bit_true(statusBit, COMBAT_STATUS_BURN		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_FREEZING	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_POISON		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_BLEEDING	)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_SHOCK		)
-				 || ::nwol::bit_true(statusBit, COMBAT_STATUS_WEAKNESS	)
+				if( ::gpk::bit_true(statusBit, COMBAT_STATUS_BURN		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_FREEZING	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_POISON		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_BLEEDING	)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_SHOCK		)
+				 || ::gpk::bit_true(statusBit, COMBAT_STATUS_WEAKNESS	)
 				)
 					continue;
 
