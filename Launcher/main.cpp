@@ -270,10 +270,8 @@ int32_t downloadPatchContents(netbuf* netConnection, SLauncherSettings& launcher
 
 		bool bFound = false;
 		for(uint32_t iForThisPatch=0, fileThisPatchCount=(uint32_t)launcherSettings.Files.size(); iForThisPatch < fileThisPatchCount; ++iForThisPatch)
-			if(currentFileName == launcherSettings.Files[iForThisPatch].Path)
-			{
-				if(fileNamesToPatch[iFileNames].PackedDate > launcherSettings.Files[iForThisPatch].PackedDate)
-				{
+			if(currentFileName == launcherSettings.Files[iForThisPatch].Path) {
+				if(fileNamesToPatch[iFileNames].PackedDate > launcherSettings.Files[iForThisPatch].PackedDate) {
 					FtpGet(currentFileName.c_str(), remotePathFixed, FTPLIB_BINARY, netConnection);
 					fopen_s(&fp, currentFileName.c_str(), "rb");
 					if(0 == fp) {
@@ -292,8 +290,7 @@ int32_t downloadPatchContents(netbuf* netConnection, SLauncherSettings& launcher
 				break;
 			}
 
-		if(false == bFound)
-		{
+		if(bFound == 1) {
 			int32_t success = FtpGet(currentFileName.c_str(), remotePathFixed, FTPLIB_BINARY, netConnection);
 			if(0 == success) {
 				log_printf("Error downloading patch for file: %s.\n", currentFileName.c_str());
@@ -323,8 +320,7 @@ int32_t downloadPatchContents(netbuf* netConnection, SLauncherSettings& launcher
 int32_t getPatchInfoFileNamesAndDates(const ::nwol::array_obj<std::string>& fileNames, ::nwol::array_obj<std::string>& filteredFileNames, ::nwol::array_pod<SPatchDate>& fileDates)
 {
 	char dateStr[9] = {};
-	for(uint32_t iFile = 0, fileCount = (uint32_t)fileNames.size(); iFile < fileCount; ++iFile)
-	{
+	for(uint32_t iFile = 0, fileCount = (uint32_t)fileNames.size(); iFile < fileCount; ++iFile) {
 		const std::string& currentFileName = fileNames[iFile];
 		if(currentFileName.size() != 13 || strcmp(&currentFileName.c_str()[9], ".txt"))
 			continue;
@@ -339,10 +335,8 @@ int32_t getPatchInfoFileNamesAndDates(const ::nwol::array_obj<std::string>& file
 		newDate.Month	= (char)	((newDate.PackedDate-newDate.Year*10000)/100);
 		newDate.Day		= (char)	(newDate.PackedDate-newDate.Year*10000-newDate.Month*100);
 		bool bFound = false;
-		for(uint32_t i=0, dateCount = (uint32_t)fileDates.size(); i < dateCount; ++i)
-		{
-			if(fileDates[i].PackedDate > newDate.PackedDate)
-			{
+		for(uint32_t i=0, dateCount = (uint32_t)fileDates.size(); i < dateCount; ++i) {
+			if(fileDates[i].PackedDate > newDate.PackedDate) {
 				bFound = true;
 				filteredFileNames	.insert(i, currentFileName);
 				fileDates			.insert(i, newDate);
@@ -350,8 +344,7 @@ int32_t getPatchInfoFileNamesAndDates(const ::nwol::array_obj<std::string>& file
 			}
 		}
 
-		if(false == bFound) 
-		{
+		if(false == bFound) {
 			filteredFileNames.push_back(currentFileName);
 			fileDates.push_back(newDate);
 		}
@@ -361,16 +354,12 @@ int32_t getPatchInfoFileNamesAndDates(const ::nwol::array_obj<std::string>& file
 	return 0;
 }
 
-void shutdownConsole()
-{
+void shutdownConsole() {
 	PostMessage(GetConsoleWindow(),WM_QUIT,0,0);
-
 	FreeConsole();
 }
 
-
-void initConsole(const char* windowTitle)
-{
+void initConsole(const char* windowTitle) {
 	AllocConsole();
 	AttachConsole(GetCurrentProcessId());
 
@@ -378,7 +367,6 @@ void initConsole(const char* windowTitle)
 	freopen_s(&stream, "CONOUT$", "w+", stdout);
 	SetConsoleTitleA(windowTitle);
 }
-
 
 enum APPLICATION_STATE
 	{	APPLICATION_STATE_INIT						= 0
@@ -405,7 +393,6 @@ static char patchhost[256] = {};
 
 static const uint32_t WIDTH		= 480;
 static const uint32_t HEIGHT	= 300;
-
 
 LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -537,8 +524,7 @@ APPLICATION_STATE executeStep(APPLICATION_STATE applicationState, HINSTANCE hIns
 	case APPLICATION_STATE_CONNECT			:	
 		netConnection = 0;
 		success = FtpConnect(patchhost, &netConnection);
-		if (0 == success)
-		{
+		if (0 == success) {
 			log_printf("Failed to connect to host: %s.\n", patchhost);
 			FtpQuit(netConnection);
 			return APPLICATION_STATE_INVALID;
@@ -546,8 +532,7 @@ APPLICATION_STATE executeStep(APPLICATION_STATE applicationState, HINSTANCE hIns
 
 		success = FtpLogin(userName, password, netConnection);
 
-		if(0 == success)
-		{
+		if(0 == success) {
 			log_printf("Failed to authenticate user: %s.\n", userName);
 			FtpQuit(netConnection);
 			return APPLICATION_STATE_INVALID;
@@ -558,8 +543,7 @@ APPLICATION_STATE executeStep(APPLICATION_STATE applicationState, HINSTANCE hIns
 	case APPLICATION_STATE_LOAD_SETTINGS	:	
 		loadSettings(launcherSettings, settingsFileName);
 
-		if( 0 > listRemote(netConnection, fileNames) )
-		{
+		if( 0 > listRemote(netConnection, fileNames) ) {
 			log_printf("Error downloading patch history from server.\n");
 			return APPLICATION_STATE_INVALID;
 		}

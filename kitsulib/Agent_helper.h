@@ -128,13 +128,13 @@ namespace klib
 
 		const SEntityPoints							& agentBasePoints				= character.Points;
 		sprintf_s(formattedGauge, "%i"		, agentBasePoints.Coins								); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Coins in wallet"		, formattedGauge);
-		valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);
+		valueToGrid(display_.TextAttributes	, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);
 		sprintf_s(formattedGauge, "%i"		, agentFinalPoints.Coins							); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Coins per turn"		, formattedGauge);
-		valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = (agentFinalPoints.Coins >= 0) ? COLOR_ORANGE : COLOR_RED), 1, 11);
+		valueToGrid(display_.TextAttributes	, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = (agentFinalPoints.Coins >= 0) ? COLOR_ORANGE : COLOR_RED), 1, 11);
 		sprintf_s(formattedGauge, "%i"		, agentBasePoints.CostMaintenance					); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Salary"				, formattedGauge);
-		valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);
+		valueToGrid(display_.TextAttributes	, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);
 		sprintf_s(formattedGauge, "%i"		, agentFinalPoints.CostMaintenance					); printfToGrid(display, ++offsetY, offsetX, nwol::SCREEN_LEFT, formatAgentCoins, "- Total Cost"			, formattedGauge);
-		valueToGrid(display_.TextAttributes, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);
+		valueToGrid(display_.TextAttributes	, offsetY, offsetX+23, nwol::SCREEN_LEFT, &(color = COLOR_ORANGE), 1, 11);
 	
 	}
 
@@ -230,7 +230,7 @@ namespace klib
 	#define MAX_AGENT_ROWS		2
 	#define MAX_AGENT_COLUMNS	3
 
-	void								drawSquadSlots					(SGame& instanceGame);
+	void									drawSquadSlots					(SGame& instanceGame);
 }
 
 #endif // __AGENT_HELPER_H__91238648097234698723649872364923874__

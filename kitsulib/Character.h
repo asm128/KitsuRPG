@@ -18,7 +18,7 @@ namespace klib
 		SFacility												Facility				= {0,0,1,-1};	// Index, ModifierIndex, Level
 		SStageProp												StageProp				= {0,0,1,-1};	// Index, ModifierIndex, Level
 	};																					
-																						
+
 	struct SCharacterResearch {																					
 		SResearchGroup<SWeapon		>							Weapon					= {};
 		SResearchGroup<SAccessory	>							Accessory				= {};
@@ -31,14 +31,14 @@ namespace klib
 
 #define MAX_INVENTORY_SLOTS 256
 	struct SCharacterInventory {
-		SEntityContainer<SItem			, MAX_INVENTORY_SLOTS>	Items;
-		SEntityContainer<SProfession	, MAX_INVENTORY_SLOTS>	Profession;
-		SEntityContainer<SWeapon		, MAX_INVENTORY_SLOTS>	Weapon;
-		SEntityContainer<SArmor			, MAX_INVENTORY_SLOTS>	Armor;
-		SEntityContainer<SAccessory		, MAX_INVENTORY_SLOTS>	Accessory;
-		SEntityContainer<SVehicle		, MAX_INVENTORY_SLOTS>	Vehicle;
-		SEntityContainer<SStageProp		, MAX_INVENTORY_SLOTS>	StageProp;
-		SEntityContainer<SFacility		, MAX_INVENTORY_SLOTS>	Facility;
+		SEntityContainer<SItem		, MAX_INVENTORY_SLOTS>		Items;
+		SEntityContainer<SProfession, MAX_INVENTORY_SLOTS>		Profession;
+		SEntityContainer<SWeapon	, MAX_INVENTORY_SLOTS>		Weapon;
+		SEntityContainer<SArmor		, MAX_INVENTORY_SLOTS>		Armor;
+		SEntityContainer<SAccessory	, MAX_INVENTORY_SLOTS>		Accessory;
+		SEntityContainer<SVehicle	, MAX_INVENTORY_SLOTS>		Vehicle;
+		SEntityContainer<SStageProp	, MAX_INVENTORY_SLOTS>		StageProp;
+		SEntityContainer<SFacility	, MAX_INVENTORY_SLOTS>		Facility;
 
 		int32_t													GetCount				(ENTITY_TYPE entityType) const	{
 			int32_t result = 0;

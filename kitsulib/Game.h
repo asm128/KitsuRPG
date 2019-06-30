@@ -62,8 +62,7 @@ namespace klib
 	typedef ::nwol::SGrid<char, SGlobalDisplay::Width, SGlobalDisplay::Depth>			SMenuDisplay		;
 
 	//
-	struct SFrameInfo
-	{
+	struct SFrameInfo {
 							::nwol::SInput								Input			= {};
 							::nwol::STimer								Timer			= {};
 	};

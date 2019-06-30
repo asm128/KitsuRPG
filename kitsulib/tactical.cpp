@@ -948,7 +948,16 @@ SGameState																drawTacticalScreen								(SGame& instanceGame, const 
 	else 
 		bNotCanceled = characterTurn(instanceGame, selectedAction);
 
-	if( (tacticalInfo.Board.Shots.Bullet.Count <= 0) && bNotCanceled && currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Actions == 0 && currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves == 0) 
+	bool movesRemaining = false;
+
+	for(int32_t i = 0; i < currentPlayer.Squad.Size; i++) {
+		if(currentPlayer.Squad.ActionsLeft[i].Actions != 0 || currentPlayer.Squad.ActionsLeft[i].Moves != 0){
+			movesRemaining = true;
+		break;
+		}
+	}
+
+	if( (tacticalInfo.Board.Shots.Bullet.Count <= 0) && bNotCanceled && !movesRemaining) 
 		endTurn(instanceGame);
 
 	 // If players have agents still alive we just continue in the tactical screen. Otherwise go back to main screen. 
