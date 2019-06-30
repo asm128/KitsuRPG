@@ -125,16 +125,16 @@ void											initPlayerCharacter								(klib::CCharacter& adventurer, const s
 	adventurer.Goods.Inventory.Facility		.AddElement({1,1,1});
 
 	int16_t i = 5;
-	adventurer.Goods.Inventory.Weapon		.AddElement({rand() % (int16_t)nwol::size(klib::definitionsWeapon		), rand()%(int16_t)nwol::size(klib::modifiersWeapon		), ++i});
-	adventurer.Goods.Inventory.Accessory	.AddElement({rand() % (int16_t)nwol::size(klib::definitionsAccessory	), rand()%(int16_t)nwol::size(klib::modifiersAccessory	), ++i});
-	adventurer.Goods.Inventory.Armor		.AddElement({rand() % (int16_t)nwol::size(klib::definitionsArmor		), rand()%(int16_t)nwol::size(klib::modifiersArmor		), ++i});
-	adventurer.Goods.Inventory.Profession	.AddElement({rand() % (int16_t)nwol::size(klib::definitionsProfession	), rand()%(int16_t)nwol::size(klib::modifiersProfession	), ++i});
-	adventurer.Goods.Inventory.Vehicle		.AddElement({rand() % (int16_t)nwol::size(klib::definitionsVehicle		), rand()%(int16_t)nwol::size(klib::modifiersVehicle	), ++i});
-	adventurer.Goods.Inventory.Facility		.AddElement({rand() % (int16_t)nwol::size(klib::definitionsFacility		), rand()%(int16_t)nwol::size(klib::modifiersFacility	), ++i});
+	adventurer.Goods.Inventory.Weapon		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsWeapon		), rand()%(int16_t)::gpk::size(klib::modifiersWeapon		), ++i});
+	adventurer.Goods.Inventory.Accessory	.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsAccessory	), rand()%(int16_t)::gpk::size(klib::modifiersAccessory	), ++i});
+	adventurer.Goods.Inventory.Armor		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsArmor		), rand()%(int16_t)::gpk::size(klib::modifiersArmor		), ++i});
+	adventurer.Goods.Inventory.Profession	.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsProfession	), rand()%(int16_t)::gpk::size(klib::modifiersProfession	), ++i});
+	adventurer.Goods.Inventory.Vehicle		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsVehicle		), rand()%(int16_t)::gpk::size(klib::modifiersVehicle	), ++i});
+	adventurer.Goods.Inventory.Facility		.AddElement({rand() % (int16_t)::gpk::size(klib::definitionsFacility	), rand()%(int16_t)::gpk::size(klib::modifiersFacility	), ++i});
 
 	adventurer.Goods.Inventory.Items		.AddElement({1,1,1});
 	for(int32_t j = 1;  j < 3; ++j)
-		adventurer.Goods.Inventory.Items		.AddElement({ 1+int16_t(rand()%(nwol::size(klib::itemDescriptions)-1)), int16_t(1+rand()%nwol::size(klib::itemModifiers)), int16_t(rand()%nwol::size(klib::itemGrades)) });
+		adventurer.Goods.Inventory.Items		.AddElement({ 1+int16_t(rand()%(::gpk::size(klib::itemDescriptions)-1)), int16_t(1+rand() % ::gpk::size(klib::itemModifiers)), int16_t(rand() % ::gpk::size(klib::itemGrades)) });
 
 	researchEquipped(adventurer);
 	adventurer.Recalculate();
