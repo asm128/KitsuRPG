@@ -16,12 +16,12 @@ DEFINE_RUNTIME_INTERFACE_FUNCTIONS(SApplication, "Vulgar Display of Power", 0, 1
 #define errmsg(functionCall, format, ...)																									\
 	{																																		\
 		::nwol::error_t													_err_errMy								= 0;						\
-		error_if(errored(_err_errMy = functionCall), "'%s' failed. Error code: 0x%x. " format, #functionCall, _err_errMy, __VA_ARGS__);		\
+		gerror_if(errored(_err_errMy = functionCall), "'%s' failed. Error code: 0x%x. " format, #functionCall, _err_errMy, __VA_ARGS__);		\
 	}
 
 int32_t														cleanup									(::SApplication& instanceApp)										{
 	::nwol::shutdownASCIIScreen();
-	nwol_necall(::networkDisable(instanceApp), "Network not enabled?");
+	gpk_necall(::networkDisable(instanceApp), "Network not enabled?");
 	return 0; 
 }
 
@@ -31,7 +31,7 @@ int32_t														setup									(::SApplication& instanceApp)										{
 	::nwol::initASCIIScreen(guiSystem.TargetSizeASCII.x, guiSystem.TargetSizeASCII.y);
 	char															moduleTitle[240]						= {};
 	uint8_t															moduleTitleLen							= (uint8_t)::nwol::size(moduleTitle);
-	nwol_necall(::nwol_moduleTitle(moduleTitle, &moduleTitleLen), "If this fails then something weird is going on.");
+	gpk_necall(::nwol_moduleTitle(moduleTitle, &moduleTitleLen), "If this fails then something weird is going on.");
 	::nwol::setASCIIScreenTitle(moduleTitle);
 
 	::klib::initGame(instanceApp.Game);
@@ -48,7 +48,7 @@ int32_t														setup									(::SApplication& instanceApp)										{
 
 	newControl.AreaASCII										= {1, 1, (int32_t)newControlLabel.size(), 1}	;
 	newControl.Text												= newControlLabel								;
-	nwol_necall(::nwol::createControl(guiSystem, newControl), "Failed to create control: %s.", newControl.Text.c_str());
+	gpk_necall(::nwol::createControl(guiSystem, newControl), "Failed to create control: %s.", newControl.Text.c_str());
 	return 0; 
 }
 
@@ -61,12 +61,12 @@ int32_t														update									(::SApplication& instanceApp, bool exitReque
 		return ::nwol::APPLICATION_STATE_EXIT;
 
 	::nwol::SInput													& inputSystem							= instanceApp.Input;
-	error_if(errored(::nwol::pollInput(inputSystem)), "Some weird thing happened which prevented pollInput() to succeed. I have no idea why this would ever happen.");
+	gerror_if(errored(::nwol::pollInput(inputSystem)), "Some weird thing happened which prevented pollInput() to succeed. I have no idea why this would ever happen.");
 	//if(inputSystem.Keys[VK_ESCAPE])
 	//	return ::nwol::APPLICATION_STATE_EXIT;
 
 	::nwol::SGUI													& guiSystem								= instanceApp.GUI;
-	error_if(errored(::nwol::updateGUI(guiSystem, inputSystem)), "Why would we fail to update the GUI?");
+	gerror_if(errored(::nwol::updateGUI(guiSystem, inputSystem)), "Why would we fail to update the GUI?");
 
 	::nwol::array_pod<::nwol::CONTROL_STATE>						& controlFlags							= guiSystem.Controls.ControlFlags;
 	for(uint32_t iControl = 0, controlCount = controlFlags.size(); iControl < controlCount; ++iControl)
