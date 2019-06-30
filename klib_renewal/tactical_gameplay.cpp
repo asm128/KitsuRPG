@@ -423,7 +423,10 @@ bool																					klib::updateCurrentPlayer												(SGame& instanceGa
 
 	if(currentPlayer.Control.Type != PLAYER_CONTROL_AI)
 		return true;
-
+	if( 0 == currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves
+	 && 0 == currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Actions
+	 )
+		return false;
 	if( bHasArrived && (0 < currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves) ) {
 		::selectAIDestination(instanceGame);
 		nwol::bit_set(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
