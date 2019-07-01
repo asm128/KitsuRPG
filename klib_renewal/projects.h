@@ -28,11 +28,11 @@ namespace klib
 	{
 		if(selectedChoice.IsModifier) {
 			researchCompleted.Modifiers.AddElement(selectedChoice.Entity.Modifier); 
-			maxResearch.Modifier													= nwol::max(maxResearch.Modifier,	selectedChoice.Entity.Modifier);
+			maxResearch.Modifier													= ::gpk::max(maxResearch.Modifier,	selectedChoice.Entity.Modifier);
 		}
 		else {
 			researchCompleted.Definitions.AddElement(selectedChoice.Entity.Definition); 
-			maxResearch.Definition													= nwol::max(maxResearch.Definition,	selectedChoice.Entity.Definition);
+			maxResearch.Definition													= ::gpk::max(maxResearch.Definition,	selectedChoice.Entity.Definition);
 		}
 		successMessage															= "You have successfully researched " + selectedChoice.Name + ".";
 	}

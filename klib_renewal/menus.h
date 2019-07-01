@@ -1,6 +1,6 @@
 #include "drawMenu.h"
-#include "ascii_screen.h"
-#include "draw_misc.h"
+#include "klib_ascii_screen.h"
+#include "klib_draw_misc.h"
 #include "klib_grid.h"
 
 #ifndef __MENUS_H__9237409126340927634987234__

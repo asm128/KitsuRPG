@@ -23,15 +23,15 @@ struct SBuyable {
 	std::string		Name;
 } selectedChoice;
 
-static ::klib::SMenuItem<SBuyable>	menuItemsAccessory	[::nwol::size(definitionsAccessory	)] = {};
-static ::klib::SMenuItem<SBuyable>	menuItemsStageProp	[::nwol::size(definitionsStageProp	)] = {};
-static ::klib::SMenuItem<SBuyable>	menuItemsFacility	[::nwol::size(definitionsFacility	)] = {};
-static ::klib::SMenuItem<SBuyable>	menuItemsVehicle	[::nwol::size(definitionsVehicle	)] = {};
-static ::klib::SMenuItem<SBuyable>	menuItemsProfession	[::nwol::size(definitionsProfession	)] = {};
-static ::klib::SMenuItem<SBuyable>	menuItemsWeapon		[::nwol::size(definitionsWeapon		)] = {};
-static ::klib::SMenuItem<SBuyable>	menuItemsArmor		[::nwol::size(definitionsArmor		)] = {};
-static ::klib::SMenuItem<SBuyable>	menuItemsItem		[::nwol::size(itemDescriptions		)] = {};
-static ::klib::SMenuItem<SBuyable>	menuItemsAgent		[::nwol::size(enemyDefinitions		)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsAccessory	[::gpk::size(definitionsAccessory	)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsStageProp	[::gpk::size(definitionsStageProp	)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsFacility	[::gpk::size(definitionsFacility	)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsVehicle	[::gpk::size(definitionsVehicle		)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsProfession	[::gpk::size(definitionsProfession	)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsWeapon		[::gpk::size(definitionsWeapon		)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsArmor		[::gpk::size(definitionsArmor		)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsItem		[::gpk::size(itemDescriptions		)] = {};
+static ::klib::SMenuItem<SBuyable>	menuItemsAgent		[::gpk::size(enemyDefinitions		)] = {};
 
 #define SHOP_EXIT_VALUE 0x7FFF
 static ::klib::SMenu<SBuyable>		menuAccessory		({SHOP_EXIT_VALUE},	"Accessory"		" a la carte"	, 48);

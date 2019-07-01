@@ -1,6 +1,7 @@
+#include "klib_input.h"
+
 #include "Menu.h"
 #include "klib_timer.h"
-#include "nwol_input.h"
 #include "ascii_color.h"
 
 #include "gpk_view_grid.h"
@@ -36,16 +37,16 @@ namespace klib
 								void						printMultipageHelp									(char* targetASCII, uint32_t targetWidth, uint32_t targetHeight, uint32_t currentPage, uint32_t pageCount, uint32_t posXOffset);
 
 	template <size_t _FormatLen>
-	static						int32_t						drawExitOption										(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t posXOffset, nwol::ALIGN_SCREEN align, const char (&formatString)[_FormatLen], const std::string& exitText, bool bSelected )		{
+	static						int32_t						drawExitOption										(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t posXOffset, ::klib::ALIGN_SCREEN align, const char (&formatString)[_FormatLen], const std::string& exitText, bool bSelected )		{
 		int32_t														offsetY												= (int32_t)targetHeight-MENU_ROFFSET-1;
 		int32_t														actualOffsetX										= ::klib::printfToRect(targetASCII, targetWidth, targetHeight, offsetY, posXOffset, align, formatString, "0", exitText.c_str());	
 
 		uint16_t													colorBkg											= bSelected ? COLOR_GREEN << 4 : COLOR_GREEN;  
-		return ::nwol::valueToRect(targetAttributes, targetWidth, targetHeight,  offsetY, actualOffsetX, nwol::SCREEN_LEFT, &colorBkg, 1, (int32_t)exitText.size()+3);
+		return ::klib::valueToRect(targetAttributes, targetWidth, targetHeight,  offsetY, actualOffsetX, ::klib::SCREEN_LEFT, &colorBkg, 1, (int32_t)exitText.size()+3);
 	}
 
 	template <size_t _ArraySize, typename _ReturnType>
-								_ReturnType					processInput										(const nwol::SInput& frameInput, uint32_t targetWidth, uint32_t targetHeight, SDrawMenuState& localPersistentState, bool& bResetMenuStuff, bool& bResetTitle, int32_t lineOffset, const klib::SMenuItem<_ReturnType>(&menuItems)[_ArraySize], uint32_t actualOptionCount, uint32_t pageCount, size_t itemOffset, int32_t exitOffset, int32_t numberCharsAvailable, const _ReturnType& noActionValue, const _ReturnType& exitValue, bool disableEscKeyClose, const ::gpk::label& exitText)	{
+								_ReturnType					processInput										(const ::klib::SInput& frameInput, uint32_t targetWidth, uint32_t targetHeight, SDrawMenuState& localPersistentState, bool& bResetMenuStuff, bool& bResetTitle, int32_t lineOffset, const klib::SMenuItem<_ReturnType>(&menuItems)[_ArraySize], uint32_t actualOptionCount, uint32_t pageCount, size_t itemOffset, int32_t exitOffset, int32_t numberCharsAvailable, const _ReturnType& noActionValue, const _ReturnType& exitValue, bool disableEscKeyClose, const ::gpk::label& exitText)	{
 		bool														bMouseOverExit										= mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, exitOffset-4, (int32_t)targetHeight-MENU_ROFFSET-1, (int32_t)exitText.size()+4);
 
 		_ReturnType													resultVal											= noActionValue;
@@ -103,7 +104,7 @@ namespace klib
 	}
 
 	template <size_t _ArraySize, typename _ReturnType>
-	_ReturnType												drawMenu											(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t optionCount, const std::string& title, const klib::SMenuItem<_ReturnType>(&menuItems)[_ArraySize], const nwol::SInput& frameInput, const _ReturnType& exitValue, const _ReturnType& noActionValue=-1, uint32_t rowWidth=20, bool disableEscKeyClose=false, const ::gpk::label& exitText="Exit this menu") {
+	_ReturnType												drawMenu											(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t optionCount, const std::string& title, const klib::SMenuItem<_ReturnType>(&menuItems)[_ArraySize], const ::klib::SInput& frameInput, const _ReturnType& exitValue, const _ReturnType& noActionValue=-1, uint32_t rowWidth=20, bool disableEscKeyClose=false, const ::gpk::label& exitText="Exit this menu") {
 		drawMenu_globals.Timer.Frame();
 
 		optionCount												= (optionCount < _ArraySize) ? optionCount : _ArraySize; // Fix optionCount to the maximum size of the array if optionCount is higher than the allowed size.
@@ -114,7 +115,7 @@ namespace klib
 
 		std::string													clearString											(::std::max(rowWidth, 128U), ' ');
 		for(int32_t i=-2, count = (int32_t)targetHeight-clearOffset; i<count; ++i)
-			::klib::printfToRectColored(targetASCII, targetWidth, targetHeight, targetAttributes, (COLOR_BLACK<<4) | COLOR_YELLOW, clearOffset+i, 0, nwol::SCREEN_CENTER, "%s", clearString.c_str()); // clear all lines where we're going to draw
+			::klib::printfToRectColored(targetASCII, targetWidth, targetHeight, targetAttributes, (COLOR_BLACK<<4) | COLOR_YELLOW, clearOffset+i, 0, ::klib::SCREEN_CENTER, "%s", clearString.c_str()); // clear all lines where we're going to draw
 
 		const bool													multipage											= optionCount > 9;
 		const uint32_t												pageCount											= (uint32_t)((multipage == false) ? 1 : optionCount/9 + ((optionCount%9)?1:0));
@@ -130,7 +131,7 @@ namespace klib
 
 		rowWidth												= ::std::max((uint32_t)titleLength, std::max((uint32_t)exitText.size()+3, rowWidth));
 		const bool													bDonePrinting										= ::klib::getMessageSlow(localPersistentState.SlowTitle, titleFormatted, titleLength, drawMenu_globals.Timer.LastTimeSeconds*4);
-		int32_t														actualOffsetX										= ::klib::lineToRect(targetASCII, targetWidth, targetHeight, lineOffset, 0, nwol::SCREEN_CENTER, localPersistentState.SlowTitle);		//"-- %s --", title.c_str() );	// Print menu title
+		int32_t														actualOffsetX										= ::klib::lineToRect(targetASCII, targetWidth, targetHeight, lineOffset, 0, ::klib::SCREEN_CENTER, localPersistentState.SlowTitle);		//"-- %s --", title.c_str() );	// Print menu title
 		for(uint32_t i=0; i<rowWidth+1; i++)
 			targetAttributes[lineOffset*targetWidth+actualOffsetX+i] = COLOR_GREEN;
 
@@ -165,7 +166,7 @@ namespace klib
 		const uint32_t												posXOffset											= 0;
 		for(uint32_t i = 0, count = (localPersistentState.MenuItemAccum < actualOptionCount) ? localPersistentState.MenuItemAccum : actualOptionCount; i < count; ++i) {
 			::sprintf_s(numberKey, "%u", (uint32_t)(i+1));
-			actualOffsetX											= ::klib::printfToRect(targetASCII, targetWidth, targetHeight, lineOffset, posXOffset, nwol::SCREEN_CENTER, formatString, numberKey, menuItems[itemOffset+i].Text.begin());
+			actualOffsetX											= ::klib::printfToRect(targetASCII, targetWidth, targetHeight, lineOffset, posXOffset, ::klib::SCREEN_CENTER, formatString, numberKey, menuItems[itemOffset+i].Text.begin());
 			if(localPersistentState.CurrentOption == (int32_t)i)
 				for(uint32_t j = 0; j < rowWidth + 1; ++j)
 					targetAttributes[lineOffset * targetWidth + actualOffsetX + j]	= COLOR_YELLOW << 4;
@@ -179,7 +180,7 @@ namespace klib
 		int32_t														exitOffset											= 0;
 		// Print Exit option at the end.
 		if(localPersistentState.MenuItemAccum > actualOptionCount)
-			exitOffset												= ::klib::drawExitOption(targetASCII, targetAttributes, targetWidth, targetHeight, posXOffset, nwol::SCREEN_CENTER, formatString, exitText.begin(), localPersistentState.CurrentOption == 10);
+			exitOffset												= ::klib::drawExitOption(targetASCII, targetAttributes, targetWidth, targetHeight, posXOffset, ::klib::SCREEN_CENTER, formatString, exitText.begin(), localPersistentState.CurrentOption == 10);
 
 		// Print page control help if multipage.
 		if(multipage) 
@@ -207,12 +208,12 @@ namespace klib
 	}
 
 	template <typename _tCell, size_t _ItemCount, typename _ReturnType>
-	inline _ReturnType										drawMenu			(::gpk::view_grid<_tCell> display, uint16_t* targetAttributes, uint32_t optionCount, const std::string& title, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType exitValue, _ReturnType noActionValue = -1, uint32_t rowWidth=20, bool disableEscapeKey=false, const std::string& exitText="Exit this menu") {
+	inline _ReturnType										drawMenu			(::gpk::view_grid<_tCell> display, uint16_t* targetAttributes, uint32_t optionCount, const std::string& title, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const ::klib::SInput& frameInput, _ReturnType exitValue, _ReturnType noActionValue = -1, uint32_t rowWidth=20, bool disableEscapeKey=false, const std::string& exitText="Exit this menu") {
 		return ::klib::drawMenu(display.begin(), targetAttributes, display.metrics().x, display.metrics().y, optionCount, title, menuItems, frameInput, exitValue, noActionValue, rowWidth, disableEscapeKey, {exitText.data(), (uint32_t)exitText.size()});
 	}
 	
 	template <typename _tCell, size_t _ItemCount, typename _ReturnType>
-	inline _ReturnType										drawMenu			(::gpk::view_grid<_tCell> display, uint16_t* targetAttributes, const std::string& title, const ::klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType exitValue, _ReturnType noActionValue = -1, uint32_t rowWidth=20, bool disableEscapeKey=false, const std::string& exitText="Exit this menu") {
+	inline _ReturnType										drawMenu			(::gpk::view_grid<_tCell> display, uint16_t* targetAttributes, const std::string& title, const ::klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const ::klib::SInput& frameInput, _ReturnType exitValue, _ReturnType noActionValue = -1, uint32_t rowWidth=20, bool disableEscapeKey=false, const std::string& exitText="Exit this menu") {
 		return ::klib::drawMenu(display.begin(), targetAttributes, display.metrics().x, display.metrics().y, _ItemCount, title, menuItems, frameInput, exitValue, noActionValue, rowWidth, disableEscapeKey, {exitText.data(), (uint32_t)exitText.size()});
 	}
 
@@ -236,12 +237,12 @@ namespace klib
 	};
 
 	template <typename _tCell, size_t _ItemCount, typename _ReturnType>
-	_ReturnType drawMenu(::gpk::view_grid<_tCell>& display, uint16_t* targetAttributes, const SMenu<_ReturnType>& menuInstance, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const nwol::SInput& frameInput, _ReturnType noActionValue = -1) {
+	_ReturnType drawMenu(::gpk::view_grid<_tCell>& display, uint16_t* targetAttributes, const SMenu<_ReturnType>& menuInstance, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], const ::klib::SInput& frameInput, _ReturnType noActionValue = -1) {
 		return ::klib::drawMenu(display.begin(), targetAttributes, display.metrics().x, display.metrics().y, (uint32_t)_ItemCount, menuInstance.Title.begin(), menuItems, frameInput, menuInstance.ValueExit, noActionValue, menuInstance.RowWidth, menuInstance.bDisableEscapeKey, menuInstance.TextExit);
 	}
 
 	template <typename _tCell, size_t _ItemCount, typename _ReturnType>
-	_ReturnType drawMenu(::gpk::view_grid<_tCell>& display, uint16_t* targetAttributes, const SMenu<_ReturnType>& menuInstance, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], uint32_t optionCount, const nwol::SInput& frameInput, _ReturnType noActionValue = -1) {
+	_ReturnType drawMenu(::gpk::view_grid<_tCell>& display, uint16_t* targetAttributes, const SMenu<_ReturnType>& menuInstance, const klib::SMenuItem<_ReturnType>(&menuItems)[_ItemCount], uint32_t optionCount, const ::klib::SInput& frameInput, _ReturnType noActionValue = -1) {
 		return ::klib::drawMenu(display.begin(), targetAttributes, display.metrics().x, display.metrics().y, optionCount, menuInstance.Title.begin(), menuItems, frameInput, menuInstance.ValueExit, noActionValue, menuInstance.RowWidth, menuInstance.bDisableEscapeKey, menuInstance.TextExit);
 	}
 } // namespace

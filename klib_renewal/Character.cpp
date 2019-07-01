@@ -9,7 +9,7 @@
 #include "Facility.h"
 #include "Accessory.h"
 
-#include "draw_misc.h"
+#include "klib_draw_misc.h"
 
 void									klib::SCharacter::RecalculateFinalPoints	()																						noexcept	{
 	const SEntityPoints							weaponPoints								= klib::getWeaponPoints		(CurrentEquip.Weapon);
@@ -58,7 +58,7 @@ void									klib::addStatus								(SCombatStatus& characterStatus, COMBAT_STAT
 bool									klib::isRelevantTeam						(::klib::TEAM_TYPE teamId)																			{
 		static constexpr	const ::klib::TEAM_TYPE			irrelevantTeams[]			= {::klib::TEAM_TYPE_CIVILIAN, ::klib::TEAM_TYPE_SPECTATOR, ::klib::TEAM_TYPE_INVALID};
 		bool										bRelevant					= true;
-		for(uint32_t i=0; i < ::nwol::size(irrelevantTeams); ++i)
+		for(uint32_t i=0; i < ::gpk::size(irrelevantTeams); ++i)
 			if(irrelevantTeams[i] == teamId) {
 				bRelevant								= false;
 				break;

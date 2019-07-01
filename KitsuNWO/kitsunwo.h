@@ -2,8 +2,6 @@
 
 #include "gui.h"
 #include "netlib_node.h"
-//#include "nwol_enum.h"
-#include "nwol_mutex.h"
 #include "nwol_member_registry.h"
 #include "nwol_runtime.h"
 #include "application.h"

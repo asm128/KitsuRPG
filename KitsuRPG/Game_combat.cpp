@@ -506,7 +506,7 @@ int32_t																	selectItemsAI				(klib::CCharacter& user, klib::CCharact
 // This function returns true if an item was used or false if the menu was exited without doing anything.
 bool																	useItems					(klib::CCharacter& user, klib::CCharacter& target, bool bIsAIControlled)								{
 	uint32_t																	indexInventory				= ~0U;
-	static const size_t															inventorySize				= nwol::size(user.Goods.Inventory.Items.Slots);
+	static const size_t															inventorySize				= ::gpk::size(user.Goods.Inventory.Items.Slots);
 	if(0 == user.Goods.Inventory.Items.Count) {
 		printf("%s has no items in the inventory.\n", user.Name.c_str());
 		return false;

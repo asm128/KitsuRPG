@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 #include "Item.h"
-#include "draw_misc.h"
+#include "klib_draw_misc.h"
 #include "Weapon.h"
 #include "Armor.h"
 #include "Profession.h"
@@ -26,9 +26,9 @@ void											setupAgentEquip
 	defin											= ( defin <= 2 ) ? (rand() % 3) + 1 : defin + ((rand() % 3) - 1); 
 	modif											= ( modif <= 2 ) ? (rand() % 3) + 1 : modif + ((rand() % 3) - 1); 
 		
-	currentEnemyCurrentEquip.Definition				= std::max(std::min( defin, (int32_t)nwol::size( definitionsTable	) - 1), 1);	
-	currentEnemyCurrentEquip.Modifier				= std::max(std::min( modif, (int32_t)nwol::size( modifiersTable		) - 1), 1);
-	currentEnemyCurrentEquip.Level					= std::max(templateAgentCurrentEquip.Level	+ ((rand() % 3) - 2), 1);
+	currentEnemyCurrentEquip.Definition				= ::gpk::max(::gpk::min( defin, (int32_t)::gpk::size( definitionsTable	) - 1), 1);	
+	currentEnemyCurrentEquip.Modifier				= ::gpk::max(::gpk::min( modif, (int32_t)::gpk::size( modifiersTable	) - 1), 1);
+	currentEnemyCurrentEquip.Level					= ::gpk::max(templateAgentCurrentEquip.Level	+ ((rand() % 3) - 2), 1);
 }
 
 void											klib::completeAgentResearch										(::klib::CCharacter& agent)									{
@@ -39,11 +39,11 @@ void											klib::completeAgentResearch										(::klib::CCharacter& agent)	
 }
 
 void											klib::setupAgent												(const CCharacter& adventurer, CCharacter& currentEnemy)	{
-	currentEnemy.Goods.Inventory.Items.AddElement({ 1+int16_t(rand()%(nwol::size(itemDescriptions)-1)), 1+int16_t(rand()%(nwol::size(itemModifiers)-1)), 1+int16_t(rand()%(nwol::size(itemGrades)-1)) });
+	currentEnemy.Goods.Inventory.Items.AddElement({ 1+int16_t(rand()%(::gpk::size(itemDescriptions)-1)), 1+int16_t(rand()%(::gpk::size(itemModifiers)-1)), 1+int16_t(rand() % (::gpk::size(itemGrades)-1)) });
 
 	for(int32_t iSlot=0, slotCount=adventurer.Goods.Inventory.Items.Count; iSlot<slotCount; ++iSlot)
 		for(int32_t iItemUnit=0, itemUnitCount=adventurer.Goods.Inventory.Items[iSlot].Count; iItemUnit<itemUnitCount; ++iItemUnit)
-			currentEnemy.Goods.Inventory.Items.AddElement({ 1+int16_t(rand()%(nwol::size(itemDescriptions)-1)), 1+int16_t(rand()%(nwol::size(itemModifiers)-1)), int16_t(rand()%nwol::size(itemGrades)) });
+			currentEnemy.Goods.Inventory.Items.AddElement({ 1+int16_t(rand()%(::gpk::size(itemDescriptions)-1)), 1+int16_t(rand()%(::gpk::size(itemModifiers)-1)), int16_t(rand() % ::gpk::size(itemGrades)) });
 
 	currentEnemy.Goods.CompletedResearch			= SCharacterResearch();
 	setupAgentEquip(currentEnemy.CurrentEquip.Profession	, currentEnemy.Goods.CompletedResearch.Profession	, adventurer.CurrentEquip.	Profession		, definitionsProfession	, modifiersProfession	);			

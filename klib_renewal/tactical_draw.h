@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "StageProp.h"
 
-#include "ascii_reference.h"
+#include "klib_ascii_reference.h"
 
 #ifndef __TACTICAL_DRAW_H__2309748209346029374609821764__
 #define __TACTICAL_DRAW_H__2309748209346029374609821764__
@@ -84,7 +84,7 @@ namespace klib
 		static const int32_t						typeSizeInBits			= sizeof(_T)*8;
 		maxCount = (maxCount > typeSizeInBits) ? typeSizeInBits : maxCount;
 		for(int32_t i = 0; i < maxCount; ++i)
-			if( nwol::bit_true(bitToFind, (_T)(1ULL << i)) )
+			if( ::gpk::bit_true(bitToFind, (_T)(1ULL << i)) )
 				return i;
 		return -1;
 	}
@@ -93,35 +93,35 @@ namespace klib
 	int32_t									initStatusColors		(SStatusColor (&statusColors)[_StatusCount])																																				{
 		int32_t										nBitIndex;
 		// Stun
-		nBitIndex								= getBitIndex(COMBAT_STATUS_FROZEN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_WHITE		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_PANIC		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_ORANGE		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_SLEEP		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_BLACK		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_STUN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_DARKRED		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_SHOCK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_CYAN		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_PETRIFY		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_GREEN		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_CHARMED		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_MAGENTA		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_BERSERK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_YELLOW		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_FROZEN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_WHITE		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_PANIC		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_ORANGE		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_SLEEP		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_BLACK		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_STUN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_DARKRED		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_SHOCK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_CYAN		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_PETRIFY		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_GREEN		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_CHARMED		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_MAGENTA		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_BERSERK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_DARKGREY		, COLOR_YELLOW		};
 
 		// Poison damage
-		nBitIndex								= getBitIndex(COMBAT_STATUS_BLEEDING	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_GREEN			, COLOR_RED			};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_POISON		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_GREEN			, COLOR_DARKGREEN	};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_BLEEDING	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_GREEN			, COLOR_RED			};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_POISON		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_GREEN			, COLOR_DARKGREEN	};
 		
 		// Shieldable damage
-		nBitIndex								= getBitIndex(COMBAT_STATUS_BURN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_RED			, COLOR_DARKRED		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_FREEZING	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_RED			, COLOR_WHITE		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_BURN		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_RED			, COLOR_DARKRED		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_FREEZING	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_RED			, COLOR_WHITE		};
 
 		// Debuff
-		nBitIndex								= getBitIndex(COMBAT_STATUS_WEAKNESS	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_BLACK		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_SLOW		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_DARKRED		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_BULLIED		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_DARKMAGENTA	};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_DRUNK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_GREEN		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_BLIND		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_WHITE		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_WEAKNESS	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_BLACK		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_SLOW		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_DARKRED		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_BULLIED		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_DARKMAGENTA	};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_DRUNK		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_GREEN		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_BLIND		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_BLUE			, COLOR_WHITE		};
 
 		// 
-		nBitIndex								= getBitIndex(COMBAT_STATUS_RAGE		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_ORANGE			, COLOR_GREEN		};
-		nBitIndex								= getBitIndex(COMBAT_STATUS_INVISIBLE	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_ORANGE			, COLOR_WHITE		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_RAGE		, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_ORANGE			, COLOR_GREEN		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_INVISIBLE	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_ORANGE			, COLOR_WHITE		};
 
-		nBitIndex								= getBitIndex(COMBAT_STATUS_BLACKOUT	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_WHITE			, COLOR_BLACK		};
+		nBitIndex								= ::klib::getBitIndex(COMBAT_STATUS_BLACKOUT	, MAX_COMBAT_STATUS_COUNT); statusColors[nBitIndex] = {COLOR_WHITE			, COLOR_BLACK		};
 		return 0;
 	}
 
@@ -175,7 +175,7 @@ namespace klib
 							SEntityFlags								playerAgentFlags		= playerAgent.FinalFlags	;
 						
 							initialSight							= (playerAgentPoints.Fitness.Sight+SIGHT_OFFSET);
-							finalSight								= getFinalSight(initialSight, playerAgent);
+							finalSight								= ::klib::getFinalSight(initialSight, playerAgent);
 
 							if(distance.Length() < finalSight) {
 								bInRange								= true;
@@ -195,7 +195,7 @@ namespace klib
 					int32_t											cellPlayerIndex				= board.Tiles.Entities.Agents.Cells[z][x].PlayerIndex;
 
 					bool											bIsAlly						= tacticalInfo.Setup.TeamPerPlayer[indexBoardPlayer] == tacticalInfo.Setup.TeamPerPlayer[cellPlayerIndex];
-					target.Screen.Cells[z][x]					= ::nwol::ascii_face[bIsAlly ? FACE_BLACK : FACE_WHITE];
+					target.Screen.Cells[z][x]					= ::klib::ascii_face[bIsAlly ? FACE_BLACK : FACE_WHITE];
 					//target.Screen.Cells[z][x] = std::to_string(agentIndex+1)[0]; 
 
 
@@ -212,17 +212,17 @@ namespace klib
 							color = getStatusColor(agent.ActiveBonus.Status.Status, bSwaps[3], color);
 
 						if(bSwaps[5] && fractionLife < 0.25) {
-							target.Screen.Cells[z][x] = ::nwol::ascii_fraction[1];
+							target.Screen.Cells[z][x] = ::klib::ascii_fraction[1];
 							color = bSwaps[0] ? color : COLOR_RED;
 						}
 						else if(bSwaps[5] && fractionLife < 0.5) {
-							target.Screen.Cells[z][x] = ::nwol::ascii_fraction[2];
+							target.Screen.Cells[z][x] = ::klib::ascii_fraction[2];
 							color = bSwaps[0] ? color : COLOR_YELLOW;
 						}
 						else {
 							bool bIsMale			= agent.Flags.Tech.Gender == GENDER_MALE;
 							bool bIsHermaphrodite	= agent.Flags.Tech.Gender == GENDER_HERMAPHRODITE;
-							target.Screen.Cells[z][x] = ::nwol::ascii_gender[bIsMale ? MALE : bIsHermaphrodite ? HERMAPHRODITE : FEMALE];
+							target.Screen.Cells[z][x] = ::klib::ascii_gender[bIsMale ? MALE : bIsHermaphrodite ? HERMAPHRODITE : FEMALE];
 						}
 					}
 					else if(bSwaps[4] && tacticalInfo.HasDrops(currentCoord))
@@ -240,9 +240,9 @@ namespace klib
 						if(bullet.Points.StatusInflict)
 							bulletColor = getStatusColor(bullet.Points.StatusInflict, bSwaps[2], bulletColor);
 
-						if(nwol::bit_true(bullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_ROCKET))
+						if(::gpk::bit_true(bullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_ROCKET))
 							bulletAscii = 0x0F; // bigger asterisk
-						else if(nwol::bit_false(bullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_SHELL)) {
+						else if(::gpk::bit_false(bullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_SHELL)) {
 							const ::gpk::SCoord2<float> dirVector = {bullet.Direction.x, bullet.Direction.z}; 
 							if( ( dirVector.x < (-GAME_EPSILON) && dirVector.y < (-GAME_EPSILON) )
 								|| ( dirVector.x > GAME_EPSILON && dirVector.y > GAME_EPSILON )
@@ -262,14 +262,14 @@ namespace klib
 					target.TextAttributes.Cells[z][x] |= bulletColor;
 				} 
 				else if( board.Tiles.Entities.Coins	.Cells[z][x] !=  0)	{ 
-					target.Screen.Cells			[z][x] = ::nwol::ascii_cards[DECK_DIAMONDS]; 
+					target.Screen.Cells			[z][x] = ::klib::ascii_cards[DECK_DIAMONDS]; 
 					target.TextAttributes.Cells	[z][x] |= bSwaps[6] ? COLOR_DARKYELLOW : COLOR_ORANGE; 
 				} 
 				else if(board.Tiles.Entities.Props.Cells[z][x].Definition != -1) { 
 					static const ::gpk::label chestLabel	= "Chest";
 					static const ::gpk::label wallLabel		= "Wall";
 					if(chestLabel == definitionsStageProp[board.Tiles.Entities.Props.Cells[z][x].Definition].Name) {
-						target.Screen.Cells[z][x] = ::nwol::ascii_cards[DECK_CLUBS];
+						target.Screen.Cells[z][x] = ::klib::ascii_cards[DECK_CLUBS];
 						target.TextAttributes.Cells[z][x] |= bSwaps[10] ? COLOR_YELLOW : COLOR_BLACK; 
 					}
 					else if(wallLabel == definitionsStageProp[board.Tiles.Entities.Props.Cells[z][x].Definition].Name){
@@ -422,9 +422,9 @@ namespace klib
 		gridColorPacked							|= (gridColorPacked << 16) | (gridColorPacked << 32) | (gridColorPacked << 48);
 		int32_t										widthOverColorSize				= _Width>>2;
 		for(uint32_t z = 0; z < _Depth; ++z) {
-			valueToGrid(target.TextAttributes, z, 0, ::nwol::SCREEN_LEFT, (uint16_t*)&gridColorPacked, 4, widthOverColorSize);
+			::klib::valueToGrid(target.TextAttributes, z, 0, ::klib::SCREEN_LEFT, (uint16_t*)&gridColorPacked, 4, widthOverColorSize);
 		}
-		boardToDisplay(instanceGame, tacticalInfo.Board, target, playerIndex, teamId, selection, bFogOfWar);
+		::klib::boardToDisplay(instanceGame, tacticalInfo.Board, target, playerIndex, teamId, selection, bFogOfWar);
 	}
 }
 

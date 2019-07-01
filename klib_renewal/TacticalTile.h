@@ -1,7 +1,7 @@
 #include "StageProp.h"
 
 #include "klib_grid.h"
-#include "ascii_reference.h"
+#include "klib_ascii_reference.h"
 
 #ifndef __TACTICALTILE_H__9238402734628937234__
 #define __TACTICALTILE_H__9238402734628937234__

@@ -26,10 +26,10 @@ void													selectAITarget											(SGame& instanceGame)																{
 
 	if(playerControl.AIMode == PLAYER_AI_ASSISTS)
 		return; 
-	else if( (!nwol::bit_true(playerControl.AIMode, PLAYER_AI_TEAMERS))		// Here we check if the AI has an aggressive flag. If it doesn't just cancel the turn.
-		  && (!nwol::bit_true(playerControl.AIMode, PLAYER_AI_RIOTERS))	
-		  && (!nwol::bit_true(playerControl.AIMode, PLAYER_AI_VIOLENT))
-		  && (!nwol::bit_true(playerControl.AIMode, PLAYER_AI_REVENGE))
+	else if( (!::gpk::bit_true(playerControl.AIMode, PLAYER_AI_TEAMERS))		// Here we check if the AI has an aggressive flag. If it doesn't just cancel the turn.
+		  && (!::gpk::bit_true(playerControl.AIMode, PLAYER_AI_RIOTERS))	
+		  && (!::gpk::bit_true(playerControl.AIMode, PLAYER_AI_VIOLENT))
+		  && (!::gpk::bit_true(playerControl.AIMode, PLAYER_AI_REVENGE))
 		)
 	{
 		return; 
@@ -96,10 +96,10 @@ void													selectAIDestination										(SGame& instanceGame)													
 		selectAvailableTile(tacticalInfo.Board, targetPositionAgent);
 		return;
 	}
-	else if( (!nwol::bit_true(currentPlayer.Control.AIMode, PLAYER_AI_TEAMERS))	
-		  && (!nwol::bit_true(currentPlayer.Control.AIMode, PLAYER_AI_RIOTERS))	
-		  && (!nwol::bit_true(currentPlayer.Control.AIMode, PLAYER_AI_VIOLENT))
-		  && (!nwol::bit_true(currentPlayer.Control.AIMode, PLAYER_AI_REVENGE))
+	else if( (!::gpk::bit_true(currentPlayer.Control.AIMode, PLAYER_AI_TEAMERS))	
+		  && (!::gpk::bit_true(currentPlayer.Control.AIMode, PLAYER_AI_RIOTERS))	
+		  && (!::gpk::bit_true(currentPlayer.Control.AIMode, PLAYER_AI_VIOLENT))
+		  && (!::gpk::bit_true(currentPlayer.Control.AIMode, PLAYER_AI_REVENGE))
 		)
 	{ 
 		selectAvailableTile(tacticalInfo.Board, targetPositionAgent);
@@ -123,7 +123,7 @@ void													selectAIDestination										(SGame& instanceGame)													
 	targetPositionAgent										= playerTarget.Army[playerTarget.Squad.Agents[currentPlayer.Selection.TargetUnit]]->Position; 
 	::gpk::SCoord3<int32_t>									vectorToAgent											= targetPositionAgent-currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]]->Position;
 	::gpk::SCoord3<float>										vec														= vectorToAgent.Cast<float>();
-	if(nwol::bit_false(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_MELEE) && vec.Length() <= 18) {
+	if(::gpk::bit_false(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_MELEE) && vec.Length() <= 18) {
 		getValidCoordForAgentDestination(targetPositionAgent, tacticalInfo.Board);
 		return;
 	}
@@ -153,10 +153,10 @@ TURN_ACTION												selectAIAction											(SGame& instanceGame)											
 	else if(0 >= currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves && 0 < currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Actions) {
 		if(currentPlayer.Control.AIMode == PLAYER_AI_ASSISTS)	
 			result													= TURN_ACTION_CANCEL; 
-		else if( (nwol::bit_false(currentPlayer.Control.AIMode, PLAYER_AI_TEAMERS))		// Here we check if the AI has an aggressive flag. If it doesn't just cancel the turn.
-			  && (nwol::bit_false(currentPlayer.Control.AIMode, PLAYER_AI_RIOTERS))	
-			  && (nwol::bit_false(currentPlayer.Control.AIMode, PLAYER_AI_VIOLENT))
-			  && (nwol::bit_false(currentPlayer.Control.AIMode, PLAYER_AI_REVENGE))
+		else if( (::gpk::bit_false(currentPlayer.Control.AIMode, PLAYER_AI_TEAMERS))		// Here we check if the AI has an aggressive flag. If it doesn't just cancel the turn.
+			  && (::gpk::bit_false(currentPlayer.Control.AIMode, PLAYER_AI_RIOTERS))	
+			  && (::gpk::bit_false(currentPlayer.Control.AIMode, PLAYER_AI_VIOLENT))
+			  && (::gpk::bit_false(currentPlayer.Control.AIMode, PLAYER_AI_REVENGE))
 			)
 			result													= TURN_ACTION_CANCEL; 
 		else {
@@ -177,7 +177,7 @@ TURN_ACTION												selectAIAction											(SGame& instanceGame)											
 						const SEntityPoints											& playerAgentPoints										= playerAgent.FinalPoints;
 						const SEntityFlags											& playerAgentFlags										= playerAgent.FinalFlags;
 
-						if(::nwol::bit_true(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_RANGED)) {
+						if(::gpk::bit_true(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_RANGED)) {
 							bool														bInSight												= false;
 							STacticalSetup												& tacticalSetup											= tacticalInfo.Setup;
 
@@ -220,7 +220,7 @@ TURN_ACTION												selectAIAction											(SGame& instanceGame)											
 		}
 	}
 	else if(0 < currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves)
-		nwol::bit_set(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
+		::gpk::bit_set(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
 
 	return result;
 }

@@ -26,13 +26,13 @@ GDEFINE_OBJ(klib, CCharacter);
 
 
 // Set up a nice prompt 
-void prompt(std::string& userInput, const std::string& displayText, ::nwol::SASCIITarget& asciiTarget) {
-	::nwol::asciiTargetClear	(asciiTarget, ' ', COLOR_GREEN);
+void prompt(std::string& userInput, const std::string& displayText, ::klib::SASCIITarget& asciiTarget) {
+	::klib::asciiTargetClear	(asciiTarget, ' ', COLOR_GREEN);
 	uint32_t								screenWidth				=	asciiTarget.Width()
 		,									screenHeight			=	asciiTarget.Height()
 		;
-	::klib::lineToRect((char_t*)asciiTarget.Characters.begin(), screenWidth, screenHeight, (screenHeight>>1)-1, 0, ::nwol::SCREEN_CENTER, displayText.c_str());
-	::nwol::presentASCIIBackBuffer();
+	::klib::lineToRect((char_t*)asciiTarget.Characters.begin(), screenWidth, screenHeight, (screenHeight>>1)-1, 0, ::klib::SCREEN_CENTER, displayText.c_str());
+	::klib::presentASCIIBackBuffer();
 
 	static const HANDLE						hConsoleOut				= ::GetStdHandle( STD_OUTPUT_HANDLE );
 	COORD									cursorPos				= {((SHORT)screenWidth>>1)-5, (SHORT)screenHeight>>1};
@@ -48,20 +48,20 @@ void klib::resetGame(SGame& instanceGame) {
 	instanceGame.UserLog.clear();
 	::klib::initGame(instanceGame);
 
-	//::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
+	//::klib::clearASCIIBackBuffer(' ', COLOR_WHITE);
 
 	// Set up a nice prompt 
 	::std::string playerName;
-	::nwol::SASCIITarget					asciiTarget;
-	::nwol::getASCIIBackBuffer	(asciiTarget);
+	::klib::SASCIITarget					asciiTarget;
+	::klib::getASCIIBackBuffer	(asciiTarget);
 	::prompt(playerName, "Enter your name:", asciiTarget);
 	::std::string password;
 	//::prompt(password, "Enter password:");
 
 	instanceGame.Players[PLAYER_INDEX_USER].Name = {playerName.data(), (uint32_t)playerName.size()};
-	::nwol::bit_set(instanceGame.Flags, GAME_FLAGS_STARTED);
-	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);
-	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE);
+	::gpk::bit_set(instanceGame.Flags, GAME_FLAGS_STARTED);
+	::gpk::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);
+	::gpk::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE);
 }
 
 struct SWearables {
@@ -92,9 +92,9 @@ void klib::initGame(SGame& instanceGame) {
 	info_printf("sizeof(STacticalInfo)-sizeof(STacticalBoard): %u"	, (uint32_t)(sizeof(::klib::STacticalInfo)	- sizeof(::klib::STacticalBoard))	);
 	info_printf("sizeof(SGame): %u"									, (uint32_t) sizeof(::klib::SGame)												);
 
-	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_STARTED			);
-	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL			);
-	::nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE	);
+	::gpk::bit_clear(instanceGame.Flags, GAME_FLAGS_STARTED			);
+	::gpk::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL			);
+	::gpk::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE	);
 	instanceGame.Seed		= 12;
 	::srand((unsigned int)instanceGame.Seed);
 	::klib::resetCursorString(instanceGame.SlowMessage);
@@ -196,10 +196,10 @@ void klib::initGame(SGame& instanceGame) {
 
 	for(uint32_t iPlayer=0, count=1/*MAX_PLAYER_TYPES*/; iPlayer < count; ++iPlayer) {
 		::klib::SPlayer& player	= instanceGame.Players[iPlayer]	= SPlayer();
-		GPObj(::klib, CCharacter) newAgent = ::klib::enemyDefinitions[1 + ::rand() % (::nwol::size(klib::enemyDefinitions)-1)];
+		GPObj(::klib, CCharacter) newAgent = ::klib::enemyDefinitions[1 + ::rand() % (::gpk::size(klib::enemyDefinitions)-1)];
 
 		for(uint32_t iAgent=0, agentCount=CAMPAIGN_AGENT_COUNT*2; iAgent<agentCount; iAgent++) {
-			int32_t iAgentType = (int32_t)(iif(iAgent < CAMPAIGN_AGENT_COUNT) ::nwol::size(klib::enemyDefinitions)-iAgent-2 : 1);
+			int32_t iAgentType = (int32_t)(iif(iAgent < CAMPAIGN_AGENT_COUNT) ::gpk::size(klib::enemyDefinitions)-iAgent-2 : 1);
 			GPObj(::klib, CCharacter) newAgentNext = klib::enemyDefinitions[iAgentType];
 			::klib::CCharacter& adventurer = *newAgentNext.get_address();
 			::klib::setupAgent(adventurer, adventurer);
@@ -296,12 +296,12 @@ void klib::initGame(SGame& instanceGame) {
 		//player.Name = ::gpk::get_value_label((PLAYER_INDEX)iPlayer);
 	}
 	::klib::initTacticalMap(instanceGame);
-	nwol::bit_set(instanceGame.Flags, GAME_FLAGS_RUNNING	);
+	::gpk::bit_set(instanceGame.Flags, GAME_FLAGS_RUNNING	);
 }
 
 uint32_t								klib::missionCost						(SPlayer& player, const SSquad& squadSetup, uint32_t maxAgents)	{
 		int32_t															totalCost						= 0;
-		for(size_t iAgent=0, agentCount= maxAgents < nwol::size(squadSetup.Agents) ? maxAgents : nwol::size(squadSetup.Agents); iAgent<agentCount; ++iAgent) {
+		for(size_t iAgent=0, agentCount= maxAgents < ::gpk::size(squadSetup.Agents) ? maxAgents : ::gpk::size(squadSetup.Agents); iAgent<agentCount; ++iAgent) {
 			if(squadSetup.Agents[iAgent] == -1)
 				continue;
 

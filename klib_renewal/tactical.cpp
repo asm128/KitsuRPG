@@ -106,7 +106,7 @@ bool																	handleUserInput									(SGame& instanceGame, const SGameSt
 
 void																	drawTileInfo
 	(	const SGame						& instanceGame
-	,	const ::nwol::SInput			& frameInput
+	,	const ::klib::SInput			& frameInput
 	,	const STacticalInfo				& tacticalInfo
 	,	SGlobalDisplay					& globalDisplay	
 	,	STacticalDisplay				& tacticalDisplay	
@@ -212,9 +212,9 @@ void																	drawTileInfo
 	}
 
 	if(bDrawText)
-		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, tacticalDisplayStop+3, 0, nwol::SCREEN_CENTER, messageSlow);
+		::klib::lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, tacticalDisplayStop+3, 0, ::klib::SCREEN_CENTER, messageSlow);
 
-	printfToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, bInTacticalMap ? messageColor : COLOR_DARKGREY, tacticalDisplayStop+3, tacticalDisplayX	+1, nwol::SCREEN_LEFT, "%i, %i", mouseX-tacticalDisplayX, mouseY-TACTICAL_DISPLAY_POSY);
+	printfToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, bInTacticalMap ? messageColor : COLOR_DARKGREY, tacticalDisplayStop+3, tacticalDisplayX	+1, ::klib::SCREEN_LEFT, "%i, %i", mouseX-tacticalDisplayX, mouseY-TACTICAL_DISPLAY_POSY);
 
 }
 
@@ -262,29 +262,29 @@ void																	drawPlayerInfo									(SGame& instanceGame)															
 		}
 
 		selectionText															= "Player name: "	+ ::std::string(currentPlayer.Name.begin());	
-		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 1, tacticalDisplayX+1, ::nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 1, tacticalDisplayX+1, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 		selectionText															= "Agent name: "	+ currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]]->Name;
-		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 2, tacticalDisplayX+1, ::nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 2, tacticalDisplayX+1, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 		selectionText															= "Moves left: " + std::to_string(currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves) + ". Actions left: " + std::to_string(currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Actions) + ".";
-		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 3, tacticalDisplayX+1, ::nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 3, tacticalDisplayX+1, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 		
 		int32_t																		selectionX										= currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].x;
 		int32_t																		selectionZ										= currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit].z;
 		selectionText															= "Target Position: " + std::to_string(selectionX) + ", " + std::to_string(selectionZ);
-		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 4, tacticalDisplayX+1, ::nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+		lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 4, tacticalDisplayX+1, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 
 		if(bSwap && currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit] != currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]]->Position) {
 			selectionText															= "-";
 			if(selectionX-1 >= 0) 
-				lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, selectionZ, selectionX-1, ::nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+				lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, selectionZ, selectionX-1, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 			if(selectionX+1 < tacticalDisplay.Width) 
-				lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, selectionZ, selectionX+1, ::nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+				lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, selectionZ, selectionX+1, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 
 			selectionText															= "|";
 			if(selectionZ-1 >= 0) 
-				lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, selectionZ-1, selectionX, ::nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+				lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, selectionZ-1, selectionX, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 			if(selectionZ+1 < tacticalDisplay.Depth) 
-				lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, selectionZ+1, selectionX, ::nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+				lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, selectionZ+1, selectionX, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 		}
 	}
 
@@ -302,7 +302,7 @@ void																	drawPlayerInfo									(SGame& instanceGame)															
 	messageColor															= getPlayerColor(tacticalInfo, currentTarget, (int8_t)currentPlayer.Selection.TargetPlayer, PLAYER_INDEX_USER, bDarken);
 
 	selectionText															= std::string("Target player: ") + std::string(currentTarget.Name.begin());
-	lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 2, tacticalDisplayX+1, nwol::SCREEN_RIGHT, selectionText.c_str());
+	lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 2, tacticalDisplayX+1, ::klib::SCREEN_RIGHT, selectionText.c_str());
 
 	if( currentPlayer.Selection.TargetUnit == -1 || currentTarget.Squad.Agents[currentPlayer.Selection.TargetUnit] == -1 )
 		return;
@@ -314,15 +314,15 @@ void																	drawPlayerInfo									(SGame& instanceGame)															
 	if(bSwap) {
 		selectionText															= "-";
 		if(agentX-1 >= 0) 
-			lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, agentZ, agentX-1, nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+			lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, agentZ, agentX-1, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 		if(agentX+1 < tacticalDisplay.Width) 
-			lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, agentZ, agentX+1, nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+			lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, agentZ, agentX+1, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 
 		selectionText															= "|";
 		if(agentZ-1 >= 0) 
-			lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, agentZ-1, agentX, nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+			lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, agentZ-1, agentX, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 		if(agentZ+1 < tacticalDisplay.Depth) 
-			lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, agentZ+1, agentX, nwol::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
+			lineToGridColored(tacticalDisplay.Screen	, tacticalDisplay.TextAttributes	, messageColor, agentZ+1, agentX, ::klib::SCREEN_LEFT, selectionText.c_str(), (uint32_t)selectionText.size());
 	}
 
 	if( !targetAgent.IsAlive() )
@@ -332,7 +332,7 @@ void																	drawPlayerInfo									(SGame& instanceGame)															
 	displayDetailedAgentSlot(globalDisplay, PLAYER_INFO_POSY, xOffset, targetAgent, messageColor);
 	displayStatusEffectsAndTechs(globalDisplay, PLAYER_INFO_POSY+9, xOffset+32, targetAgent);
 	selectionText															= "Target: " + targetAgent.Name;
-	lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 3, tacticalDisplayX+1, nwol::SCREEN_RIGHT, selectionText.c_str());
+	lineToGridColored(globalDisplay.Screen, globalDisplay.TextAttributes, messageColor, 3, tacticalDisplayX+1, ::klib::SCREEN_RIGHT, selectionText.c_str());
 }
 
 bool																	shoot											(SGame& instanceGame, int32_t tacticalPlayer, int32_t squadAgent)					{
@@ -345,8 +345,8 @@ bool																	shoot											(SGame& instanceGame, int32_t tacticalPlaye
 	if(targetTile == agentShooter.Position)
 		return false;
 
-	int32_t																		totalBullets									= ::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_SPLASH) ? 10 : 1;
-	if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_BURST))
+	int32_t																		totalBullets									= ::gpk::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_SPLASH) ? 10 : 1;
+	if(::gpk::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_BURST))
 		totalBullets															*= 3;
 	
 	//int																			finalChance										= agentShooter.FinalPoints.Attack.Hit;
@@ -355,19 +355,19 @@ bool																	shoot											(SGame& instanceGame, int32_t tacticalPlaye
 		printf("Blindness causes %s to have %u hit chance for this turn.\n", agentShooter.Name.c_str(), agentShooter.FinalPoints.Attack.Hit >>= 1);
 
 	//if ((rand() % 100) < finalChance ) {
-		 if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType		, ATTACK_TYPE_SPLASH		)) PlaySound("..\\gpk_data\\sounds\\Shotgun_Blast-Jim_Rogers-1914772763.wav"		, 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_ROCKET	)) PlaySound("..\\gpk_data\\sounds\\Missle_Launch-Kibblesbob-2118796725.wav"		, 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_GRENADE	)) PlaySound("..\\gpk_data\\sounds\\grenade-launcher-daniel_simon.wav"			, 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_BULLET	)) PlaySound("..\\gpk_data\\sounds\\Anti Aircraft Gun-Mike_Koenig-1303768514.wav"	, 0, SND_ASYNC | SND_FILENAME);
-	else if(::nwol::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_RAY		)) PlaySound("..\\gpk_data\\sounds\\Gun_Shot-Marvin-1140816320.wav"				, 0, SND_ASYNC | SND_FILENAME);
+		 if(::gpk::bit_true(agentShooter.FinalFlags.Tech.AttackType		, ATTACK_TYPE_SPLASH		)) PlaySound("..\\gpk_data\\sounds\\Shotgun_Blast-Jim_Rogers-1914772763.wav"		, 0, SND_ASYNC | SND_FILENAME);
+	else if(::gpk::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_ROCKET	)) PlaySound("..\\gpk_data\\sounds\\Missle_Launch-Kibblesbob-2118796725.wav"		, 0, SND_ASYNC | SND_FILENAME);
+	else if(::gpk::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_GRENADE	)) PlaySound("..\\gpk_data\\sounds\\grenade-launcher-daniel_simon.wav"			, 0, SND_ASYNC | SND_FILENAME);
+	else if(::gpk::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_BULLET	)) PlaySound("..\\gpk_data\\sounds\\Anti Aircraft Gun-Mike_Koenig-1303768514.wav"	, 0, SND_ASYNC | SND_FILENAME);
+	else if(::gpk::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_RAY		)) PlaySound("..\\gpk_data\\sounds\\Gun_Shot-Marvin-1140816320.wav"				, 0, SND_ASYNC | SND_FILENAME);
 	
 	for(int32_t iBullet=0; iBullet<totalBullets; ++iBullet) {
-		::nwol::bit_clear(playerShooter.Squad.AgentStates[squadAgent], AGENT_STATE_MOVE);
+		::gpk::bit_clear(playerShooter.Squad.AgentStates[squadAgent], AGENT_STATE_MOVE);
 		SBullet																		newBullet;
 		newBullet.Position.Cell													= {agentShooter.Position.x, agentShooter.Position.y, agentShooter.Position.z};
 		newBullet.Position.Offset												= {.5f, .75f, .5f};
 		newBullet.Direction														= {(float)(targetTile.x-newBullet.Position.Cell.x), (float)(targetTile.y-newBullet.Position.Cell.y), (float)(targetTile.z-newBullet.Position.Cell.z)};
-		if(::nwol::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_SPLASH)) {
+		if(::gpk::bit_true(agentShooter.FinalFlags.Tech.AttackType, ATTACK_TYPE_SPLASH)) {
 			double																		angleOffset										= 1.0/20.0*(totalBullets/2);
 			double																		angle											= iBullet/20.0;
 			newBullet.Direction.RotateY(angle-angleOffset);
@@ -407,7 +407,7 @@ inline	TURN_ACTION														selectRemoteAction								(SGame& instanceGame)	
 		CCharacter																	& currentAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 		CCharacter																	& playerAgent									= *currentPlayer.Army[currentPlayer.Squad.Agents[currentPlayer.Selection.PlayerUnit]];
 		instanceGame.ClearMessages();
-		if(nwol::bit_true(currentAgent.FinalFlags.Tech.AttackType, ATTACK_TYPE_RANGED)) {
+		if(::gpk::bit_true(currentAgent.FinalFlags.Tech.AttackType, ATTACK_TYPE_RANGED)) {
 			if(true_if(playerAgent.ActiveBonus.Status.Status & COMBAT_STATUS_BLACKOUT) && (getWeaponFlags(playerAgent.CurrentEquip.Weapon).Tech.Tech & ENTITY_TECHNOLOGY_DIGITAL)) {
 				instanceGame.UserMessage												= "This weapon was disabled by an electromagnetic pulse.";
 				instanceGame.LogMessage();
@@ -422,7 +422,7 @@ inline	TURN_ACTION														selectRemoteAction								(SGame& instanceGame)	
 				instanceGame.LogMiss();
 			}
 		}
-		else if(nwol::bit_true(currentAgent.FinalFlags.Tech.AttackType, ATTACK_TYPE_MELEE)) {
+		else if(::gpk::bit_true(currentAgent.FinalFlags.Tech.AttackType, ATTACK_TYPE_MELEE)) {
 			if(currentPlayer.Selection.TargetPlayer == -1 || tacticalInfo.Setup.Players[currentPlayer.Selection.TargetPlayer] == PLAYER_INDEX_INVALID || currentPlayer.Selection.TargetUnit == -1) {
 				instanceGame.UserMiss													= "You need to select a valid target in order to attack!"; 
 				instanceGame.LogMiss();
@@ -442,7 +442,7 @@ inline	TURN_ACTION														selectRemoteAction								(SGame& instanceGame)	
 				double																		finalSight										= getFinalRange(playerAgent, playerAgentPoints);
 				double																		finalRange										= getFinalSight(playerAgent, playerAgentPoints);
 				if( (distance.Length() > finalSight || distance.Length() > finalRange) 
-				 && nwol::bit_false(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_RANGED)
+				 && ::gpk::bit_false(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_RANGED)
 				 )
 				{
 					instanceGame.UserMiss													= "You can't attack " + targetAgent.Name + " from that distance."; 
@@ -634,7 +634,7 @@ TURN_ACTION																useItems										(SGame& instanceGame, SPlayer& play
 
 SGameState																endMission										(SGame& instanceGame)									{
 	klib::determineOutcome(instanceGame);						// Determine outcome before exiting tactical mode.
-	nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);	// Tell the system that the tactical mode is over.
+	::gpk::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);	// Tell the system that the tactical mode is over.
 	return {GAME_STATE_WELCOME_COMMANDER};
 }
 
@@ -737,9 +737,9 @@ void																	updateBullets									(SGame& instanceGame)									{
 				tacticalInfo.Board.Shots.Coords.DecreaseEntity(tacticalInfo.Board.Shots.Coords.FindElement(oldBulletPos.Cell));
 
 				if(bImpact 
-					&&	(	nwol::bit_true(newBullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_ROCKET	) 
-						||	nwol::bit_true(newBullet.Points.Tech.AmmoEffect, AMMO_EFFECT_EXPLOSIVE			) 
-						||	nwol::bit_true(newBullet.Points.Tech.AmmoEffect, AMMO_EFFECT_BLAST				) 
+					&&	(	::gpk::bit_true(newBullet.Points.Tech.ProjectileClass, PROJECTILE_CLASS_ROCKET	) 
+						||	::gpk::bit_true(newBullet.Points.Tech.AmmoEffect, AMMO_EFFECT_EXPLOSIVE			) 
+						||	::gpk::bit_true(newBullet.Points.Tech.AmmoEffect, AMMO_EFFECT_BLAST				) 
 						)
 					)
 				{
@@ -754,7 +754,7 @@ void																	updateBullets									(SGame& instanceGame)									{
 					newAOE.Level															= newBullet.Points.Level;
 					newAOE.TurnsLeft														= newBullet.Points.Level;
 					tacticalInfo.AddAOE(newAOE);
-					if(nwol::bit_true(newBullet.Points.Tech.AmmoEffect, AMMO_EFFECT_EXPLOSIVE)) {
+					if(::gpk::bit_true(newBullet.Points.Tech.AmmoEffect, AMMO_EFFECT_EXPLOSIVE)) {
 						int32_t y=0;
 						for(int32_t z = (int32_t)(newAOE.Position.Cell.z-newAOE.RadiusOrHalfSize), maxz=int32_t(newAOE.Position.Cell.z+newAOE.RadiusOrHalfSize); z < maxz; ++z) {
 							if(z < 0 || z >= tacticalInfo.Board.Depth)
@@ -848,9 +848,9 @@ void																	updateBullets									(SGame& instanceGame)									{
 bool																	initTacticalGame								(SGame& instanceGame);
 SGameState																drawTacticalScreen								(SGame& instanceGame, const SGameState& returnState)				{
 	SGameState																	exitState										= returnState;
-	if(false == nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL)) {
+	if(false == ::gpk::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL)) {
 		if(!initTacticalGame(instanceGame)) {
-			nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);
+			::gpk::bit_clear(instanceGame.Flags, GAME_FLAGS_TACTICAL);
 			return {GAME_STATE_WELCOME_COMMANDER};
 		}
 		//int32_t finalCost = ::klib::missionCost(instanceGame.Players[PLAYER_INDEX_USER], instanceGame.Players[PLAYER_INDEX_USER].Squad, instanceGame.Players[PLAYER_INDEX_USER].Squad.Size);

@@ -64,7 +64,7 @@ SGameState processMenuReturn(SGame& instanceGame, TURN_ACTION returnValue) {
 
 void handleSubstateChange(SGame& instanceGame, const SGameState& newState, const SGameState& prevState) 
 {
-	::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
+	::klib::clearASCIIBackBuffer(' ', COLOR_WHITE);
 	instanceGame.GlobalDisplay		.Clear();
 	//instanceGame.TacticalDisplay	.Clear();	
 	//instanceGame.PostEffectDisplay	.Clear();	
@@ -104,7 +104,7 @@ void handleMissionEnd(SGame& instanceGame)
 
 void handleStateChange(SGame& instanceGame, const SGameState& newState, const SGameState& prevState)
 {
-	nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
+	::klib::clearASCIIBackBuffer(' ', COLOR_WHITE);
 	instanceGame.ClearDisplays();
 	::klib::resetCursorString(instanceGame.SlowMessage);
 
@@ -123,14 +123,10 @@ void handleStateChange(SGame& instanceGame, const SGameState& newState, const SG
 			resetGame(instanceGame);
 			handleSubstateChange(instanceGame, newState, prevState);
 		}
-		else
-		{
+		else {
 			instanceGame.StateMessage = "Welcome back commander";
-
-			if(nwol::bit_false(instanceGame.Flags, GAME_FLAGS_TACTICAL) && (prevState.State == GAME_STATE_TACTICAL_CONTROL || prevState.State == GAME_STATE_START_MISSION))
-			{
+			if(::gpk::bit_false(instanceGame.Flags, GAME_FLAGS_TACTICAL) && (prevState.State == GAME_STATE_TACTICAL_CONTROL || prevState.State == GAME_STATE_START_MISSION))
 				handleMissionEnd(instanceGame);
-			}
 		}
 		break;
 
@@ -211,7 +207,7 @@ void klib::showMenu(SGame& instanceGame) {
 
 	switch(instanceGame.State.State) {
 	case GAME_STATE_MENU_MAIN			:	
-		if( nwol::bit_true(instanceGame.Flags, GAME_FLAGS_STARTED) )
+		if( ::gpk::bit_true(instanceGame.Flags, GAME_FLAGS_STARTED) )
 			newAction = processMenuReturn(instanceGame, drawMenu(globalDisplay.Screen, &globalDisplay.TextAttributes[0][0], menuMainInGame, optionsMainInGame, instanceGame.FrameInput, instanceGame.State));	
 		else													
 			newAction = processMenuReturn(instanceGame, drawMenu(globalDisplay.Screen, &globalDisplay.TextAttributes[0][0], menuMain, optionsMain, instanceGame.FrameInput, instanceGame.State));	
@@ -244,7 +240,7 @@ void klib::showMenu(SGame& instanceGame) {
 		break;
 	case GAME_STATE_EXIT				:	
 		instanceGame.StateMessage = "Exiting game...";	
-		nwol::bit_clear(instanceGame.Flags, GAME_FLAGS_RUNNING);
+		::gpk::bit_clear(instanceGame.Flags, GAME_FLAGS_RUNNING);
 		newAction = instanceGame.State; 
 		break;
 

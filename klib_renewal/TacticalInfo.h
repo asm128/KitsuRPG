@@ -149,12 +149,12 @@ namespace klib
 			TotalPlayers											= 0;
 			TotalTeams												= 0;
 	
-			memset(Players				, -1, sizeof(PLAYER_INDEX	)*nwol::size(Players			));
-			memset(Controls				,  0, sizeof(SPlayerControl	)*nwol::size(Controls			));
-			memset(TeamPerPlayer		, -1, sizeof(TEAM_TYPE		)*nwol::size(TeamPerPlayer		));
-			memset(PlayersPerTeam		, -1, sizeof(int8_t			)*nwol::size(PlayersPerTeam		));
-			memset(PlayerCountPerTeam	,  0, sizeof(int8_t			)*nwol::size(PlayerCountPerTeam	));
-			memset(SquadSize			,  0, sizeof(uint8_t		)*nwol::size(SquadSize			));
+			memset(Players				, -1, sizeof(PLAYER_INDEX	)*::gpk::size(Players				));
+			memset(Controls				,  0, sizeof(SPlayerControl	)*::gpk::size(Controls				));
+			memset(TeamPerPlayer		, -1, sizeof(TEAM_TYPE		)*::gpk::size(TeamPerPlayer			));
+			memset(PlayersPerTeam		, -1, sizeof(int8_t			)*::gpk::size(PlayersPerTeam		));
+			memset(PlayerCountPerTeam	,  0, sizeof(int8_t			)*::gpk::size(PlayerCountPerTeam	));
+			memset(SquadSize			,  0, sizeof(uint8_t		)*::gpk::size(SquadSize				));
 		};
 	};
 
@@ -222,8 +222,8 @@ namespace klib
 			CurrentPlayer											= -1;
 			CurrentTeam												= -1;
 			Drops													= SMapInventory();
-			memset(CurrentPlayerPerTeam	, -1, sizeof(int8_t				)*::nwol::size(CurrentPlayerPerTeam	));
-			memset(AgentsInTeamSight	,  0, sizeof(SAgentsReference	)*::nwol::size(AgentsInTeamSight	));
+			memset(CurrentPlayerPerTeam	, -1, sizeof(int8_t				)*::gpk::size(CurrentPlayerPerTeam	));
+			memset(AgentsInTeamSight	,  0, sizeof(SAgentsReference	)*::gpk::size(AgentsInTeamSight	));
 			Board.Clear();
 		}
 

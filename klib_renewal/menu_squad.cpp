@@ -12,7 +12,7 @@ SGameState														drawSquadSetupMenu									(SGame& instanceGame, const S
 
 	static SMenuItem<int32_t>											menuItems[MAX_AGENT_SQUAD_SLOTS]					= {};
 	static int32_t														maxNameLen											= 0;
-	for(uint32_t i=0, count=player.Squad.Size/*(uint32_t)nwol::size(menuItems)*/; i<count; i++) {
+	for(uint32_t i=0, count=player.Squad.Size/*(uint32_t)::gpk::size(menuItems)*/; i<count; i++) {
 		menuItems[i].ReturnValue										= i;
 
 		char																buffer[128];
@@ -27,11 +27,11 @@ SGameState														drawSquadSetupMenu									(SGame& instanceGame, const S
 		}
 	}
 
-	int32_t																result												= drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], player.Squad.Size, "Squad setup", menuItems, instanceGame.FrameInput, (int32_t)nwol::size(player.Squad.Agents), -1, std::max(24, maxNameLen+4));
-	if(nwol::size(player.Squad.Agents) == result)
+	int32_t																result												= drawMenu(instanceGame.GlobalDisplay.Screen, &instanceGame.GlobalDisplay.TextAttributes.Cells[0][0], player.Squad.Size, "Squad setup", menuItems, instanceGame.FrameInput, (int32_t)::gpk::size(player.Squad.Agents), -1, ::gpk::max(24, maxNameLen+4));
+	if(::gpk::size(player.Squad.Agents) == result)
 		return {GAME_STATE_WELCOME_COMMANDER};
 
-	if( result < 0 || result >= (int32_t)nwol::size(player.Squad.Agents) )
+	if( result < 0 || result >= (int32_t)::gpk::size(player.Squad.Agents) )
 		return {GAME_STATE_MENU_SQUAD_SETUP};
 
 	player.Selection.PlayerUnit										= result;

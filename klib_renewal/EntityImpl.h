@@ -4,6 +4,8 @@
 #include "gpk_size.h"
 #include "gpk_bit.h"
 
+#include <string>
+
 #ifndef __ENTITYIMPL_H__928374092634923746298374__
 #define __ENTITYIMPL_H__928374092634923746298374__
 
@@ -28,7 +30,7 @@ namespace klib
 								int32_t								ResearchIndex;
 								int32_t								PriceUnit;
 								int32_t								PricePaid;
-								bool_t								IsModifier;
+								bool								IsModifier;
 								SEntity								Entity;
 								ENTITY_TYPE							Type;
 	};

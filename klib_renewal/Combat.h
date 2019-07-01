@@ -1,5 +1,7 @@
 #include "Character.h"
 
+#include <string>
+
 #ifndef __COMBAT_H__923409826342897346920__
 #define __COMBAT_H__923409826342897346920__
 
@@ -14,7 +16,7 @@ namespace klib
 	void					applyCombatBonus							(::klib::CCharacter& character	, const ::klib::SEntityPoints& combatBonus																																		, const ::std::string& sourceName);
 	void					applyWeaponLeechEffects						(::klib::CCharacter& attacker	, ::klib::CCharacter& targetReflecting		, const ::klib::SLifePoints& finalDamage																							, const ::std::string& sourceName);
 	::klib::SLifePoints		applySuccessfulHit							(::klib::CCharacter& thrower	, ::klib::CCharacter& target				, int32_t damage				, int32_t absorptionRate, bool bAddStatus, ::klib::COMBAT_STATUS grenadeStatus, int32_t statusTurns	, const ::std::string& sourceName);
-	::klib::SLifePoints		applySuccessfulHit							(::klib::CCharacter& thrower	, ::klib::CCharacter& target				, int32_t damage				, bool_t bAddStatus, ::klib::COMBAT_STATUS grenadeStatus, int32_t statusTurns						, const ::std::string& sourceName);
+	::klib::SLifePoints		applySuccessfulHit							(::klib::CCharacter& thrower	, ::klib::CCharacter& target				, int32_t damage				, bool bAddStatus, ::klib::COMBAT_STATUS grenadeStatus, int32_t statusTurns							, const ::std::string& sourceName);
 	void					applySuccessfulWeaponHit					(::klib::CCharacter& attacker	, ::klib::CCharacter& targetReflecting		, int32_t damageDealt			, int32_t absorptionRate																			, const ::std::string& sourceName);
 	void					applySuccessfulWeaponHit					(::klib::CCharacter& attacker	, ::klib::CCharacter& targetReflecting		, int32_t damageDealt																												, const ::std::string& sourceName);
 	bool					attack										(::klib::CCharacter& attacker	, ::klib::CCharacter& target);
@@ -25,9 +27,9 @@ namespace klib
 	//void					applyRoundStatus							(::klib::CCharacter& character);
 	void					applyRoundStatusAndBonusesAndSkipRound		(::klib::CCharacter& character);
 
-	bool_t					useGrenade									(const ::klib::SItem& itemGrenade	, ::klib::CCharacter& thrower, ::klib::CCharacter& target);
-	bool_t					usePotion									(const ::klib::SItem& itemPotion	, ::klib::CCharacter& potionDrinker);
-	bool_t					executeItem									(int32_t indexInventory				, ::klib::CCharacter& user, ::klib::CCharacter& target);
+	bool					useGrenade									(const ::klib::SItem& itemGrenade	, ::klib::CCharacter& thrower, ::klib::CCharacter& target);
+	bool					usePotion									(const ::klib::SItem& itemPotion	, ::klib::CCharacter& potionDrinker);
+	bool					executeItem									(int32_t indexInventory				, ::klib::CCharacter& user, ::klib::CCharacter& target);
 #pragma pack(pop)
 }
 

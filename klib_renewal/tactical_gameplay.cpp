@@ -39,11 +39,11 @@ static int32_t												getAgentsInRange									(SGame& instanceGame, const :
 				
 			const ::gpk::SCoord3<int32_t>									& coordAgent										= agent.Position;
 			const ::gpk::SCoord3<float>									distance											= (coordAgent-origin).Cast<float>();
-			if(distance.Length() > range && nwol::bit_false(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_RANGED))
+			if(distance.Length() > range && ::gpk::bit_false(playerAgentFlags.Tech.AttackType, ATTACK_TYPE_RANGED))
 				continue;
 
 			agentsInRange.Agents[agentsInRange.Count++]					= {{tacticalInfo.Setup.TeamPerPlayer[iPlayer], (int8_t)iPlayer, 0, (int8_t)iAgent}, {0, 0, 0}};
-			if(agentsInRange.Count >= (int32_t)nwol::size(agentsInRange.Agents))
+			if(agentsInRange.Count >= (int32_t)::gpk::size(agentsInRange.Agents))
 				break;
 		}
 	}
@@ -60,7 +60,7 @@ void																					recalculateAgentsInRangeAndSight										(SGame& insta
 
 		SPlayer																						& player																= instanceGame.Players[tacticalInfo.Setup.Players[iPlayer]];
 		uint8_t																						squadSize																= tacticalInfo.Setup.SquadSize[iPlayer];
-		for(uint32_t iAgent=0, agentCount = squadSize > ::nwol::size(tacticalInfo.Setup.SquadSize) ? (uint32_t)::nwol::size(tacticalInfo.Setup.SquadSize) : squadSize; iAgent < agentCount; ++iAgent) {
+		for(uint32_t iAgent=0, agentCount = squadSize > ::gpk::size(tacticalInfo.Setup.SquadSize) ? (uint32_t)::gpk::size(tacticalInfo.Setup.SquadSize) : squadSize; iAgent < agentCount; ++iAgent) {
 			if(player.Squad.Agents[iAgent] == -1)
 				continue;
 
@@ -83,7 +83,7 @@ void																					recalculateAgentsInRangeAndSight										(SGame& insta
 bool																					klib::moveStep															(SGame& instanceGame, SPlayer& player, int8_t playerIndex, int32_t agentIndex, TEAM_TYPE teamId, STacticalBoard& board, ::gpk::SCoord3<int32_t>& agentPosition_) {
 	if(agentPosition_ == player.Squad.TargetPositions[agentIndex])
 		return player.Squad.ActionsLeft[agentIndex].Moves <= 0;	// I added this just in case but currently there is no situation in which this function is called when the agent is in the target position already.
-	else if(nwol::bit_false(player.Squad.AgentStates[agentIndex], AGENT_STATE_MOVE))
+	else if(::gpk::bit_false(player.Squad.AgentStates[agentIndex], AGENT_STATE_MOVE))
 		return player.Squad.ActionsLeft[agentIndex].Moves <= 0;	// I added this just in case but currently there is no situation in which this function is called when the agent is in the target position already.
 
 	const ::gpk::SCoord3<int32_t>																initialPosition															= agentPosition_;
@@ -355,7 +355,7 @@ void																					klib::endTurn															(SGame& instanceGame)						
 			playerToClear.Squad.ActionsLeft[iAgent].Actions										= 1;
 			playerToClear.Squad.TargetPositions[iAgent]											= character.Position;
 
-			nwol::bit_clear(playerToClear.Squad.AgentStates[iAgent], AGENT_STATE_MOVE);
+			::gpk::bit_clear(playerToClear.Squad.AgentStates[iAgent], AGENT_STATE_MOVE);
 
 			::klib::applyTurnStatusAndBonusesAndSkipTurn(character);
 			++character.Score.TurnsPlayed;
@@ -418,7 +418,7 @@ bool																					klib::updateCurrentPlayer												(SGame& instanceGa
 	if( currentPlayer.Squad.TargetPositions[currentPlayer.Selection.PlayerUnit] != currentAgentPosition && (0 < currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves) ) {
 		bHasArrived																				= ::moveStep(instanceGame, currentPlayer, tacticalInfo.CurrentPlayer, currentPlayer.Selection.PlayerUnit, tacticalInfo.Setup.TeamPerPlayer[tacticalInfo.CurrentPlayer], tacticalInfo.Board, currentAgentPosition);
 		if(bHasArrived) 
-			nwol::bit_clear(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
+			::gpk::bit_clear(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
 	}
 
 	if(currentPlayer.Control.Type != PLAYER_CONTROL_AI)
@@ -429,7 +429,7 @@ bool																					klib::updateCurrentPlayer												(SGame& instanceGa
 		return false;
 	if( bHasArrived && (0 < currentPlayer.Squad.ActionsLeft[currentPlayer.Selection.PlayerUnit].Moves) ) {
 		::selectAIDestination(instanceGame);
-		nwol::bit_set(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
+		::gpk::bit_set(currentPlayer.Squad.AgentStates[currentPlayer.Selection.PlayerUnit], AGENT_STATE_MOVE);
 	}
 	return true;
 }
@@ -454,7 +454,7 @@ void																					distributeDropsForVictoriousTeam										(SGame& insta
 	STacticalInfo																				& tacticalInfo															= instanceGame.TacticalInfo;
 	uint32_t																					totalWinners															= 0;
 	int32_t																						indexWinners[MAX_TACTICAL_PLAYERS]										= {};
-	::memset(&indexWinners[0], -1, sizeof(PLAYER_INDEX) * ::nwol::size(indexWinners));
+	::memset(&indexWinners[0], -1, sizeof(PLAYER_INDEX) * ::gpk::size(indexWinners));
 
 	for(uint32_t iPlayer = 0, playerCount = tacticalInfo.Setup.TotalPlayers; iPlayer < playerCount; ++iPlayer) {
 		if(tacticalInfo.Setup.Players[iPlayer] == -1 || tacticalInfo.Setup.TeamPerPlayer[iPlayer] != teamVictorious)

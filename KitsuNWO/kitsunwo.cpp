@@ -1,6 +1,6 @@
 #include "kitsunwo.h"
 
-#include "ascii_screen.h"
+#include "klib_ascii_screen.h"
 #include "gui.h"
 
 #include "nwol_runtime_impl.h"
@@ -14,12 +14,12 @@ DEFINE_RUNTIME_INTERFACE_FUNCTIONS(SApplication, "Vulgar Display of Power", 0, 1
 
 #define errmsg(functionCall, format, ...)																									\
 	{																																		\
-		::nwol::error_t													_err_errMy								= 0;						\
+		::gpk::error_t													_err_errMy								= 0;						\
 		gerror_if(errored(_err_errMy = functionCall), "'%s' failed. Error code: 0x%x. " format, #functionCall, _err_errMy, __VA_ARGS__);		\
 	}
 
 int32_t														cleanup									(::SApplication& instanceApp)										{
-	::nwol::shutdownASCIIScreen();
+	::klib::shutdownASCIIScreen();
 	gpk_necall(::networkDisable(instanceApp), "Network not enabled?");
 	return 0; 
 }
@@ -27,18 +27,18 @@ int32_t														cleanup									(::SApplication& instanceApp)										{
 int32_t														setup									(::SApplication& instanceApp)										{ 
 	::nwol::SGUI													& guiSystem								= instanceApp.GUI;
 
-	::nwol::initASCIIScreen(guiSystem.TargetSizeASCII.x, guiSystem.TargetSizeASCII.y);
+	::klib::initASCIIScreen(guiSystem.TargetSizeASCII.x, guiSystem.TargetSizeASCII.y);
 	char															moduleTitle[240]						= {};
 	uint8_t															moduleTitleLen							= (uint8_t)::nwol::size(moduleTitle);
 	gpk_necall(::nwol_moduleTitle(moduleTitle, &moduleTitleLen), "If this fails then something weird is going on.");
-	::nwol::setASCIIScreenTitle(moduleTitle);
+	::klib::setASCIIScreenTitle(moduleTitle);
 
 	::klib::initGame(instanceApp.Game);
 
 	errmsg(::networkEnable(instanceApp), "Failed to enable network.");
 
-	::nwol::SASCIITarget											asciiTarget								= {};
-	::nwol::getASCIIBackBuffer(asciiTarget);
+	::klib::SASCIITarget											asciiTarget								= {};
+	::klib::getASCIIBackBuffer(asciiTarget);
 	guiSystem.TargetSizeASCII.x									= asciiTarget.Width		();
 	guiSystem.TargetSizeASCII.y									= asciiTarget.Height	();
 
@@ -81,7 +81,7 @@ int32_t														update									(::SApplication& instanceApp, bool exitReque
 }
 
 int32_t														render									(::SApplication& instanceApp)										{ 
-	::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
+	::klib::clearASCIIBackBuffer(' ', COLOR_WHITE);
 
 	::klib::SGame													& instanceGame							= instanceApp.Game;
 	::gddm::SFrameworkNetworkClient									& appNetwork							= instanceApp.NetworkClient;
@@ -89,11 +89,14 @@ int32_t														render									(::SApplication& instanceApp)										{
 		::nwol::CMutexGuard												thelock				(appNetwork.ServerTimeMutex);
 		instanceGame.ServerTime										= appNetwork.ServerTime;
 	}
-	instanceGame.FrameInput										= instanceApp.Input;
-	::nwol::SASCIITarget							target;
-	::nwol::getASCIIBackBuffer						(target);
+	memcpy(instanceGame.FrameInput.Mouse.Buttons, instanceApp.Input.Mouse.Buttons, sizeof(instanceApp.Input.Mouse.Buttons));
+	instanceGame.FrameInput.Mouse.Deltas							= {instanceApp.Input.Mouse.Deltas.x, instanceApp.Input.Mouse.Deltas.y};
+	memcpy(instanceGame.FrameInput.Keys			, instanceApp.Input.Keys		, sizeof(instanceApp.Input.Keys			));
+	memcpy(instanceGame.FrameInput.PreviousKeys	, instanceApp.Input.PreviousKeys, sizeof(instanceApp.Input.PreviousKeys	));
+	::klib::SASCIITarget							target;
+	::klib::getASCIIBackBuffer						(target);
 	::klib::drawAndPresentGame(instanceGame, target);
-	::nwol::renderGUIASCII(target, instanceApp.GUI);
-	::nwol::presentASCIIBackBuffer();
+	//::nwol::renderGUIASCII(target, instanceApp.GUI);
+	::klib::presentASCIIBackBuffer();
 	return 0; 
 }

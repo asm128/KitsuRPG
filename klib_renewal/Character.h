@@ -95,12 +95,12 @@ namespace klib
 		inline				bool								CanMove					()								const	noexcept	{ return IsAlive() && !DidLoseTurn();					}
 		inline				bool								IsAlive					()								const	noexcept	{ return Points.LifeCurrent.Health > 0;					}
 							bool								DidLoseTurn				()								const	noexcept	{
-			return ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_SLEEP		) 
-				|| ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_STUN		) 
-				|| ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_SHOCK		) 
-				|| ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_PANIC		) 
-				|| ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_PETRIFY	) 
-				|| ::nwol::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_FROZEN		)
+			return ::gpk::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_SLEEP		) 
+				|| ::gpk::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_STUN		) 
+				|| ::gpk::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_SHOCK		) 
+				|| ::gpk::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_PANIC		) 
+				|| ::gpk::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_PETRIFY	) 
+				|| ::gpk::bit_true(ActiveBonus.Status.Status, COMBAT_STATUS_FROZEN		)
 				;
 		}
 	};

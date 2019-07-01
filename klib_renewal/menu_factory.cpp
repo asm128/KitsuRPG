@@ -68,20 +68,20 @@ SGameState													drawFactoryMenu										(SGame& instanceGame, const SGam
 	GET_AVAILABLE_RESEARCH_FOR_ENTITY			(Armor		, false, false);
 
 #define MAX_RESEARCH_ITEMS					\
-	 nwol::size(definitionsAccessory)		\
-	+nwol::size(definitionsWeapon)		\
-	+nwol::size(definitionsArmor)			\
-	+nwol::size(definitionsProfession)	\
-	+nwol::size(definitionsVehicle)		\
-	+nwol::size(definitionsFacility)		\
-	+nwol::size(definitionsStageProp)		\
-		//+nwol::size(modifiersAccessory)		\\
-		//+nwol::size(modifiersWeapon)			\\
-		//+nwol::size(modifiersArmor)			\\
-		//+nwol::size(modifiersProfession)		\\
-		//+nwol::size(modifiersVehicle)			\\
-		//+nwol::size(modifiersFacility)		\\
-		//+nwol::size(modifiersStageProp)
+	 ::gpk::size(definitionsAccessory)		\
+	+::gpk::size(definitionsWeapon)		\
+	+::gpk::size(definitionsArmor)			\
+	+::gpk::size(definitionsProfession)	\
+	+::gpk::size(definitionsVehicle)		\
+	+::gpk::size(definitionsFacility)		\
+	+::gpk::size(definitionsStageProp)		\
+		//+::gpk::size(modifiersAccessory)		\\
+		//+::gpk::size(modifiersWeapon)			\\
+		//+::gpk::size(modifiersArmor)			\\
+		//+::gpk::size(modifiersProfession)		\\
+		//+::gpk::size(modifiersVehicle)			\\
+		//+::gpk::size(modifiersFacility)		\\
+		//+::gpk::size(modifiersStageProp)
 
 	static	klib::SMenuItem<SEntityResearch>						menuItems			[MAX_RESEARCH_ITEMS]			= {};
 	uint32_t														researchedCount										= 0;

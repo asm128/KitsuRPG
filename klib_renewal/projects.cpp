@@ -38,7 +38,7 @@ void handleProductionStep(SGame& instanceGame) {
 	SPlayer& player = instanceGame.Players[PLAYER_INDEX_USER];
 	SPlayerProjects& playerProjects = player.Projects;
 
-	int32_t budgetProduction		= playerProjects.BudgetProduction.bIsRatio ? int32_t(player.Money*(playerProjects.BudgetProduction.Money/100.0)) : nwol::min(playerProjects.BudgetProduction.Money, player.Money);
+	int32_t budgetProduction		= playerProjects.BudgetProduction.bIsRatio ? int32_t(player.Money*(playerProjects.BudgetProduction.Money/100.0)) : ::gpk::min(playerProjects.BudgetProduction.Money, player.Money);
 	int32_t actualCostProduction	= 0;
 	for(uint32_t iProduct=0, productCount=playerProjects.QueuedProduction.size(); iProduct < productCount; ++iProduct) {
 		if(actualCostProduction >= budgetProduction)
@@ -89,14 +89,14 @@ void handleResearchStep(SGame& instanceGame) {
 	SCharacterResearch	& playerResearch	= playerUser.Goods.CompletedResearch;
 	SPlayerProjects		& playerProjects	= playerUser.Projects;
 
-	int32_t budgetResearch		= playerProjects.BudgetResearch.bIsRatio ? int32_t(playerUser.Money*(playerProjects.BudgetResearch.Money/100.0)) : nwol::min(playerProjects.BudgetResearch.Money, playerUser.Money);
+	int32_t budgetResearch		= playerProjects.BudgetResearch.bIsRatio ? int32_t(playerUser.Money*(playerProjects.BudgetResearch.Money/100.0)) : ::gpk::min(playerProjects.BudgetResearch.Money, playerUser.Money);
 	int32_t actualCostResearch	= 0;
 	for(uint32_t iProduct = 0, productCount = playerProjects.QueuedResearch.size(); iProduct < productCount; ++iProduct) {
 		if(actualCostResearch >= budgetResearch)
 			break;
 
 		SEntityResearch				& product		= playerProjects.QueuedResearch[iProduct];
-		int32_t						assignedFunds	= ::nwol::min(budgetResearch-actualCostResearch, product.PriceUnit-product.PricePaid);
+		int32_t						assignedFunds	= ::gpk::min(budgetResearch-actualCostResearch, product.PriceUnit-product.PricePaid);
 		//product.PriceUnit		-= assignedFunds;
 		product.PricePaid		+= assignedFunds;
 		actualCostResearch		+= assignedFunds;

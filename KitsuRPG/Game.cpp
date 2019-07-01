@@ -376,7 +376,7 @@ void																	tavern										(klib::CCharacter& adventurer)						{
 
 void																	mercenaryJob								(klib::CCharacter& adventurer)						{
 	// Build menu items.
-	static const size_t															enemyCount									= nwol::size(klib::enemyDefinitions);
+	static const size_t															enemyCount									= ::gpk::size(klib::enemyDefinitions);
 	::std::string t;
 	klib::SMenuItem<int32_t> jobOptions[enemyCount];
 	for(int32_t i=0, count = enemyCount-1; i<count; ++i) {
@@ -401,8 +401,8 @@ void																	mercenaryJob								(klib::CCharacter& adventurer)						{
 template<size_t _Size>
 static int																initializeItemMenu							(klib::SMenuItem<klib::SItem>(&menuItems)[_Size])	{
 	char																		itemOption[128]								= {};
-	static const size_t															descriptionCount							= nwol::size(klib::itemDescriptions);
-	static const size_t															gradeCount									= nwol::size(klib::itemGrades);
+	static const size_t															descriptionCount							= ::gpk::size(klib::itemDescriptions);
+	static const size_t															gradeCount									= ::gpk::size(klib::itemGrades);
 	for(int32_t indexItem = 0, itemCount = descriptionCount - 1; indexItem < itemCount; ++indexItem) {
 		const int32_t																indexDefinition								= (int32_t)indexItem + 1;
 		for(int32_t grade = 0; grade < gradeCount; ++grade) {

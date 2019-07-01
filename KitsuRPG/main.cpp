@@ -11,7 +11,7 @@
 #include "Facility.h"
 
 #include "GameMenu.h"
-#include "ascii_screen.h"
+#include "klib_ascii_screen.h"
 
 #include <iostream>
 #include <algorithm>
@@ -35,7 +35,7 @@ int												main											(int argc, char **argv)											{
 
 	srand((unsigned int)time(NULL));
 
-	::nwol::initASCIIScreen(132, 60);
+	::klib::initASCIIScreen(132, 60);
 
 	printf("Welcome Stranger!! who are you?\n");
 	printf("My name is: \n");
@@ -67,7 +67,7 @@ int												main											(int argc, char **argv)											{
 	if( pAdventurer )
 		delete(pAdventurer);
 
-	::nwol::shutdownASCIIScreen();
+	::klib::shutdownASCIIScreen();
 }
 
 //

@@ -38,7 +38,7 @@ namespace klib
 					continue;
 
 				agentsInRange.Agents[agentsInRange.Count++]					= {tacticalInfo.Setup.TeamPerPlayer[iPlayer], (int8_t)iPlayer, 0, (int8_t)iAgent};
-				if(agentsInRange.Count >= (int32_t)nwol::size(agentsInRange.Agents))
+				if(agentsInRange.Count >= (int32_t)::gpk::size(agentsInRange.Agents))
 					break;
 			}
 		}

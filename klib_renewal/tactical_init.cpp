@@ -450,16 +450,16 @@ bool												initCampaignPlayers									(SGame& instanceGame)											{
 						::setupAgent(agentAI, agentAI);
 					else {
 						bHeroSet											= true;
-						agentAI												= enemyDefinitions[::nwol::size(enemyDefinitions)-1];
+						agentAI												= enemyDefinitions[::gpk::size(enemyDefinitions)-1];
 						::setupAgent(agentAI, agentAI);
-						agentAI.CurrentEquip.Weapon		.Definition			= (int16_t)::nwol::size(definitionsWeapon)-1;
-						agentAI.CurrentEquip.Armor		.Definition			= (int16_t)::nwol::size(definitionsArmor)-1;
-						agentAI.CurrentEquip.Profession	.Definition			= (int16_t)::nwol::size(definitionsProfession)-1;
-						agentAI.CurrentEquip.Accessory	.Definition			= (int16_t)::nwol::size(definitionsAccessory)-1;
-						agentAI.CurrentEquip.Weapon		.Modifier			= (int16_t)::nwol::size(modifiersWeapon)-1;
-						agentAI.CurrentEquip.Armor		.Modifier			= (int16_t)::nwol::size(modifiersArmor)-1;
-						agentAI.CurrentEquip.Profession	.Modifier			= (int16_t)::nwol::size(modifiersProfession)-1;
-						agentAI.CurrentEquip.Accessory	.Modifier			= (int16_t)::nwol::size(modifiersAccessory)-1;
+						agentAI.CurrentEquip.Weapon		.Definition			= (int16_t)::gpk::size(definitionsWeapon)-1;
+						agentAI.CurrentEquip.Armor		.Definition			= (int16_t)::gpk::size(definitionsArmor)-1;
+						agentAI.CurrentEquip.Profession	.Definition			= (int16_t)::gpk::size(definitionsProfession)-1;
+						agentAI.CurrentEquip.Accessory	.Definition			= (int16_t)::gpk::size(definitionsAccessory)-1;
+						agentAI.CurrentEquip.Weapon		.Modifier			= (int16_t)::gpk::size(modifiersWeapon)-1;
+						agentAI.CurrentEquip.Armor		.Modifier			= (int16_t)::gpk::size(modifiersArmor)-1;
+						agentAI.CurrentEquip.Profession	.Modifier			= (int16_t)::gpk::size(modifiersProfession)-1;
+						agentAI.CurrentEquip.Accessory	.Modifier			= (int16_t)::gpk::size(modifiersAccessory)-1;
 						agentAI.CurrentEquip.Weapon		.Level				= 
 						agentAI.CurrentEquip.Armor		.Level				=  
 						agentAI.CurrentEquip.Profession	.Level				= 
@@ -492,7 +492,7 @@ bool												initCampaignGame									(SGame& instanceGame)											{
 	::klib::initTacticalMap(instanceGame);
 	::klib::drawTacticalBoard(instanceGame, tacticalInfo, instanceGame.PostEffectDisplay, PLAYER_INDEX_USER, TEAM_TYPE_CIVILIAN, instanceGame.Players[PLAYER_INDEX_USER].Selection, true);
 
-	::nwol::bit_set(instanceGame.Flags, klib::GAME_FLAGS_TACTICAL);
+	::gpk::bit_set(instanceGame.Flags, klib::GAME_FLAGS_TACTICAL);
 	tacticalInfo.CurrentPlayer							= (int8_t)::resolveNextPlayer(instanceGame);
 	return true;
 }

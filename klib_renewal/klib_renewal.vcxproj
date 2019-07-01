@@ -164,7 +164,9 @@
     <ClInclude Include="Accessory.h" />
     <ClInclude Include="Agent_helper.h" />
     <ClInclude Include="Armor.h" />
-    <ClInclude Include="ascii_screen.h" />
+    <ClInclude Include="klib_ascii_color.h" />
+    <ClInclude Include="klib_ascii_reference.h" />
+    <ClInclude Include="klib_ascii_screen.h" />
     <ClInclude Include="CharacterPoints.h" />
     <ClInclude Include="CharacterTile.h" />
     <ClInclude Include="Combat.h" />
@@ -184,8 +186,12 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="helper_projects.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="klib_ascii_display.h" />
+    <ClInclude Include="klib_ascii_target.h" />
+    <ClInclude Include="klib_fill.h" />
     <ClInclude Include="klib_grid.h" />
-    <ClInclude Include="klib_misc.h" />
+    <ClInclude Include="klib_input.h" />
+    <ClInclude Include="klib_draw_misc.h" />
     <ClInclude Include="klib_random_generator.h" />
     <ClInclude Include="klib_text.h" />
     <ClInclude Include="klib_timer.h" />
@@ -206,13 +212,15 @@
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ascii_screen.cpp" />
+    <ClCompile Include="klib_ascii_screen.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Combat.cpp" />
     <ClCompile Include="draw.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Combat_grenade.cpp" />
     <ClCompile Include="Combat_potion.cpp" />
+    <ClCompile Include="klib_ascii_display.cpp" />
+    <ClCompile Include="klib_ascii_target.cpp" />
     <ClCompile Include="klib_text.cpp" />
     <ClCompile Include="klib_timer.cpp" />
     <ClCompile Include="menu_control_center.cpp" />

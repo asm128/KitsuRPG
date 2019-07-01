@@ -2,7 +2,7 @@
 #include "Agent_helper.h"
 #include "EntityDetail.h"
 
-#include "ascii_reference.h"
+#include "klib_ascii_reference.h"
 
 using namespace klib;
 
@@ -15,7 +15,7 @@ struct SListItem {
 	std::string	Text;
 };
 
-int32_t mouseOverList(const nwol::SInput& frameInput, uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width) {
+int32_t mouseOverList(const ::klib::SInput& frameInput, uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width) {
 	int32_t indexSelected = -1;
 	for(uint32_t iRow = 0; iRow < rowCount; ++iRow)
 		if(mouseOver(frameInput.Mouse.Deltas.x, frameInput.Mouse.Deltas.y, offsetX, offsetY+iRow, width)) {
@@ -27,7 +27,7 @@ int32_t mouseOverList(const nwol::SInput& frameInput, uint32_t rowCount, int32_t
 }
 
 template <typename _TReturn, size_t _Size>
-_TReturn processListInput(const nwol::SInput& frameInput, const SListItem<_TReturn> (&listItems)[_Size], uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width, const _TReturn& noActionValue) {
+_TReturn processListInput(const ::klib::SInput& frameInput, const SListItem<_TReturn> (&listItems)[_Size], uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width, const _TReturn& noActionValue) {
 	int32_t indexSelected = mouseOverList(frameInput, rowCount, offsetX, offsetY, width);
 	if(indexSelected != -1 && (indexSelected & 0x80000000))
 		return listItems[indexSelected & ~0x80000000].ReturnValue;
@@ -40,25 +40,25 @@ template <typename _TReturn, size_t _Width, size_t _Height, size_t _SizeList>
 int32_t drawList(SWeightedDisplay<_Width, _Height>& display, const SListItem<_TReturn> (&listItems)[_SizeList], uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width) {
 	char formatRow[128] = {};
 	sprintf_s(formatRow, "%%-%i.%is", width, width);
-	rowCount = nwol::min((uint32_t)_SizeList, rowCount);
+	rowCount = ::gpk::min((uint32_t)_SizeList, rowCount);
 	for(uint32_t iRow = 0; iRow < rowCount; ++iRow)
-		::klib::printfToGridColored(display.Screen, display.TextAttributes, (uint16_t)listItems[iRow].Color, offsetY+iRow, offsetX, nwol::SCREEN_LEFT, formatRow, listItems[iRow].Text.c_str());
+		::klib::printfToGridColored(display.Screen, display.TextAttributes, (uint16_t)listItems[iRow].Color, offsetY+iRow, offsetX, ::klib::SCREEN_LEFT, formatRow, listItems[iRow].Text.c_str());
 
 	return 0;
 }
 
 template <typename _TReturn>
-int32_t drawList(SGlobalDisplay& display, const ::nwol::array_obj<SListItem<_TReturn>>& listItems, uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width) {
+int32_t drawList(SGlobalDisplay& display, const ::gpk::array_obj<SListItem<_TReturn>>& listItems, uint32_t rowCount, int32_t offsetX, int32_t offsetY, int32_t width) {
 	char formatRow[128] = {};
 	sprintf_s(formatRow, "%%-%i.%is", width, width);
 	for(uint32_t iRow = 0; iRow < rowCount; ++iRow) {
 		const std::string& rowText = listItems[iRow].Text;
-		::klib::printfToGridColored(display.Screen, display.TextAttributes, (uint16_t)listItems[iRow].Color, offsetY, offsetX, nwol::SCREEN_LEFT, formatRow, rowText.c_str());
+		::klib::printfToGridColored(display.Screen, display.TextAttributes, (uint16_t)listItems[iRow].Color, offsetY, offsetX, ::klib::SCREEN_LEFT, formatRow, rowText.c_str());
 	}
 	return 0;
 }
 
-int32_t processEquipAgentInput(SGlobalDisplay& display, const nwol::SInput& frameInput, const SPlayer& player, uint32_t rowCount, int32_t offsetY, int32_t offsetX) {
+int32_t processEquipAgentInput(SGlobalDisplay& display, const ::klib::SInput& frameInput, const SPlayer& player, uint32_t rowCount, int32_t offsetY, int32_t offsetX) {
 	const int32_t mouseX = frameInput.Mouse.Deltas.x; 
 	const int32_t mouseY = frameInput.Mouse.Deltas.y; 
 	int32_t indexEquip = -1;
@@ -87,27 +87,27 @@ int32_t drawAgentResume(SGlobalDisplay& display, const CCharacter& agent, int32_
 	std::string equipName;
 
 	finalColor = (selectedAgentField == ENTITY_TYPE_CHARACTER) ? (genderColor<<4)|COLOR_DARKGREY : (COLOR_DARKGREY<<4)|genderColor;											
-	columnOffset = printfToGridColored(display.Screen, display.TextAttributes, finalColor, offsetY++, offsetX, nwol::SCREEN_LEFT, " %c - %-38.38s", ::nwol::ascii_gender[agent.Flags.Tech.Gender], agent.Name.c_str());
+	columnOffset = printfToGridColored(display.Screen, display.TextAttributes, finalColor, offsetY++, offsetX, ::klib::SCREEN_LEFT, " %c - %-38.38s", ::klib::ascii_gender[agent.Flags.Tech.Gender], agent.Name.c_str());
 
 	SListItem<int32_t> equipSlots[4];
-	for(uint32_t i=0; i<nwol::size(equipSlots); ++i)
+	for(uint32_t i=0; i<::gpk::size(equipSlots); ++i)
 		equipSlots[i].Color = (selectedAgentField == i+1) ? COLOR_GREEN : COLOR_GREEN << 4; 
 
 	equipName = getProfessionName	(agent.CurrentEquip.Profession	);	sprintf_s(formatted, " %-10.10s: %-30.30s", "Job"		, equipName.c_str());	equipSlots[ENTITY_TYPE_PROFESSION	-1].Text = std::string(formatted);
 	equipName = getWeaponName		(agent.CurrentEquip.Weapon		);	sprintf_s(formatted, " %-10.10s: %-30.30s", "Weapon"	, equipName.c_str());	equipSlots[ENTITY_TYPE_WEAPON		-1].Text = std::string(formatted);
 	equipName = getArmorName		(agent.CurrentEquip.Armor		);	sprintf_s(formatted, " %-10.10s: %-30.30s", "Armor"		, equipName.c_str());	equipSlots[ENTITY_TYPE_ARMOR		-1].Text = std::string(formatted);
 	equipName = getAccessoryName	(agent.CurrentEquip.Accessory	);	sprintf_s(formatted, " %-10.10s: %-30.30s", "Accessory"	, equipName.c_str());	equipSlots[ENTITY_TYPE_ACCESSORY	-1].Text = std::string(formatted);
-	drawList(display, equipSlots, (uint32_t)nwol::size(equipSlots), offsetX, offsetY, 43);
+	drawList(display, equipSlots, (uint32_t)::gpk::size(equipSlots), offsetX, offsetY, 43);
 
-	offsetY += (uint32_t)nwol::size(equipSlots);
+	offsetY += (uint32_t)::gpk::size(equipSlots);
 
-	sprintf_s(preformatted0, "%i", agent.Points.LifeCurrent.Health	);	sprintf_s(preformatted1, "%i", agent.FinalPoints.LifeMax.Health	);	sprintf_s(formatted, " Health    : %7.7s/%7.7s"	, preformatted0, preformatted1); columnOffset = printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0, offsetY++, offsetX, nwol::SCREEN_LEFT, "%-43.43s", formatted);
-	sprintf_s(preformatted0, "%i", agent.Points.LifeCurrent.Mana	);	sprintf_s(preformatted1, "%i", agent.FinalPoints.LifeMax.Mana	);	sprintf_s(formatted, " Mana      : %7.7s/%7.7s"	, preformatted0, preformatted1); columnOffset = printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0, offsetY++, offsetX, nwol::SCREEN_LEFT, "%-43.43s", formatted);
-	sprintf_s(preformatted0, "%i", agent.Points.LifeCurrent.Shield	);	sprintf_s(preformatted1, "%i", agent.FinalPoints.LifeMax.Shield	);	sprintf_s(formatted, " Shield    : %7.7s/%7.7s"	, preformatted0, preformatted1); columnOffset = printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0, offsetY++, offsetX, nwol::SCREEN_LEFT, "%-43.43s", formatted);
+	sprintf_s(preformatted0, "%i", agent.Points.LifeCurrent.Health	);	sprintf_s(preformatted1, "%i", agent.FinalPoints.LifeMax.Health	);	sprintf_s(formatted, " Health    : %7.7s/%7.7s"	, preformatted0, preformatted1); columnOffset = printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0, offsetY++, offsetX, ::klib::SCREEN_LEFT, "%-43.43s", formatted);
+	sprintf_s(preformatted0, "%i", agent.Points.LifeCurrent.Mana	);	sprintf_s(preformatted1, "%i", agent.FinalPoints.LifeMax.Mana	);	sprintf_s(formatted, " Mana      : %7.7s/%7.7s"	, preformatted0, preformatted1); columnOffset = printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0, offsetY++, offsetX, ::klib::SCREEN_LEFT, "%-43.43s", formatted);
+	sprintf_s(preformatted0, "%i", agent.Points.LifeCurrent.Shield	);	sprintf_s(preformatted1, "%i", agent.FinalPoints.LifeMax.Shield	);	sprintf_s(formatted, " Shield    : %7.7s/%7.7s"	, preformatted0, preformatted1); columnOffset = printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0, offsetY++, offsetX, ::klib::SCREEN_LEFT, "%-43.43s", formatted);
 	return 0;
 }
 
-int32_t processSliderInput(const nwol::SInput& frameInput, int32_t offsetY, int32_t offsetX, int32_t& value, int32_t minValue, int32_t maxValue, int32_t labelMaxLen) {
+int32_t processSliderInput(const ::klib::SInput& frameInput, int32_t offsetY, int32_t offsetX, int32_t& value, int32_t minValue, int32_t maxValue, int32_t labelMaxLen) {
 	int32_t mouseX = frameInput.Mouse.Deltas.x; 
 	int32_t mouseY = frameInput.Mouse.Deltas.y; 
 		 if( mouseOver(mouseX, mouseY, offsetX+11, offsetY, 3) && frameInput.Mouse.Buttons[0]) {if( value > minValue ) --value; }
@@ -119,16 +119,16 @@ int32_t processSliderInput(const nwol::SInput& frameInput, int32_t offsetY, int3
 int32_t drawValueSlider(SGlobalDisplay& display, int32_t offsetY, int32_t offsetX, int32_t value, int32_t labelMaxLen, const ::gpk::label& controlLabel ) {
 	char preformatted[16] = {};
 	
-	sprintf_s(preformatted, "%%-%i.%is:", labelMaxLen, labelMaxLen);	; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0	, offsetY, offsetX+00				, nwol::SCREEN_LEFT, preformatted	, controlLabel.begin());
-	preformatted[0] = ::nwol::ascii_arrow[1]; preformatted[1] = 0;		; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<4	, offsetY, offsetX+labelMaxLen+ 1	, nwol::SCREEN_LEFT, " %s "			, preformatted);
-	sprintf_s(preformatted, "%i", value);								; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0	, offsetY, offsetX+labelMaxLen+ 4	, nwol::SCREEN_LEFT, " %3.3s%% "	, preformatted);
-	preformatted[0] = ::nwol::ascii_arrow[3]; preformatted[1] = 0;		; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<4	, offsetY, offsetX+labelMaxLen+10	, nwol::SCREEN_LEFT, " %s"			, preformatted);
+	sprintf_s(preformatted, "%%-%i.%is:", labelMaxLen, labelMaxLen);	; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0	, offsetY, offsetX+00				, ::klib::SCREEN_LEFT, preformatted	, controlLabel.begin());
+	preformatted[0] = ::klib::ascii_arrow[1]; preformatted[1] = 0;		; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<4	, offsetY, offsetX+labelMaxLen+ 1	, ::klib::SCREEN_LEFT, " %s "			, preformatted);
+	sprintf_s(preformatted, "%i", value);								; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<0	, offsetY, offsetX+labelMaxLen+ 4	, ::klib::SCREEN_LEFT, " %3.3s%% "	, preformatted);
+	preformatted[0] = ::klib::ascii_arrow[3]; preformatted[1] = 0;		; printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN<<4	, offsetY, offsetX+labelMaxLen+10	, ::klib::SCREEN_LEFT, " %s"			, preformatted);
 	return 0;
 };
 
-void drawBalance(SGlobalDisplay& display, const nwol::SInput& frameInput, SPlayer& player, int32_t offsetX, int32_t offsetY) {
+void drawBalance(SGlobalDisplay& display, const ::klib::SInput& frameInput, SPlayer& player, int32_t offsetX, int32_t offsetY) {
 	// Budgets
-	printfToGridColored(display.Screen, display.TextAttributes, COLOR_YELLOW << 4, offsetY, offsetX+14, nwol::SCREEN_LEFT, "%s", "    Project budgets   ");
+	printfToGridColored(display.Screen, display.TextAttributes, COLOR_YELLOW << 4, offsetY, offsetX+14, ::klib::SCREEN_LEFT, "%s", "    Project budgets   ");
 	drawValueSlider		(display	, offsetY+2, offsetX+14, player.Projects.BudgetProduction	.Money	, 10, "Production");
 	drawValueSlider		(display	, offsetY+4, offsetX+14, player.Projects.BudgetResearch		.Money	, 10, "Research");
 	processSliderInput	(frameInput	, offsetY+2, offsetX+14, player.Projects.BudgetProduction	.Money	, 0, 100, 10);
@@ -140,20 +140,20 @@ void drawBalance(SGlobalDisplay& display, const nwol::SInput& frameInput, SPlaye
 	int32_t fundsAfterCost	= funds - cost;
 
 	int32_t productionCost	= (int32_t)(fundsAfterCost* (player.Projects.BudgetProduction	.Money/100.0));
-	productionCost			= std::max(0, nwol::min(productionCost, player.Projects.CostProduction	));
+	productionCost			= ::gpk::max(0, ::gpk::min(productionCost, player.Projects.CostProduction	));
 
 	int32_t researchCost	= (int32_t)((fundsAfterCost-productionCost)*(player.Projects.BudgetResearch.Money/100.0));
-	researchCost			= std::max(0, nwol::min(researchCost, player.Projects.CostResearch		));
+	researchCost			= ::gpk::max(0, ::gpk::min(researchCost, player.Projects.CostResearch		));
 
 	char formatted[64];
 	sprintf_s(formatted, "%15.15s%s%14.14s", "", "Balance", "");
-	printfToGridColored(display.Screen, display.TextAttributes, COLOR_YELLOW << 4, offsetY+7, offsetX, nwol::SCREEN_LEFT, "%s", formatted);
+	printfToGridColored(display.Screen, display.TextAttributes, COLOR_YELLOW << 4, offsetY+7, offsetX, ::klib::SCREEN_LEFT, "%s", formatted);
 
 	// draw fields
 	int32_t selectedIndex = mouseOverList(frameInput, 5, offsetX, offsetY+8, 37) & ~0x80000000;
 	SListItem<int32_t> balanceOptions[5] = {};
 
-	for(uint32_t i=0; i<nwol::size(balanceOptions); ++i)
+	for(uint32_t i=0; i<::gpk::size(balanceOptions); ++i)
 		balanceOptions[i].Color = (selectedIndex == i) ? COLOR_GREEN : COLOR_GREEN << 4; 
 	
 	char preformatted[16];
@@ -163,7 +163,7 @@ void drawBalance(SGlobalDisplay& display, const nwol::SInput& frameInput, SPlaye
 	sprintf_s(preformatted, "%i", researchCost								);	sprintf_s(formatted, " Research Cost       : %13.13s", preformatted); balanceOptions[3].Text = std::string(formatted); 
 	sprintf_s(preformatted, "%i", fundsAfterCost-productionCost-researchCost);	sprintf_s(formatted, " Funds after mission : %13.13s", preformatted); balanceOptions[4].Text = std::string(formatted); 
 																			
-	drawList(display, balanceOptions, (uint32_t)nwol::size(balanceOptions), offsetX, offsetY+8, 36);
+	drawList(display, balanceOptions, (uint32_t)::gpk::size(balanceOptions), offsetX, offsetY+8, 36);
 
 }
 
@@ -185,10 +185,10 @@ int32_t drawEquipDetail
 	
 	char formattedTitle[32] = {};
 	sprintf_s(formattedTitle, " - %s:", entityTypeName.begin());
-	for(uint32_t i=4, count= (uint32_t)nwol::size(formattedTitle); i<count; ++i)
+	for(uint32_t i=4, count= (uint32_t)::gpk::size(formattedTitle); i<count; ++i)
 		formattedTitle[i] = tolower(formattedTitle[i]);
 
-	printfToGridColored(display.Screen, display.TextAttributes, COLOR_YELLOW << 4 | COLOR_BLUE, offsetY, offsetX, nwol::SCREEN_LEFT, "%-37.37s", formattedTitle);
+	printfToGridColored(display.Screen, display.TextAttributes, COLOR_YELLOW << 4 | COLOR_BLUE, offsetY, offsetX, ::klib::SCREEN_LEFT, "%-37.37s", formattedTitle);
 
 	return 0;
 }
@@ -196,7 +196,7 @@ int32_t drawEquipDetail
 template <typename _TEntity, size_t _Size, size_t _DefinitionCount, size_t _ModifierCount>
 int32_t drawEquipList
 (	SGlobalDisplay& display
-,	const nwol::SInput& frameInput
+,	const ::klib::SInput& frameInput
 ,	const SPlayer& player
 ,	const CCharacter& agent
 ,	int32_t offsetY
@@ -210,7 +210,7 @@ int32_t drawEquipList
 {
 	char formattedTitle[32] = {};
 	sprintf_s(formattedTitle, " - %s:", entityTypeName.begin());
-	for(uint32_t i=4; i<nwol::size(formattedTitle); ++i)
+	for(uint32_t i=4; i<::gpk::size(formattedTitle); ++i)
 		formattedTitle[i] = tolower(formattedTitle[i]);
 
 	selectedRow &= ~0x80000000;
@@ -220,7 +220,7 @@ int32_t drawEquipList
 		entityName = getEntityName(entityContainer[iEntity].Entity, tableDefinitions, tableModifiers); 
 		uint16_t colorRow = (iEntity == selectedRow) ? COLOR_YELLOW : COLOR_YELLOW << 4;
 
-		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+iEntity, offsetX, nwol::SCREEN_LEFT, "%12.12s %-30.30s", "", entityName.c_str());
+		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+iEntity, offsetX, ::klib::SCREEN_LEFT, "%12.12s %-30.30s", "", entityName.c_str());
 	} 
 
 	return 0;
@@ -228,7 +228,7 @@ int32_t drawEquipList
 
 int32_t drawAgentList
 (	SGlobalDisplay& display
-,	const nwol::SInput& frameInput
+,	const ::klib::SInput& frameInput
 ,	const SPlayer& player
 ,	int32_t offsetY
 ,	int32_t offsetX
@@ -247,10 +247,10 @@ int32_t drawAgentList
 		const std::string& entityName = agent.Name; 
 		uint16_t colorRow = (iEntity == selectedRow) ? COLOR_YELLOW : COLOR_YELLOW << 4;
 
-		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, nwol::SCREEN_LEFT, " %c - %-38.38s", ::nwol::ascii_gender[agent.Flags.Tech.Gender], entityName.c_str());
+		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, ::klib::SCREEN_LEFT, " %c - %-38.38s", ::klib::ascii_gender[agent.Flags.Tech.Gender], entityName.c_str());
 		colorRow &= 0xF0;
 		colorRow |= agent.Flags.Tech.Gender == GENDER_FEMALE ? COLOR_MAGENTA : agent.Flags.Tech.Gender == GENDER_MALE ? COLOR_CYAN : COLOR_GREEN;
-		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, nwol::SCREEN_LEFT, " %c", ::nwol::ascii_gender[agent.Flags.Tech.Gender]);
+		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, ::klib::SCREEN_LEFT, " %c", ::klib::ascii_gender[agent.Flags.Tech.Gender]);
 		
 		++actualRowsDisplayed;
 	} 
@@ -259,7 +259,7 @@ int32_t drawAgentList
 }
 
 // 
-int32_t drawEquipList(ENTITY_TYPE entityType, SGlobalDisplay& display, const nwol::SInput& frameInput, const SPlayer& player, const CCharacter& agent, int32_t offsetY, int32_t offsetX, int32_t selectedRow) {
+int32_t drawEquipList(ENTITY_TYPE entityType, SGlobalDisplay& display, const ::klib::SInput& frameInput, const SPlayer& player, const CCharacter& agent, int32_t offsetY, int32_t offsetX, int32_t selectedRow) {
 	const ::gpk::label& labelet = ::gpk::get_value_label(entityType);
 
 	switch(entityType) {
@@ -276,7 +276,7 @@ int32_t drawEquipList(ENTITY_TYPE entityType, SGlobalDisplay& display, const nwo
 	return -1;
 }
 
-int32_t processEquipInput(ENTITY_TYPE entityType, SGlobalDisplay& display, const nwol::SInput& frameInput, const SPlayer& player, int32_t offsetY, int32_t offsetX)
+int32_t processEquipInput(ENTITY_TYPE entityType, SGlobalDisplay& display, const ::klib::SInput& frameInput, const SPlayer& player, int32_t offsetY, int32_t offsetX)
 {
 	int32_t tempRow = -1;
 				
@@ -323,7 +323,7 @@ int32_t drawWelcomeGUI(SGame& instanceGame, const SGameState& returnValue) {
 	SPlayer& player					= instanceGame.Players[PLAYER_INDEX_USER];
 
 	// Squad
-	printfToGridColored(display.Screen, display.TextAttributes, COLOR_YELLOW << 4, TACTICAL_DISPLAY_POSY-2, 1, nwol::SCREEN_LEFT, "%-43.43s", " Assigned squad:");
+	printfToGridColored(display.Screen, display.TextAttributes, COLOR_YELLOW << 4, TACTICAL_DISPLAY_POSY-2, 1, ::klib::SCREEN_LEFT, "%-43.43s", " Assigned squad:");
 	int32_t agentsDisplayed			= 0;
 	int32_t selectedRow				= -1;
 	int32_t indexRow				= -1;
@@ -441,14 +441,14 @@ SGameState drawWelcome(SGame& instanceGame, const SGameState& returnValue) {
 	int32_t							columnOffset		=  display.Screen.Width/2-(int32_t)textToPrint.size()/2;
 
 	bool							bDonePrinting		= ::klib::getMessageSlow(instanceGame.SlowMessage, {textToPrint.data(), (uint32_t)textToPrint.size()}, instanceGame.FrameTimer.LastTimeSeconds);
-	columnOffset				= printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN, lineOffset, columnOffset, nwol::SCREEN_LEFT, "%s", instanceGame.SlowMessage);
+	columnOffset				= printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN, lineOffset, columnOffset, ::klib::SCREEN_LEFT, "%s", instanceGame.SlowMessage);
 
 	if ( bDonePrinting ) {
 		drawWelcomeGUI(instanceGame, returnValue);
 
 		// Menu
 		static const SMenu<SGameState>	menuControlCenter	({GAME_STATE_MENU_MAIN}, "Control Center", 28);
-		bool							bInCourse			= ::gpk::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL) || nwol::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE);
+		bool							bInCourse			= ::gpk::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL) || ::gpk::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL_REMOTE);
 
 		return drawMenu(display.Screen, &display.TextAttributes[0][0], menuControlCenter, (bInCourse) ? optionsControlCenterMissionInCourse : optionsControlCenter, instanceGame.FrameInput, returnValue);
 	}

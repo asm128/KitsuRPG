@@ -135,9 +135,6 @@
     <ClInclude Include="EntityDetail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ascii_screen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="klib_grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -150,7 +147,28 @@
     <ClInclude Include="klib_timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="klib_misc.h">
+    <ClInclude Include="klib_ascii_display.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_ascii_target.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_fill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_ascii_color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_ascii_reference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_ascii_screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_draw_misc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -218,13 +236,19 @@
     <ClCompile Include="player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ascii_screen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="klib_text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="klib_timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="klib_ascii_display.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="klib_ascii_target.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="klib_ascii_screen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
