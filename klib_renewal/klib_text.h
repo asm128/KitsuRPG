@@ -1,8 +1,8 @@
 /// Copyright 2016-2017 - asm128
-#include "nwol_misc.h"
-#include "nwol_label.h"
 #include "nwol_ascii_target.h"
-#include "nwol_array.h"
+#include "nwol_misc.h"
+#include "gpk_label.h"
+#include "gpk_array.h"
 
 #include <cstring>
 

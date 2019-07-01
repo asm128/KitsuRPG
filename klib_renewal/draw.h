@@ -3,7 +3,6 @@
 #include "Game.h"
 
 #include "gpk_noise.h"
-#include "nwol_noise.h"
 
 #include "gpk_view_array.h"
 
@@ -23,11 +22,11 @@ namespace klib
 		for(int32_t x=0; x<displayWidth; ++x) 
 			if(display.DisplayWeights[0][x] == 0)  {
 				if( 0 == (rand()%200) && x % 2) {
-					display.Screen			.Cells[0][x]					= (nwol::noise1D((uint32_t)(lastTimeSeconds*10000+x), disturbance) > 0.0) ? '.' : (nwol::noise1D((uint32_t)(lastTimeSeconds*10000-x*x), disturbance) > 0.0) ? 15 : ',';	
+					display.Screen			.Cells[0][x]					= (::gpk::noise1D((uint32_t)(lastTimeSeconds*10000+x), disturbance) > 0.0) ? '.' : (::gpk::noise1D((uint32_t)(lastTimeSeconds*10000-x*x), disturbance) > 0.0) ? 15 : ',';	
 					display.DisplayWeights	.Cells[0][x]					= .00001f;
 					display.Speed			.Cells[0][x]					= rand()*.001f;
 					display.SpeedTarget		.Cells[0][x]					= rand()*.001f;
-					display.TextAttributes	.Cells[0][x]					= (nwol::noise1D((uint32_t)(lastTimeSeconds*10000-x), disturbance) > 0.0) ? COLOR_CYAN:COLOR_WHITE;
+					display.TextAttributes	.Cells[0][x]					= (::gpk::noise1D((uint32_t)(lastTimeSeconds*10000-x), disturbance) > 0.0) ? COLOR_CYAN:COLOR_WHITE;
 				}
 			}
 	
@@ -51,10 +50,10 @@ namespace klib
 
 				if(display.DisplayWeights.Cells[z][x] > 1.0) {
 					int															randX										= (rand()%2) ? rand()%(1+disturbance*2)-disturbance : 0;
-					int32_t														xpos										= std::max(std::min((int)x+randX, displayWidth-1), 0);
+					int32_t														xpos										= ::gpk::max(::gpk::min((int)x+randX, displayWidth-1), 0);
 					display.Screen			.Cells[z+1][xpos]				= display.Screen.Cells			[z][x];
 					display.Speed			.Cells[z+1][xpos]				= display.Speed.Cells			[z][x];
-					display.TextAttributes	.Cells[z+1][xpos]				= (nwol::noise1D((uint32_t)(lastTimeSeconds*10000+x), disturbance) > 0.0) ? COLOR_CYAN:COLOR_WHITE;
+					display.TextAttributes	.Cells[z+1][xpos]				= (::gpk::noise1D((uint32_t)(lastTimeSeconds*10000+x), disturbance) > 0.0) ? COLOR_CYAN:COLOR_WHITE;
 					//display.TextAttributes	.Cells[z+1][xpos]			= display.TextAttributes.Cells	[z][x];
 					display.DisplayWeights	.Cells[z+1][xpos]				= 0.0001f;
 					display.SpeedTarget		.Cells[z+1][xpos]				= (float)((rand()%5000))*0.001f+0.001f;
@@ -81,11 +80,11 @@ namespace klib
 		for(int32_t x=0; x<displayWidth; ++x) 
 			if(display.DisplayWeights.Cells[firstRow][x] == 0) {
 				if( 0 == (rand()%4) ) {
-					display.Screen			.Cells[firstRow][x]				=  (nwol::noise1D(randBase+x, seed+1203) > 0.0) ? '.' :  (nwol::noise1D(randBase+1+x*x, seed+1235) > 0.0) ? '|' : ',';
+					display.Screen			.Cells[firstRow][x]				=  (::gpk::noise1D(randBase+x, seed+1203) > 0.0) ? '.' :  (::gpk::noise1D(randBase+1+x*x, seed+1235) > 0.0) ? '|' : ',';
 					display.DisplayWeights	.Cells[firstRow][x]				= .00001f;
 					display.Speed			.Cells[firstRow][x]				= rand()*.001f+0.001f;
 					display.SpeedTarget		.Cells[firstRow][x]				= rand()*.0009f+0.001f;
-					display.TextAttributes	.Cells[firstRow][x]				= bReverse ? ((nwol::noise1D(randBase+321+x, seed+91423) > 0.0)?COLOR_CYAN:COLOR_BLUE) :  (nwol::noise1D(randBase+32+x, seed<<1) > 0.0) ? COLOR_RED : (nwol::noise1D(randBase+987429654+x, seed+98234) > 0.0) ? COLOR_ORANGE : COLOR_DARKYELLOW;
+					display.TextAttributes	.Cells[firstRow][x]				= bReverse ? ((::gpk::noise1D(randBase+321+x, seed+91423) > 0.0)?COLOR_CYAN:COLOR_BLUE) :  (::gpk::noise1D(randBase+32+x, seed<<1) > 0.0) ? COLOR_RED : (::gpk::noise1D(randBase+987429654+x, seed+98234) > 0.0) ? COLOR_ORANGE : COLOR_DARKYELLOW;
 				}
 			}
 
@@ -114,8 +113,8 @@ namespace klib
 					continue;
 			
 				if(display.DisplayWeights.Cells[z][x] > 1.0) {
-					int randX = ((nwol::noise1D(randBase+x+z*display.Width), seed+544) > 0.0) ? rand()%(1+disturbance*2)-disturbance : 0;
-					int32_t xpos = std::min(std::max(0, (int)x+randX), displayWidth-1);
+					int randX = ((::gpk::noise1D(randBase+x+z*display.Width), seed+544) > 0.0) ? rand()%(1+disturbance*2)-disturbance : 0;
+					int32_t xpos = ::gpk::min(::gpk::max(0, (int)x+randX), displayWidth-1);
 					int32_t zpos = bReverse ? z+1 : z-1;
 	
 					if((rand()%disappearChanceDivisor) == 0) {
@@ -125,7 +124,7 @@ namespace klib
 					else { 
 						if(('|' == display.Screen	.Cells[z][x]) && z < (display.Depth/5*4)) {
 							display.Screen			.Cells[zpos][xpos] = '.';
-							display.TextAttributes	.Cells[zpos][xpos] = ((bReverse) || (nwol::noiseNormal1D(x, seed<<2) < 0.0)) ? COLOR_DARKGREY : COLOR_YELLOW; 
+							display.TextAttributes	.Cells[zpos][xpos] = ((bReverse) || (::gpk::noiseNormal1D(x, seed<<2) < 0.0)) ? COLOR_DARKGREY : COLOR_YELLOW; 
 						}
 						else if( bReverse && z > (display.Depth/5)) {
 							display.Screen			.Cells[zpos][xpos] = '|';
@@ -138,7 +137,7 @@ namespace klib
 
 						display.DisplayWeights	.Cells[zpos][xpos]	= 0.00001f;
 						display.Speed			.Cells[zpos][xpos]	= display.Speed.Cells[z][x];
-						display.SpeedTarget		.Cells[zpos][xpos]	= (float)nwol::noiseNormal1D(x, seed)*50.0f;
+						display.SpeedTarget		.Cells[zpos][xpos]	= (float)::gpk::noiseNormal1D(x, seed)*50.0f;
 						if(bDontSlowdown)
 							display.SpeedTarget	.Cells[zpos][xpos]	*= ((bReverse ? display.Depth-z : z )*2/(float)display.Depth);
 						display.SpeedTarget		.Cells[zpos][xpos]	+= 0.001f;
@@ -169,7 +168,7 @@ namespace klib
 			) 
 			{
 				if( rand()%2 ) {
-					display.Screen			.Cells[displayDepth-1][x] = (nwol::noise1D(randBase+x, seed+1203) > 0.0) ? 'o' : (nwol::noise1D(randBase+561+x, seed+2135) > 0.0) ? '0' : (nwol::noise1D(randBase+x+6, seed+103) > 0.0) ? '.' : 'O';
+					display.Screen			.Cells[displayDepth-1][x] = (::gpk::noise1D(randBase+x, seed+1203) > 0.0) ? 'o' : (::gpk::noise1D(randBase+561+x, seed+2135) > 0.0) ? '0' : (::gpk::noise1D(randBase+x+6, seed+103) > 0.0) ? '.' : 'O';
 					display.DisplayWeights	.Cells[displayDepth-1][x] = .000001f;
 					display.Speed			.Cells[displayDepth-1][x] = rand()*.001f+0.001f;
 					display.SpeedTarget		.Cells[displayDepth-1][x] = rand()*.0025f+0.001f;
@@ -207,7 +206,7 @@ namespace klib
 						display.TextAttributes	.Cells[0][x]	= COLOR_WHITE;
 					}
 					else {
-						int32_t xpos = std::max(std::min((int)x+randX, displayWidth-1), 0);
+						int32_t xpos = ::gpk::max(::gpk::min((int)x+randX, displayWidth-1), 0);
 					
 						if((rand()%10) == 0)  {
 							display.Screen.Cells[z-1][xpos]			= ' ';
@@ -217,16 +216,16 @@ namespace klib
 								 if( '0' == display.Screen.Cells[z][x] && z < (display.Depth/5*4))
 									display.Screen.Cells[z-1][xpos] = 'O';
 							else if( 'O' == display.Screen.Cells[z][x] && z < (display.Depth/3*2))
-									display.Screen.Cells[z-1][xpos] = (nwol::noise1D(randBase+x, seed+12345) > 0.0) ? 'o' : '\'';
+									display.Screen.Cells[z-1][xpos] = (::gpk::noise1D(randBase+x, seed+12345) > 0.0) ? 'o' : '\'';
 							else if( 'o' == display.Screen.Cells[z][x] && z < (display.Depth>>1))
 									display.Screen.Cells[z-1][xpos] = '.';
 							else
 									display.Screen.Cells			[z-1][xpos]	= display.Screen.Cells[z][x];
 
-							display.TextAttributes	.Cells[z-1][xpos]	= (nwol::noise1D(randBase+x+x, seed+41203) > 0.0) ? COLOR_DARKGREEN : COLOR_GREEN;
+							display.TextAttributes	.Cells[z-1][xpos]	= (::gpk::noise1D(randBase+x+x, seed+41203) > 0.0) ? COLOR_DARKGREEN : COLOR_GREEN;
 							display.DisplayWeights	.Cells[z-1][xpos]	= 0.00001f;
 							display.Speed			.Cells[z-1][xpos]	= display.Speed.Cells[z][x];
-							display.SpeedTarget		.Cells[z-1][xpos]	= (float)nwol::noiseNormal1D(x, seed) * 20.0f * (z*1.0f/display.Depth)+0.001f;
+							display.SpeedTarget		.Cells[z-1][xpos]	= (float)::gpk::noiseNormal1D(x, seed) * 20.0f * (z*1.0f/display.Depth)+0.001f;
 						}
 					}
 
@@ -271,7 +270,7 @@ namespace klib
 
 	template<typename _TCell, size_t _Width, size_t _Depth, size_t _LineCount>
 	SGameState drawCredits(::klib::SGrid<_TCell, _Width, _Depth>& display, double lastFrameTime, const ::gpk::view_const_string (&namesCredits)[_LineCount], const SGameState& returnValue) {
-		return drawCredits(&display.Cells[0][0], (uint32_t)_Width, (uint32_t)_Depth, lastFrameTime, namesCredits, returnValue);
+		return ::klib::drawCredits(&display.Cells[0][0], (uint32_t)_Width, (uint32_t)_Depth, lastFrameTime, namesCredits, returnValue);
 	}
 
 	template<typename _TCell>
@@ -345,7 +344,7 @@ namespace klib
 			int32_t messageColor = COLOR_GREEN;
 			int32_t offsetX = 4;
 			if((curLine+=2) >= 0 && (curLine < bbHeight))
-				printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, 0, ::nwol::SCREEN_CENTER, "-- %s --", deadCharacter.Name.begin());
+				::klib::printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, 0, ::nwol::SCREEN_CENTER, "-- %s --", deadCharacter.Name.begin());
 
 			messageColor = COLOR_DARKGREY;
 			if((curLine+=2) >= 0 && curLine < bbHeight)
@@ -359,7 +358,7 @@ namespace klib
 					//, bufferEscapesFailed		
 					);
 			if((curLine+=1) >= 0 && curLine < bbHeight)
-				printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, offsetX, nwol::SCREEN_LEFT, format2
+				::klib::printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, offsetX, nwol::SCREEN_LEFT, format2
 					, bufferEnemiesKilled		
 					, bufferAttacksHit			
 					, bufferAttacksMissed		
@@ -369,13 +368,13 @@ namespace klib
 					, bufferGrenadesUsed		
 					);
 			if((curLine+=1) >= 0 && curLine < bbHeight)
-				printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, offsetX, nwol::SCREEN_LEFT, format3
+				::klib::printfToRectColored((char_t*)display, width, depth, textAttributes, messageColor, curLine, offsetX, nwol::SCREEN_LEFT, format3
 					, bufferMoneyEarned			
 					, bufferMoneySpent			
 					);
 		}
 
-		maxDifference	= std::max(curLine - curDifference, maxDifference);
+		maxDifference	= ::gpk::max(curLine - curDifference, maxDifference);
 		offset			-= lastFrameTime * 6.0;
 
 		if( offset <= -maxDifference )

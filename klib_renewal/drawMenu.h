@@ -38,7 +38,7 @@ namespace klib
 	template <size_t _FormatLen>
 	static						int32_t						drawExitOption										(char* targetASCII, uint16_t* targetAttributes, uint32_t targetWidth, uint32_t targetHeight, uint32_t posXOffset, nwol::ALIGN_SCREEN align, const char (&formatString)[_FormatLen], const std::string& exitText, bool bSelected )		{
 		int32_t														offsetY												= (int32_t)targetHeight-MENU_ROFFSET-1;
-		int32_t														actualOffsetX										= printfToRect(targetASCII, targetWidth, targetHeight, offsetY, posXOffset, align, formatString, "0", exitText.c_str());	
+		int32_t														actualOffsetX										= ::klib::printfToRect(targetASCII, targetWidth, targetHeight, offsetY, posXOffset, align, formatString, "0", exitText.c_str());	
 
 		uint16_t													colorBkg											= bSelected ? COLOR_GREEN << 4 : COLOR_GREEN;  
 		return ::nwol::valueToRect(targetAttributes, targetWidth, targetHeight,  offsetY, actualOffsetX, nwol::SCREEN_LEFT, &colorBkg, 1, (int32_t)exitText.size()+3);
