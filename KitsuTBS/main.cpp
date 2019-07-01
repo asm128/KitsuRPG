@@ -10,25 +10,25 @@ int main(int /*argc*/, char ** /*argv*/)
 	_CrtSetDbgFlag(tmp);
 #endif
 
-	::nwol::initASCIIScreen(klib::SGlobalDisplay::Width, klib::SGlobalDisplay::Depth);
+	::klib::initASCIIScreen(klib::SGlobalDisplay::Width, klib::SGlobalDisplay::Depth);
 	
 	::klib::SGame* pInstancedGame	= new klib::SGame;
 	::klib::SGame& instanceGame		= *pInstancedGame;
 
 	::klib::initGame(instanceGame);
 	while(instanceGame.Flags & klib::GAME_FLAGS_RUNNING) {
-		::nwol::pollInput(instanceGame.FrameInput);
-		::nwol::SASCIITarget							target;
-		::nwol::getASCIIBackBuffer						(target);
-		::nwol::clearASCIIBackBuffer(' ', COLOR_WHITE);
+		::klib::pollInput(instanceGame.FrameInput);
+		::klib::SASCIITarget							target;
+		::klib::getASCIIBackBuffer						(target);
+		::klib::clearASCIIBackBuffer(' ', COLOR_WHITE);
  		::klib::drawAndPresentGame(instanceGame, target);
-		::nwol::presentASCIIBackBuffer();
+		::klib::presentASCIIBackBuffer();
 	}
 
 	if(pInstancedGame)
 		delete(pInstancedGame);
 
-	::nwol::shutdownASCIIScreen();
+	::klib::shutdownASCIIScreen();
 
 	return 0;
 }

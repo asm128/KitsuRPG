@@ -25,6 +25,9 @@ namespace klib
 		inline					bool										ButtonUp								(uint8_t index)							const	noexcept	{ return 0 == Mouse.Buttons	[index] && 0 != PreviousMouse.Buttons	[index]; }
 		inline					bool										ButtonDown								(uint8_t index)							const	noexcept	{ return 0 != Mouse.Buttons	[index] && 0 == PreviousMouse.Buttons	[index]; }
 	};
+
+							::gpk::error_t								pollInput								(::klib::SInput& input);
+
 } // namespace
 
 #endif // KLIB_INPUT_H_20937492837423
