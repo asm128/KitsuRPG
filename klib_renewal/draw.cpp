@@ -49,9 +49,9 @@ void										drawStateBackground				( SGame& instanceGame )																				
 
 SGameState									drawMemorial					(SGame& instanceGame, const SGameState& returnState)																												{ return returnState; }
 void										klib::drawAndPresentGame		(SGame& instanceGame, ::nwol::SASCIITarget& target)																													{
-	static ::nwol::STimer							frameMeasure;
-	static ::nwol::STimer							animTimer;
-	static ::nwol::SAccumulator<double>				animTimerAccum					= {0.0, 1.00};
+	static ::klib::STimer							frameMeasure;
+	static ::klib::STimer							animTimer;
+	static ::klib::SAccumulator<double>				animTimerAccum					= {0.0, 1.00};
 	// increase time
 	animTimer.Frame();
 	// Check for help display
@@ -184,8 +184,8 @@ void										klib::drawAndPresentGame		(SGame& instanceGame, ::nwol::SASCIITarg
 	}
 
 	// increase coins
-	static ::nwol::STimer							profitTimer;
-	static ::nwol::SAccumulator<double>				profitTimerAccum				= {0.0, 3.0};
+	static ::klib::STimer							profitTimer;
+	static ::klib::SAccumulator<double>				profitTimerAccum				= {0.0, 3.0};
 
 	profitTimer.Frame();
 	if( profitTimerAccum.Accumulate(profitTimer.LastTimeSeconds) ) {
@@ -193,8 +193,8 @@ void										klib::drawAndPresentGame		(SGame& instanceGame, ::nwol::SASCIITarg
 		profitTimerAccum.Value						= 0;
 	}
 
-	static ::nwol::STimer							keyTimer;
-	static ::nwol::SAccumulator<double>				keyTimerAccum					= {0.0, .50};
+	static ::klib::STimer							keyTimer;
+	static ::klib::SAccumulator<double>				keyTimerAccum					= {0.0, .50};
 	// increase time
 	keyTimer.Frame();
 	// Check for help display

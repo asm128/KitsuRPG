@@ -43,14 +43,17 @@
 #include "Profession.h"
 
 #include <algorithm>
-#include "nwol_noise.h"
+#include "gpk_noise.h"
+
+#include "klib_random_generator.h"
+
 
 using namespace klib;
 
 bool												initCampaignGame									(SGame& instanceGame);
 bool												initTacticalGame									(SGame& instanceGame) {
 	if(instanceGame.Mode == GAME_MODE_CAMPAIGN)
-		return initCampaignGame(instanceGame);
+		return ::initCampaignGame(instanceGame);
 
 	return false;
 }
@@ -87,16 +90,16 @@ void												deployCampaignAgents
 
 		::gpk::SCoord3<int32_t>								agentPosition										= {0,0,0};
 		if(::isRelevantTeam(teamId))  {
-			agentPosition.x										= 1 + (int32_t)(rangeX * ::nwol::noiseNormal1D(iAgent, seed			) );
-			agentPosition.z										= 1 + (int32_t)(rangeZ * ::nwol::noiseNormal1D(iAgent, seed << 8	) );
+			agentPosition.x										= 1 + (int32_t)(rangeX * ::gpk::noiseNormal1D(iAgent, seed			) );
+			agentPosition.z										= 1 + (int32_t)(rangeZ * ::gpk::noiseNormal1D(iAgent, seed << 8	) );
 			if(teamId == TEAM_TYPE_ENEMY) {
 				agentPosition.x										+= terrainWidth - rangeX - 2;
 				agentPosition.z										+= terrainDepth - rangeZ - 2;
 			}
 		}
 		else {
-			agentPosition.x										= 1 + (int32_t)((terrainWidth - 1) * ::nwol::noiseNormal1D(iAgent, seed)	);
-			agentPosition.z										= 1 + (int32_t)((terrainDepth - 1) * ::nwol::noiseNormal1D(iAgent, seed<<8)	);
+			agentPosition.x										= 1 + (int32_t)((terrainWidth - 1) * ::gpk::noiseNormal1D(iAgent, seed)	);
+			agentPosition.z										= 1 + (int32_t)((terrainDepth - 1) * ::gpk::noiseNormal1D(iAgent, seed<<8)	);
 		}
 
 		while( terrainTopology			[agentPosition.z][agentPosition.x].Sharp		>=	PARTIAL_COVER_HEIGHT
@@ -108,16 +111,16 @@ void												deployCampaignAgents
 			)
 		{
 			if(::isRelevantTeam(teamId)) {
-				agentPosition.x										= 1 + (int32_t)(rangeX * ::nwol::noiseNormal1D(	(1+iAgent)		* agentPosition.z * (iAgent+agentPosition.x), seed+rangeZ) );
-				agentPosition.z										= 1 + (int32_t)(rangeZ * ::nwol::noiseNormal1D(((1+iAgent)<<16)	* agentPosition.x, seed = (int32_t)time(0))	);
+				agentPosition.x										= 1 + (int32_t)(rangeX * ::gpk::noiseNormal1D(	(1+iAgent)		* agentPosition.z * (iAgent+agentPosition.x), seed+rangeZ) );
+				agentPosition.z										= 1 + (int32_t)(rangeZ * ::gpk::noiseNormal1D(((1+iAgent)<<16)	* agentPosition.x, seed = (int32_t)time(0))	);
 				if(teamId == TEAM_TYPE_ENEMY)  {
 					agentPosition.x										+= terrainWidth-rangeX-2;
 					agentPosition.z										+= terrainDepth-rangeZ-2;
 				}
 			}
 			else {
-				agentPosition.x										= 1+(int32_t)((terrainWidth-1) * ::nwol::noiseNormal1D((1+iAgent)*agentPosition.z*(iAgent+agentPosition.x), seed+rangeZ)	);
-				agentPosition.z										= 1+(int32_t)((terrainDepth-1) * ::nwol::noiseNormal1D(((1+iAgent)<<16)*agentPosition.x, seed = (int32_t)time(0))			);
+				agentPosition.x										= 1+(int32_t)((terrainWidth-1) * ::gpk::noiseNormal1D((1+iAgent)*agentPosition.z*(iAgent+agentPosition.x), seed+rangeZ)	);
+				agentPosition.z										= 1+(int32_t)((terrainDepth-1) * ::gpk::noiseNormal1D(((1+iAgent)<<16)*agentPosition.x, seed = (int32_t)time(0))			);
 			}
 		}
 
@@ -160,15 +163,15 @@ void												populateProps
 	for(uint32_t z=0; z<terrainDepth; ++z)
 		for(uint32_t x=0; x<terrainWidth; ++x) {
 			double													noise[]												= 
-				{	::nwol::noiseNormal1D(z*terrainDepth+x, seed)
-				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*7187)
-				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*6719)
-				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8443)
-				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*7883)
-				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8087)
-				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*8081)
-				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*9419)
-				,	::nwol::noiseNormal1D(z*terrainDepth+x, seed*9413)			
+				{	::gpk::noiseNormal1D(z*terrainDepth+x, seed)
+				,	::gpk::noiseNormal1D(z*terrainDepth+x, seed*7187)
+				,	::gpk::noiseNormal1D(z*terrainDepth+x, seed*6719)
+				,	::gpk::noiseNormal1D(z*terrainDepth+x, seed*8443)
+				,	::gpk::noiseNormal1D(z*terrainDepth+x, seed*7883)
+				,	::gpk::noiseNormal1D(z*terrainDepth+x, seed*8087)
+				,	::gpk::noiseNormal1D(z*terrainDepth+x, seed*8081)
+				,	::gpk::noiseNormal1D(z*terrainDepth+x, seed*9419)
+				,	::gpk::noiseNormal1D(z*terrainDepth+x, seed*9413)			
 				}; 
 			bool													bReinforced											= noise[3] > .5;
 			if( terrainTopology.Cells[z][x].Sharp	< PARTIAL_COVER_HEIGHT 
@@ -178,17 +181,17 @@ void												populateProps
 			 && noise[0] > 0.98
 			 ) 
 			{ 
-				int16_t													defCheck											= 1+(int16_t)(rand()%(nwol::size(definitionsStageProp)-1));
+				int16_t													defCheck											= 1+(int16_t)(rand()%(::gpk::size(definitionsStageProp)-1));
 				terrainEntities.Props.Cells[z][x].Definition		= (int8_t)defCheck;
 				terrainEntities.Props.Cells[z][x].Modifier			= bReinforced ? 1 : 0;
 				terrainEntities.Props.Cells[z][x].Level				= 1;
 				if(definitionsStageProp[defCheck].Name == labelWall) {
 					uint32_t												wallmaxz											= ::std::min(z+3+uint32_t(noise[1]*10), terrainDepth-1);
 					uint32_t												wallmaxx											= ::std::min(x+3+uint32_t(noise[2]*10), terrainWidth-1);
-					for(uint32_t wallz=z; wallz<=wallmaxz; ++wallz)	{	if(noise[5] > 0.95 || ::nwol::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[wallz]		[x]			.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[wallz]		[x]			.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[wallz]		[x]			.Level = 1; }
-					for(uint32_t wallz=z; wallz<=wallmaxz; ++wallz)	{	if(noise[6] > 0.95 || ::nwol::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Level = 1; }
-					for(uint32_t wallx=x; wallx<=wallmaxx; ++wallx)	{	if(noise[7] > 0.95 || ::nwol::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[z]			[wallx]		.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[z]			[wallx]		.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[z]			[wallx]		.Level = 1; }
-					for(uint32_t wallx=x; wallx<=wallmaxx; ++wallx)	{	if(noise[8] > 0.95 || ::nwol::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[wallmaxz]	[wallx]		.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[wallmaxz]	[wallx]		.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[wallmaxz]	[wallx]		.Level = 1; }
+					for(uint32_t wallz=z; wallz<=wallmaxz; ++wallz)	{	if(noise[5] > 0.95 || ::klib::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[wallz]		[x]			.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[wallz]		[x]			.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[wallz]		[x]			.Level = 1; }
+					for(uint32_t wallz=z; wallz<=wallmaxz; ++wallz)	{	if(noise[6] > 0.95 || ::klib::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[wallz]		[wallmaxx]	.Level = 1; }
+					for(uint32_t wallx=x; wallx<=wallmaxx; ++wallx)	{	if(noise[7] > 0.95 || ::klib::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[z]			[wallx]		.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[z]			[wallx]		.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[z]			[wallx]		.Level = 1; }
+					for(uint32_t wallx=x; wallx<=wallmaxx; ++wallx)	{	if(noise[8] > 0.95 || ::klib::randNoise(9941) > 0.95)	continue;	terrainEntities.Props.Cells[wallmaxz]	[wallx]		.Definition = (int8_t)defCheck; terrainEntities.Props.Cells[wallmaxz]	[wallx]		.Modifier = bReinforced ? 1 : 0; terrainEntities.Props.Cells[wallmaxz]	[wallx]		.Level = 1; }
 				}
 			}
 			else if(terrainTopology.Cells[z][x].Sharp < PARTIAL_COVER_HEIGHT && terrainTopology.Cells[z][x].Smooth < PARTIAL_COVER_HEIGHT 

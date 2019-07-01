@@ -397,8 +397,8 @@ namespace klib
 			}
 		}
 
-		static ::nwol::STimer						animationTimer					= {};
-		static ::nwol::SAccumulator<double>			animationAccum					= {0.0, 0.20};
+		static ::klib::STimer						animationTimer					= {};
+		static ::klib::SAccumulator<double>			animationAccum					= {0.0, 0.20};
 
 		animationTimer.Frame();
 

@@ -1,6 +1,5 @@
 #include "kitsunwo.h"
 
-#include "nwol_text.h"
 #include "ascii_screen.h"
 #include "gui.h"
 

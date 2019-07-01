@@ -1,5 +1,5 @@
 #include "Menu.h"
-#include "nwol_timer.h"
+#include "klib_timer.h"
 #include "nwol_input.h"
 #include "ascii_color.h"
 
@@ -11,8 +11,8 @@
 #define __DRAWMENU_H__98237409236409872364987236498__
 
 struct SDrawMenuGlobals {
-							::nwol::STimer					Timer;
-							::nwol::SAccumulator<double>	Accumulator;
+							::klib::STimer					Timer;
+							::klib::SAccumulator<double>	Accumulator;
 };
 
 extern					SDrawMenuGlobals				drawMenu_globals;

@@ -440,7 +440,7 @@ SGameState drawWelcome(SGame& instanceGame, const SGameState& returnValue) {
 	int32_t							lineOffset			= (display.Screen.Depth>>1)-1;
 	int32_t							columnOffset		=  display.Screen.Width/2-(int32_t)textToPrint.size()/2;
 
-	bool							bDonePrinting		= ::klib::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
+	bool							bDonePrinting		= ::klib::getMessageSlow(instanceGame.SlowMessage, {textToPrint.data(), (uint32_t)textToPrint.size()}, instanceGame.FrameTimer.LastTimeSeconds);
 	columnOffset				= printfToGridColored(display.Screen, display.TextAttributes, COLOR_GREEN, lineOffset, columnOffset, nwol::SCREEN_LEFT, "%s", instanceGame.SlowMessage);
 
 	if ( bDonePrinting ) {

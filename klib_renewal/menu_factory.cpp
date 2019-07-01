@@ -176,7 +176,7 @@ SGameState													drawFactoryMenu										(SGame& instanceGame, const SGam
 
 SGameState																		drawFactory							(SGame& instanceGame, const SGameState& returnState)																						{
 	const ::std::string																	textToPrint							= "Factory.";
-	bool																				bDonePrinting						= ::klib::getMessageSlow(instanceGame.SlowMessage, textToPrint, instanceGame.FrameTimer.LastTimeSeconds);
+	bool																				bDonePrinting						= ::klib::getMessageSlow(instanceGame.SlowMessage, {textToPrint.data(), (uint32_t)textToPrint.size()}, instanceGame.FrameTimer.LastTimeSeconds);
 	memcpy(&instanceGame.PostEffectDisplay.Screen.Cells[instanceGame.PostEffectDisplay.Depth >> 1][instanceGame.PostEffectDisplay.Width / 2 - (strlen(instanceGame.SlowMessage) + 1) / 2], instanceGame.SlowMessage, strlen(instanceGame.SlowMessage));
 	if ( !bDonePrinting ) 
 		return returnState;

@@ -185,7 +185,10 @@
     <ClInclude Include="helper_projects.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="klib_grid.h" />
+    <ClInclude Include="klib_misc.h" />
+    <ClInclude Include="klib_random_generator.h" />
     <ClInclude Include="klib_text.h" />
+    <ClInclude Include="klib_timer.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="menus.h" />
     <ClInclude Include="player.h" />
@@ -211,6 +214,7 @@
     <ClCompile Include="Combat_grenade.cpp" />
     <ClCompile Include="Combat_potion.cpp" />
     <ClCompile Include="klib_text.cpp" />
+    <ClCompile Include="klib_timer.cpp" />
     <ClCompile Include="menu_control_center.cpp" />
     <ClCompile Include="menu_equip.cpp" />
     <ClCompile Include="menu_factory.cpp" />

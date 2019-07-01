@@ -14,7 +14,7 @@
 using namespace klib;
 
 bool																	handleUserInput									(SGame& instanceGame, const SGameState& /*returnState*/)								{
-	static nwol::SAccumulator<double>											keyAccum										= {0.0, 0.6};
+	static ::klib::SAccumulator<double>											keyAccum										= {0.0, 0.6};
 
 	STacticalInfo																& tacticalInfo									= instanceGame.TacticalInfo;
 	//SPlayer																	& playerUser									= instanceGame.Players[PLAYER_INDEX_USER];
@@ -220,8 +220,8 @@ void																	drawTileInfo
 
 void																	drawPlayerInfo									(SGame& instanceGame)																{
 	static bool																	bSwap											= false;
-	static ::nwol::STimer														animationTimer;
-	static ::nwol::SAccumulator<double>											animationAccum									= {0.0, 0.1};
+	static ::klib::STimer														animationTimer;
+	static ::klib::SAccumulator<double>											animationAccum									= {0.0, 0.1};
 
 	animationTimer.Frame();
 	if( animationAccum.Accumulate(animationTimer.LastTimeSeconds) ) {

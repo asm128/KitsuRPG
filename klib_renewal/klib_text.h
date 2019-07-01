@@ -1,6 +1,6 @@
 /// Copyright 2016-2017 - asm128
 #include "nwol_ascii_target.h"
-#include "nwol_misc.h"
+#include "klib_misc.h"
 #include "gpk_label.h"
 #include "gpk_array.h"
 
@@ -82,9 +82,9 @@ namespace klib
 	}
 
 	template <size_t _Size> 
-	static inline				bool	getMessageSlow			(char (&message)[_Size], const ::nwol::glabel& textToPrint, double lastFrameSeconds)		{ return getMessageSlow(message, textToPrint.c_str(), textToPrint.size(), lastFrameSeconds); }
+	static inline				bool	getMessageSlow			(char (&message)[_Size], const ::gpk::label& textToPrint, double lastFrameSeconds)		{ return getMessageSlow(message, textToPrint.begin(), textToPrint.size(), lastFrameSeconds); }
 
-	int32_t								getLines				(const char* source, int32_t maxLen, ::nwol::array_obj<std::string>& lines_);
+	int32_t								getLines				(const char* source, int32_t maxLen, ::gpk::array_obj<::std::string>& lines_);
 } // namespace
 
 #endif // KLIB_TEXT_H_923649827346982746982346298734623

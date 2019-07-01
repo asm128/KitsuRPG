@@ -25,7 +25,7 @@ namespace klib
 	void																fillCellsFromNoise						(::gpk::view_grid<_tCell>& grid, const _tCell& value, int64_t seed, int32_t diceFaces=10)														{
 		_tCell																	* cells									= grid.begin();
 		for(uint32_t i = 0, count = grid.size();  i < count; ++i) {
-			double																	noise									= ::nwol::noiseNormal1D(i + 1, seed);
+			double																	noise									= ::gpk::noiseNormal1D(i + 1, seed);
 			int32_t																	dice									= int32_t(noise * diceFaces);
 			if(0 == dice)
 				cells[i]															= value;

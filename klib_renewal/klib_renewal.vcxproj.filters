@@ -144,6 +144,15 @@
     <ClInclude Include="klib_text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="klib_random_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="klib_misc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp">
@@ -213,6 +222,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="klib_text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="klib_timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

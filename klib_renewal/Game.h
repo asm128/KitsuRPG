@@ -64,7 +64,7 @@ namespace klib
 	//
 	struct SFrameInfo {
 							::nwol::SInput								Input			= {};
-							::nwol::STimer								Timer			= {};
+							::klib::STimer								Timer			= {};
 	};
 
 	// Game Mode talks about the tactical mode mostly.
@@ -133,7 +133,7 @@ namespace klib
 							SPlayer									Players[MAX_PLAYER_TYPES]		= {};
 
 							nwol::SInput							FrameInput						= {};
-							nwol::STimer							FrameTimer						= {};
+							::klib::STimer							FrameTimer						= {};
 
 							// Tactical board.
 							STacticalInfo							TacticalInfo					= {};
@@ -150,7 +150,7 @@ namespace klib
 							::std::string							UserSuccess						= "";
 							::std::string							UserMiss						= "";
 							::std::string							UserError						= "";
-							::nwol::array_obj<SLogLine>					UserLog							= {};
+							::gpk::array_obj<SLogLine>				UserLog							= {};
 
 							// For the special effect
 							char									SlowMessage[256]				= {'_',};
