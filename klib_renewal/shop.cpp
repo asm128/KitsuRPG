@@ -122,7 +122,7 @@ SGameState drawBuyMenu(SGame& instanceGame, const SGameState& returnState) {
 	int32_t iCharacterInArmy = 0, armySize = player.Army.size();
 	bool bFoundFreeCharacterSlot = false;
 	bool bSold = false;
-	GPtrObj(CCharacter) newCharacter;
+	::gpk::ptr_obj<::klib::CCharacter> newCharacter;
 	switch(instanceGame.State.Substate) {
 	case GAME_SUBSTATE_ACCESSORY	:	if(playerInventory.Accessory	.AddElement({selectedChoice.Definition, 0, selectedChoice.Grade, -1})) 	{ instanceGame.UserSuccess = "You have successfully bought " + selectedChoice.Name + " for " + ::std::to_string(selectedChoice.Price)				+ " Coins."; bSold = true; } break;
 	case GAME_SUBSTATE_STAGEPROP	:	if(playerInventory.StageProp	.AddElement({selectedChoice.Definition, 0, selectedChoice.Grade, -1})) 	{ instanceGame.UserSuccess = "You have successfully bought " + selectedChoice.Name + " for " + ::std::to_string(selectedChoice.Price)				+ " Coins."; bSold = true; } break;
@@ -133,17 +133,17 @@ SGameState drawBuyMenu(SGame& instanceGame, const SGameState& returnState) {
 	case GAME_SUBSTATE_ARMOR		:	if(playerInventory.Armor		.AddElement({selectedChoice.Definition, 0, selectedChoice.Grade, -1})) 	{ instanceGame.UserSuccess = "You have successfully bought " + selectedChoice.Name + " for " + ::std::to_string(selectedChoice.Price)				+ " Coins."; bSold = true; } break;
 	case GAME_SUBSTATE_ITEM			:	if(playerInventory.Items		.AddElement({selectedChoice.Definition, 0, selectedChoice.Grade, -1})) 	{ instanceGame.UserSuccess = "You have successfully bought " + selectedChoice.Name + " for " + ::std::to_string(selectedChoice.Price)				+ " Coins."; bSold = true; } break;
 	case GAME_SUBSTATE_CHARACTER	:	
-		newCharacter = GPtrObj(CCharacter)(enemyDefinitions[selectedChoice.Definition]);
+		newCharacter.create(enemyDefinitions[selectedChoice.Definition]);
 		for(iCharacterInArmy ; iCharacterInArmy < armySize; ++iCharacterInArmy) {
 			if(0 == player.Army[iCharacterInArmy]) {
-				player.Army.set(newCharacter, iCharacterInArmy);
+				player.Army[iCharacterInArmy].create(*newCharacter);
 				bFoundFreeCharacterSlot = true;
 				break;
 			}
 		}
 		if(!bFoundFreeCharacterSlot)
 			player.Army.push_back(newCharacter);	
-		::setupAgent(*newCharacter.get_address(), *newCharacter.get_address());
+		::setupAgent(*newCharacter, *newCharacter);
 		instanceGame.UserSuccess = "You have successfully hired " + selectedChoice.Name + " for " + ::std::to_string(selectedChoice.MaintenanceCost) + " Coins/Mission."; 
 		bSold = true;
 		break;

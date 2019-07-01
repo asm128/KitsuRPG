@@ -111,7 +111,7 @@ void										klib::drawAndPresentGame		(SGame& instanceGame, ::klib::SASCIITarg
 
 	int32_t											actualOffsetX;
 	// Print log
-	const int32_t									MAX_LOG_LINES					= iif(instanceGame.State.State == GAME_STATE_WELCOME_COMMANDER || ::gpk::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL)) 30 : 4;
+	const int32_t									MAX_LOG_LINES					= (instanceGame.State.State == GAME_STATE_WELCOME_COMMANDER || ::gpk::bit_true(instanceGame.Flags, GAME_FLAGS_TACTICAL)) ? 30 : 4;
 	int32_t											logSize							= (int32_t)instanceGame.UserLog.size();
 	for(uint32_t iLogLine=0, logLineCount = std::min(MAX_LOG_LINES, logSize); iLogLine< logLineCount; ++iLogLine)
 		actualOffsetX								= ::klib::lineToRectColored(target, instanceGame.UserLog[logSize-1-iLogLine].Color, bbHeight-9-iLogLine, 1, ::klib::SCREEN_LEFT, instanceGame.UserLog[logSize-1-iLogLine].Message.c_str());	

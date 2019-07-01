@@ -7,7 +7,7 @@
 
 #include <time.h>
 
-#if defined (__WINDOWS__)
+#if defined (GPK_WINDOWS)
 #include <Mmsystem.h>	// currently we use this for WinAPI's PlaySound().
 #endif
 
@@ -355,7 +355,7 @@ bool																	shoot											(SGame& instanceGame, int32_t tacticalPlaye
 		printf("Blindness causes %s to have %u hit chance for this turn.\n", agentShooter.Name.c_str(), agentShooter.FinalPoints.Attack.Hit >>= 1);
 
 	//if ((rand() % 100) < finalChance ) {
-		 if(::gpk::bit_true(agentShooter.FinalFlags.Tech.AttackType		, ATTACK_TYPE_SPLASH		)) PlaySound("..\\gpk_data\\sounds\\Shotgun_Blast-Jim_Rogers-1914772763.wav"		, 0, SND_ASYNC | SND_FILENAME);
+		 if(::gpk::bit_true(agentShooter.FinalFlags.Tech.AttackType			, ATTACK_TYPE_SPLASH		)) PlaySound("..\\gpk_data\\sounds\\Shotgun_Blast-Jim_Rogers-1914772763.wav"		, 0, SND_ASYNC | SND_FILENAME);
 	else if(::gpk::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_ROCKET	)) PlaySound("..\\gpk_data\\sounds\\Missle_Launch-Kibblesbob-2118796725.wav"		, 0, SND_ASYNC | SND_FILENAME);
 	else if(::gpk::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_GRENADE	)) PlaySound("..\\gpk_data\\sounds\\grenade-launcher-daniel_simon.wav"			, 0, SND_ASYNC | SND_FILENAME);
 	else if(::gpk::bit_true(agentShooter.FinalFlags.Tech.ProjectileClass	, PROJECTILE_CLASS_BULLET	)) PlaySound("..\\gpk_data\\sounds\\Anti Aircraft Gun-Mike_Koenig-1303768514.wav"	, 0, SND_ASYNC | SND_FILENAME);

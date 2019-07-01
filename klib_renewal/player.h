@@ -2,7 +2,7 @@
 #include "Character.h"
 #include "CharacterTile.h"
 #include "PlayerControl.h"
-#include "glist.h"
+#include "gpk_ptr.h"
 
 
 #ifndef __PLAYER_H__98213640926348273649827364987234698234__
@@ -39,7 +39,7 @@ namespace klib
 
 #define DECLARE_EQUIP_TYPE(name)			\
 	typedef SEquip<S##name> SEquip##name;	\
-	GDECLARE_POD(SEquip##name)
+//	GDECLARE_POD(SEquip##name)
 
 	DECLARE_EQUIP_TYPE(Profession	);
 	DECLARE_EQUIP_TYPE(Weapon		);
@@ -52,34 +52,34 @@ namespace klib
 	DECLARE_EQUIP_TYPE(Tile			);
 
 	struct SPlayerInventory {
-		GLstObj(::klib, SEquipProfession	)			EquipProfession				= {};
-		GLstObj(::klib, SEquipWeapon		)			EquipWeapon					= {};
-		GLstObj(::klib, SEquipArmor			)			EquipArmor					= {};
-		GLstObj(::klib, SEquipAccessory		)			EquipAccessory				= {};
-		GLstObj(::klib, SEquipVehicle		)			EquipVehicle				= {};
-		GLstObj(::klib, SEquipFacility		)			EquipFacility				= {};
-		GLstObj(::klib, SEquipStageProp		)			EquipStageProp				= {};
-		GLstObj(::klib, SEquipItem			)			EquipItem					= {};
-		GLstObj(::klib, SEquipTile			)			EquipTile					= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipProfession>>		EquipProfession				= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipWeapon	>>		EquipWeapon					= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipArmor		>>		EquipArmor					= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipAccessory	>>		EquipAccessory				= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipVehicle	>>		EquipVehicle				= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipFacility	>>		EquipFacility				= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipStageProp	>>		EquipStageProp				= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipItem		>>		EquipItem					= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::SEquipTile		>>		EquipTile					= {};
 	};
 
 	//
-	GDECLARE_OBJ(CCharacter);
+	//GDECLARE_OBJ(CCharacter);
 
 	struct SPlayer { // can be AI or human.
-		int32_t											Money						= 1000000;
-		SPlayerControl									Control						= SPlayerControl();
-		SPlayerSelection								Selection					= {0, 0, -1, -1, -1};
-		SSquad											Squad						= SSquad();
-		SCharacterScore									Score						= {};
-		SCharacterGoods									Goods						= {};
-		SPlayerProjects									Projects					= {};
-		SPlayerInventory								Inventory					= {};
-		GLstObj(::klib, CCharacter)						Army						= {};
-		::gpk::array_obj<CDeadCharacter>				Memorial					= {};
-		::gpk::label									Name						= "Kasparov";
+		int32_t													Money						= 1000000;
+		SPlayerControl											Control						= SPlayerControl();
+		SPlayerSelection										Selection					= {0, 0, -1, -1, -1};
+		SSquad													Squad						= SSquad();
+		SCharacterScore											Score						= {};
+		SCharacterGoods											Goods						= {};
+		SPlayerProjects											Projects					= {};
+		SPlayerInventory										Inventory					= {};
+		::gpk::array_obj<::gpk::ptr_obj<::klib::CCharacter>>	Army						= {};
+		::gpk::array_obj<CDeadCharacter>						Memorial					= {};
+		::gpk::label											Name						= "Kasparov";
 
-		bool											IsAlive						()											const	{
+		bool													IsAlive						()											const	{
 			for(int32_t iAgent = 0; iAgent < Squad.Size; iAgent++)
 				if(Squad.Agents[iAgent] != -1 && Army[Squad.Agents[iAgent]]->IsAlive())
 					return true;

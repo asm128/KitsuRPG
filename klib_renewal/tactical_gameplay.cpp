@@ -606,9 +606,9 @@ void																					klib::determineOutcome													(SGame& instanceGame
 			currentPlayer.Squad.Agents[iAgent]														= -1;
 			currentPlayer.Memorial.push_back(deadCharacter);
 			if(oldAgentIndex == (int32_t)(currentPlayer.Army.size()-1))
-				currentPlayer.Army.pop(0);
+				currentPlayer.Army.pop_back(0);
 			else
-				currentPlayer.Army.set(0, oldAgentIndex);
+				currentPlayer.Army[oldAgentIndex]														= {};
 		}
 
 		if(!currentPlayer.IsAlive())

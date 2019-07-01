@@ -234,7 +234,7 @@ int32_t drawAgentList
 ,	int32_t offsetX
 ,	int32_t selectedRow
 ,	const ::gpk::label& entityTypeName
-,	const GLstObj(klib, CCharacter)& army
+,	const ::gpk::array_obj<::gpk::ptr_obj<::klib::CCharacter>>& army
 )
 {
 	int32_t actualRowsDisplayed = 0;
@@ -249,7 +249,7 @@ int32_t drawAgentList
 
 		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, ::klib::SCREEN_LEFT, " %c - %-38.38s", ::klib::ascii_gender[agent.Flags.Tech.Gender], entityName.c_str());
 		colorRow &= 0xF0;
-		colorRow |= agent.Flags.Tech.Gender == GENDER_FEMALE ? COLOR_MAGENTA : agent.Flags.Tech.Gender == GENDER_MALE ? COLOR_CYAN : COLOR_GREEN;
+		colorRow |= agent.Flags.Tech.Gender == ::klib::GENDER_FEMALE ? COLOR_MAGENTA : agent.Flags.Tech.Gender == ::klib::GENDER_MALE ? COLOR_CYAN : COLOR_GREEN;
 		printfToGridColored(display.Screen, display.TextAttributes, colorRow, offsetY+1+actualRowsDisplayed, offsetX, ::klib::SCREEN_LEFT, " %c", ::klib::ascii_gender[agent.Flags.Tech.Gender]);
 		
 		++actualRowsDisplayed;

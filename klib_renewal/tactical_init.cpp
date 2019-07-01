@@ -433,8 +433,9 @@ bool												initCampaignPlayers									(SGame& instanceGame)											{
 
 			//if( 0 == playerAI.Army[playerAI.Squad.Agents[iSquadAgentSlot]] ) 
 			//{
-				GPtrObj(CCharacter)										newAgent											(enemyDefinitions[1+rand()%3]);
-				playerAI.Army.set(newAgent, playerAI.Squad.Agents[iSquadAgentSlot]);
+				::gpk::ptr_obj<::klib::CCharacter>										newAgent											;
+				newAgent.create(enemyDefinitions[1+rand()%3]);
+				playerAI.Army[playerAI.Squad.Agents[iSquadAgentSlot]] = newAgent;
 			//}
 			CCharacter												& agentAI											= *playerAI		.Army[playerAI	.Squad.Agents[iSquadAgentSlot]];
 			const CCharacter										& agentUser											= *playerUser	.Army[playerUser.Squad.Agents[iSquadAgentSlot]];

@@ -10,12 +10,10 @@
 #include "StageProp.h"
 #include "Item.h"
 
-#include "gref_definition.h"
+//#include "gref_definition.h"
 
 #include <ctime>
 #include <algorithm>
-
-GDEFINE_OBJ(klib, CCharacter);
 
 ::std::string						klib::getItemName					(const SItem& item)									{
 	char									formattedName[128]					= {};
@@ -196,12 +194,14 @@ void klib::initGame(SGame& instanceGame) {
 
 	for(uint32_t iPlayer=0, count=1/*MAX_PLAYER_TYPES*/; iPlayer < count; ++iPlayer) {
 		::klib::SPlayer& player	= instanceGame.Players[iPlayer]	= SPlayer();
-		GPObj(::klib, CCharacter) newAgent = ::klib::enemyDefinitions[1 + ::rand() % (::gpk::size(klib::enemyDefinitions)-1)];
+		::gpk::ptr_obj<::klib::CCharacter> newAgent;// = ::klib::enemyDefinitions[1 + ::rand() % (::gpk::size(klib::enemyDefinitions)-1)];
+		newAgent.create(::klib::enemyDefinitions[1 + ::rand() % (::gpk::size(klib::enemyDefinitions)-1)]);
 
 		for(uint32_t iAgent=0, agentCount=CAMPAIGN_AGENT_COUNT*2; iAgent<agentCount; iAgent++) {
-			int32_t iAgentType = (int32_t)(iif(iAgent < CAMPAIGN_AGENT_COUNT) ::gpk::size(klib::enemyDefinitions)-iAgent-2 : 1);
-			GPObj(::klib, CCharacter) newAgentNext = klib::enemyDefinitions[iAgentType];
-			::klib::CCharacter& adventurer = *newAgentNext.get_address();
+			int32_t iAgentType = (int32_t)((iAgent < CAMPAIGN_AGENT_COUNT) ? ::gpk::size(klib::enemyDefinitions)-iAgent-2 : 1);
+			::gpk::ptr_obj<::klib::CCharacter> newAgentNext;
+			newAgentNext.create(klib::enemyDefinitions[iAgentType]);
+			::klib::CCharacter& adventurer = *newAgentNext;
 			::klib::setupAgent(adventurer, adventurer);
 			if(iPlayer == 0) {
 				::SWearables wearablesSelected = {};

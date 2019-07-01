@@ -89,7 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>NOMINMAX;   WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods; ..\..\gpk\llc; ..\..\gpk\gpk;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gpk\llc; ..\..\gpk\gpk;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,7 +106,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>NOMINMAX;     _DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods; ..\..\gpk\llc; ..\..\gpk\gpk;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gpk\llc; ..\..\gpk\gpk;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -125,7 +125,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NOMINMAX; WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods; ..\..\gpk\llc; ..\..\gpk\gpk;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gpk\llc; ..\..\gpk\gpk;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,7 +146,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NOMINMAX; NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\nwol\nwol; ..\..\nwol\gods; ..\..\gpk\llc; ..\..\gpk\gpk;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gpk\llc; ..\..\gpk\gpk;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
